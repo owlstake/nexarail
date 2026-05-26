@@ -1,0 +1,10 @@
+NexaRail Docker Rehearsal Evidence
+===================================
+Timestamp: 20260525T222140Z
+Chain ID: unknown
+Height: 0
+Validators: 0
+Settlement live_enabled: N/A
+Escrow live_enabled: N/A
+Treasury live_enabled: N/A
+Payout live_enabled: N/A

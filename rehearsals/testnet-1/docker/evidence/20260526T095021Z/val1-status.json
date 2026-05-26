@@ -1,0 +1,42 @@
+{
+  "jsonrpc": "2.0",
+  "id": -1,
+  "result": {
+    "node_info": {
+      "protocol_version": {
+        "p2p": "8",
+        "block": "11",
+        "app": "0"
+      },
+      "id": "c7980a418bc5263317ef728681442834cfb5c44f",
+      "listen_addr": "tcp://0.0.0.0:26656",
+      "network": "nexarail-testnet-1",
+      "version": "0.37.16",
+      "channels": "40202122233038606100",
+      "moniker": "val1",
+      "other": {
+        "tx_index": "on",
+        "rpc_address": "tcp://0.0.0.0:26657"
+      }
+    },
+    "sync_info": {
+      "latest_block_hash": "DC169F4898269211323F38FCE05D7236F915F12AF3CC74BBAB123020C478543D",
+      "latest_app_hash": "663BB8E3C2B89F3971364BEAB551F1FFDBC751FF64CD2A1A91280B817E3B1393",
+      "latest_block_height": "3",
+      "latest_block_time": "2026-05-26T09:50:12.043553585Z",
+      "earliest_block_hash": "4A10135754D8B501CDCF80EBF2BADDAC3AA0AA13B9DDE9072B18BF18951D7E9E",
+      "earliest_app_hash": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "earliest_block_height": "1",
+      "earliest_block_time": "2026-05-26T09:49:54.866762Z",
+      "catching_up": false
+    },
+    "validator_info": {
+      "address": "1DADC39F48805288FDA4816B752FB2AFFBB293AF",
+      "pub_key": {
+        "type": "tendermint/PubKeyEd25519",
+        "value": "KVkMfOb4yudy44VSJbRghIM+kAOkLDLvYV/XWrHrZQw="
+      },
+      "voting_power": "500"
+    }
+  }
+}

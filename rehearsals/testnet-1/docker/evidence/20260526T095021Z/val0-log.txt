@@ -1,0 +1,82 @@
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mstarting node with ABCI Tendermint in-process[0m [36mmodule=[0mserver
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mmultiAppConn [36mmodule=[0mproxy [36mmsg=[0m"Starting multiAppConn service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mconnection=[0mquery [36mimpl=[0mlocalClient [36mmodule=[0mabci-client [36mmsg=[0m"Starting localClient service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mconnection=[0msnapshot [36mimpl=[0mlocalClient [36mmodule=[0mabci-client [36mmsg=[0m"Starting localClient service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mconnection=[0mmempool [36mimpl=[0mlocalClient [36mmodule=[0mabci-client [36mmsg=[0m"Starting localClient service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mconnection=[0mconsensus [36mimpl=[0mlocalClient [36mmodule=[0mabci-client [36mmsg=[0m"Starting localClient service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mEventBus [36mmodule=[0mevents [36mmsg=[0m"Starting EventBus service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mPubSub [36mmodule=[0mpubsub [36mmsg=[0m"Starting PubSub service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mIndexerService [36mmodule=[0mtxindex [36mmsg=[0m"Starting IndexerService service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mABCI Handshake App Info[0m [36mhash=[0m [36mheight=[0m0 [36mmodule=[0mconsensus [36mprotocol-version=[0m0 [36msoftware-version=[0m0.1.0-dev
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mABCI Replay Blocks[0m [36mappHeight=[0m0 [36mmodule=[0mconsensus [36mstateHeight=[0m0 [36mstoreHeight=[0m0
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mInitChain[0m [36mchainID=[0mnexarail-testnet-1 [36minitialHeight=[0m1 [36mmodule=[0mserver
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1minitializing blockchain state from genesis.json[0m [36mmodule=[0mserver
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1masserted all invariants[0m [36mduration=[0m0.000208 [36mheight=[0m0 [36mmodule=[0mx/crisis
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mCompleted ABCI Handshake - CometBFT and App are synced[0m [36mappHash=[0m"���B��\x1c\x14���șo�$'�A�d��L���\x1bxR�U" [36mappHeight=[0m0 [36mmodule=[0mconsensus
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mVersion info[0m [36mabci=[0m1.0.0 [36mblock=[0m11 [36mcommit_hash=[0m [36mmodule=[0mserver [36mp2p=[0m8 [36mtendermint_version=[0m0.37.16
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mThis node is a validator[0m [36maddr=[0mC8E4A2218F04A1E466929655E7E1EB2081B71F47 [36mmodule=[0mconsensus [36mpubKey=[0mPubKeyEd25519{C8F44AE3680D631A6AE33EFF4685B51A25B52464C8BDC6415F38AC5229E57B5F}
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mP2P Node ID[0m [36mID=[0mcdb31f228a6ee2ee54b613de9e1edaf509ec521b [36mfile=[0m/home/nexarail/config/node_key.json [36mmodule=[0mp2p
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mAdding persistent peers[0m [36maddrs=[0m["c7980a418bc5263317ef728681442834cfb5c44f@val1:26656","9e61e006865a559c153f991442a42879940fe122@val2:26656"] [36mmodule=[0mp2p
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mAdding unconditional peer ids[0m [36mids=[0m[] [36mmodule=[0mp2p
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mAdd our address to book[0m [36maddr=[0mcdb31f228a6ee2ee54b613de9e1edaf509ec521b@0.0.0.0:26656 [36mbook=[0m/home/nexarail/config/addrbook.json [36mmodule=[0mp2p
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mNode [36mmodule=[0mserver [36mmsg=[0m"Starting Node service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mStarting pprof server[0m [36mladdr=[0mlocalhost:6060 [36mmodule=[0mserver
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0m"P2P Switch" [36mmodule=[0mp2p [36mmsg=[0m"Starting P2P Switch service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mReactor [36mmodule=[0mblockchain [36mmsg=[0m"Starting Reactor service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mBlockPool [36mmodule=[0mblockchain [36mmsg=[0m"Starting BlockPool service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mConsensusReactor [36mmodule=[0mconsensus [36mmsg=[0m"Starting Consensus service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mReactor [0m [36mmodule=[0mconsensus [36mwaitSync=[0mtrue
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mEvidence [36mmodule=[0mevidence [36mmsg=[0m"Starting Evidence service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mStateSync [36mmodule=[0mstatesync [36mmsg=[0m"Starting StateSync service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mPEX [36mmodule=[0mpex [36mmsg=[0m"Starting PEX service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mbook=[0m/home/nexarail/config/addrbook.json [36mimpl=[0mAddrBook [36mmodule=[0mp2p [36mmsg=[0m"Starting AddrBook service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mserve[0m [36mmodule=[0mrpc-server [36mmsg=[0m"Starting RPC HTTP server on [::]:26657"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mEnsure peers[0m [36mmodule=[0mpex [36mnumDialing=[0m0 [36mnumInPeers=[0m0 [36mnumOutPeers=[0m0 [36mnumToDial=[0m10
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mNo addresses to dial. Falling back to seeds[0m [36mmodule=[0mpex
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mSaving AddrBook to file[0m [36mbook=[0m/home/nexarail/config/addrbook.json [36mmodule=[0mp2p [36msize=[0m2
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mstarting API server...[0m [36mmodule=[0mapi-server
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mserve[0m [36mmodule=[0mapi-server [36mmsg=[0m"Starting RPC HTTP server on [::]:1317"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0m"Peer{MConn{172.18.0.4:26656} c7980a418bc5263317ef728681442834cfb5c44f out}" [36mmodule=[0mp2p [36mmsg=[0m"Starting Peer service" [36mpeer=[0mc7980a418bc5263317ef728681442834cfb5c44f@172.18.0.4:26656
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mMConn{172.18.0.4:26656} [36mmodule=[0mp2p [36mmsg=[0m"Starting MConnection service" [36mpeer=[0mc7980a418bc5263317ef728681442834cfb5c44f@172.18.0.4:26656
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0m"Peer{MConn{172.18.0.3:26656} 9e61e006865a559c153f991442a42879940fe122 out}" [36mmodule=[0mp2p [36mmsg=[0m"Starting Peer service" [36mpeer=[0m9e61e006865a559c153f991442a42879940fe122@172.18.0.3:26656
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mMConn{172.18.0.3:26656} [36mmodule=[0mp2p [36mmsg=[0m"Starting MConnection service" [36mpeer=[0m9e61e006865a559c153f991442a42879940fe122@172.18.0.3:26656
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mTime to switch to consensus reactor![0m [36mheight=[0m1 [36mmodule=[0mblockchain
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice stop[0m [36mimpl=[0mBlockPool [36mmodule=[0mblockchain [36mmsg=[0m"Stopping BlockPool service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mSwitchToConsensus[0m [36mmodule=[0mconsensus
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mConsensusState [36mmodule=[0mconsensus [36mmsg=[0m"Starting State service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mbaseWAL [36mmodule=[0mconsensus [36mmsg=[0m"Starting baseWAL service" [36mwal=[0m/home/nexarail/data/cs.wal/wal
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mGroup [36mmodule=[0mconsensus [36mmsg=[0m"Starting Group service" [36mwal=[0m/home/nexarail/data/cs.wal/wal
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mservice start[0m [36mimpl=[0mTimeoutTicker [36mmodule=[0mconsensus [36mmsg=[0m"Starting TimeoutTicker service"
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mSearching for height[0m [36mheight=[0m1 [36mmax=[0m0 [36mmin=[0m0 [36mmodule=[0mconsensus [36mwal=[0m/home/nexarail/data/cs.wal/wal
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mSearching for height[0m [36mheight=[0m0 [36mmax=[0m0 [36mmin=[0m0 [36mmodule=[0mconsensus [36mwal=[0m/home/nexarail/data/cs.wal/wal
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mFound[0m [36mheight=[0m0 [36mindex=[0m0 [36mmodule=[0mconsensus [36mwal=[0m/home/nexarail/data/cs.wal/wal
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mCatchup by replaying consensus messages[0m [36mheight=[0m1 [36mmodule=[0mconsensus
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mReplay: Done[0m [36mmodule=[0mconsensus
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mTimed out[0m [36mdur=[0m3982.097846 [36mheight=[0m1 [36mmodule=[0mconsensus [36mround=[0m0 [36mstep=[0mRoundStepNewHeight
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mreceived proposal[0m [36mmodule=[0mconsensus [36mproposal=[0m"Proposal{1/0 (4A10135754D8B501CDCF80EBF2BADDAC3AA0AA13B9DDE9072B18BF18951D7E9E:1:1A9FB3424FDB, -1) 048301099E86 @ 2026-05-26T09:50:06.518878252Z}" [36mproposer=[0m1DADC39F48805288FDA4816B752FB2AFFBB293AF
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mreceived complete proposal block[0m [36mhash=[0m4A10135754D8B501CDCF80EBF2BADDAC3AA0AA13B9DDE9072B18BF18951D7E9E [36mheight=[0m1 [36mmodule=[0mconsensus
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mfinalizing commit of block[0m [36mhash=[0m4A10135754D8B501CDCF80EBF2BADDAC3AA0AA13B9DDE9072B18BF18951D7E9E [36mheight=[0m1 [36mmodule=[0mconsensus [36mnum_txs=[0m0 [36mroot=[0mE3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mminted coins from module account[0m [36mamount=[0m61791stake [36mfrom=[0mmint [36mmodule=[0mx/bank
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mexecuted block[0m [36mheight=[0m1 [36mmodule=[0mstate [36mnum_invalid_txs=[0m0 [36mnum_valid_txs=[0m0
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mcommit synced[0m [36mcommit=[0m436F6D6D697449447B5B3233302032323520323920313335203136312033342031303220323332203235203120313733203233372032323020373220383220323139203232362033342031313720313039203433203138392031333820313331203130392034392031373320313539203130362031343020323532203137355D3A317D [36mmodule=[0mserver
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mcommitted state[0m [36mapp_hash=[0mE6E11D87A12266E81901ADEDDC4852DBE222756D2BBD8A836D31AD9F6A8CFCAF [36mheight=[0m1 [36mmodule=[0mstate [36mnum_txs=[0m0
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mindexed block events[0m [36mheight=[0m1 [36mmodule=[0mtxindex
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mTimed out[0m [36mdur=[0m4959.222975 [36mheight=[0m2 [36mmodule=[0mconsensus [36mround=[0m0 [36mstep=[0mRoundStepNewHeight
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mreceived proposal[0m [36mmodule=[0mconsensus [36mproposal=[0m"Proposal{2/0 (7D0B816113CB5FFDC87D8CBB3642B2C6323F96C15D872A71C57E5B662384E708:1:58C6D8177ACE, -1) 2A4A1C08AF2D @ 2026-05-26T09:50:11.837278799Z}" [36mproposer=[0mC8E4A2218F04A1E466929655E7E1EB2081B71F47
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mreceived complete proposal block[0m [36mhash=[0m7D0B816113CB5FFDC87D8CBB3642B2C6323F96C15D872A71C57E5B662384E708 [36mheight=[0m2 [36mmodule=[0mconsensus
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mfinalizing commit of block[0m [36mhash=[0m7D0B816113CB5FFDC87D8CBB3642B2C6323F96C15D872A71C57E5B662384E708 [36mheight=[0m2 [36mmodule=[0mconsensus [36mnum_txs=[0m0 [36mroot=[0mE6E11D87A12266E81901ADEDDC4852DBE222756D2BBD8A836D31AD9F6A8CFCAF
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mminted coins from module account[0m [36mamount=[0m61791stake [36mfrom=[0mmint [36mmodule=[0mx/bank
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mexecuted block[0m [36mheight=[0m2 [36mmodule=[0mstate [36mnum_invalid_txs=[0m0 [36mnum_valid_txs=[0m0
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mcommit synced[0m [36mcommit=[0m436F6D6D697449447B5B313032203539203138342032323720313934203138342031353920353720313133203534203735203233342031383120383120323431203235352032313920313939203831203235352031303020323035203432203236203134352034302031312031323920313236203539203139203134375D3A327D [36mmodule=[0mserver
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mcommitted state[0m [36mapp_hash=[0m663BB8E3C2B89F3971364BEAB551F1FFDBC751FF64CD2A1A91280B817E3B1393 [36mheight=[0m2 [36mmodule=[0mstate [36mnum_txs=[0m0
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mindexed block events[0m [36mheight=[0m2 [36mmodule=[0mtxindex
+nexarail-val0  | E[2026-05-26|09:50:16.366] [Rosetta]- Client is not ready: rpc error: code = Unimplemented desc = unknown service cosmos.bank.v1beta1.Query. Retrying ... 
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mTimed out[0m [36mdur=[0m4988.607571 [36mheight=[0m3 [36mmodule=[0mconsensus [36mround=[0m0 [36mstep=[0mRoundStepNewHeight
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mreceived proposal[0m [36mmodule=[0mconsensus [36mproposal=[0m"Proposal{3/0 (DC169F4898269211323F38FCE05D7236F915F12AF3CC74BBAB123020C478543D:1:A6C7DA0B6BDA, -1) 190D0CA76F33 @ 2026-05-26T09:50:17.146078718Z}" [36mproposer=[0mDA9A8CE23B480D03E7868ED0B391FF02310B08C1
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mreceived complete proposal block[0m [36mhash=[0mDC169F4898269211323F38FCE05D7236F915F12AF3CC74BBAB123020C478543D [36mheight=[0m3 [36mmodule=[0mconsensus
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mfinalizing commit of block[0m [36mhash=[0mDC169F4898269211323F38FCE05D7236F915F12AF3CC74BBAB123020C478543D [36mheight=[0m3 [36mmodule=[0mconsensus [36mnum_txs=[0m0 [36mroot=[0m663BB8E3C2B89F3971364BEAB551F1FFDBC751FF64CD2A1A91280B817E3B1393
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mminted coins from module account[0m [36mamount=[0m61791stake [36mfrom=[0mmint [36mmodule=[0mx/bank
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mexecuted block[0m [36mheight=[0m3 [36mmodule=[0mstate [36mnum_invalid_txs=[0m0 [36mnum_valid_txs=[0m0
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mcommit synced[0m [36mcommit=[0m436F6D6D697449447B5B373920313838203136382032362031353420353920323337203137342036352039352031333720383120323034203233352033372032313420323132203520323334203136382031373220313331203233322033382031343120333320323339203132372033372031333920313730203131305D3A337D [36mmodule=[0mserver
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mcommitted state[0m [36mapp_hash=[0m4FBCA81A9A3BEDAE415F8951CCEB25D6D405EAA8AC83E8268D21EF7F258BAA6E [36mheight=[0m3 [36mmodule=[0mstate [36mnum_txs=[0m0
+nexarail-val0  | [90m9:50AM[0m [32mINF[0m [1mindexed block events[0m [36mheight=[0m3 [36mmodule=[0mtxindex

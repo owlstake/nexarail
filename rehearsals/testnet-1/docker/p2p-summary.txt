@@ -1,0 +1,20 @@
+Chain ID: nexarail-testnet-1
+Genesis checksum: 68b8d625ff5331cb56c33ddfcdc179bc4a60d1f5dffd83963c64b84fc469f49a
+gen_txs: 3
+
+Node IDs:
+  val0: cdb31f228a6ee2ee54b613de9e1edaf509ec521b
+  val1: c7980a418bc5263317ef728681442834cfb5c44f
+  val2: 9e61e006865a559c153f991442a42879940fe122
+
+Persistent peers: cdb31f228a6ee2ee54b613de9e1edaf509ec521b@val0:26656,c7980a418bc5263317ef728681442834cfb5c44f@val1:26656
+
+Ports (host → container):
+  val0 RPC: 26657 → 26657, REST: 1317, gRPC: 9090
+  val1 RPC: 26667 → 26657, REST: 1318, gRPC: 9091
+  val2 RPC: 26677 → 26657, REST: 1319, gRPC: 9092
+
+Start:  ./scripts/testnet/run-docker-3-validator-rehearsal.sh
+Query:  ./scripts/testnet/query-docker-3-validator-rehearsal.sh
+Stop:   ./scripts/testnet/stop-docker-3-validator-rehearsal.sh
+Logs:   ./scripts/testnet/logs-docker-3-validator-rehearsal.sh

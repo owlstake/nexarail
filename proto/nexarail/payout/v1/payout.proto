@@ -1,0 +1,59 @@
+syntax = "proto3";
+package nexarail.payout.v1;
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+option go_package = "github.com/nexarail/chain/x/payout/types";
+
+message Params {
+  bool payouts_enabled = 1; bool batch_payouts_enabled = 2; bool approval_required = 3;
+  uint32 max_reference_length = 4; uint32 max_memo_length = 5; uint32 max_failure_reason_length = 6;
+  uint32 max_batch_size = 7; cosmos.base.v1beta1.Coin min_payout_amount = 8 [(gogoproto.nullable) = false];
+}
+message Payout {
+  string payout_id = 1; string batch_id = 2; string merchant_id = 3;
+  string initiator_address = 4; string recipient_address = 5; string asset_denom = 6;
+  cosmos.base.v1beta1.Coin amount = 7 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee_amount = 8 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin net_amount = 9 [(gogoproto.nullable) = false];
+  int32 status = 10; int32 payout_type = 11;
+  string payout_reference = 12; string memo = 13; string external_reference = 14; string failure_reason = 15;
+  int64 created_at = 16; int64 updated_at = 17; int64 approved_at = 18; int64 paid_at = 19; int64 cancelled_at = 20; int64 failed_at = 21;
+}
+message BatchPayout {
+  string batch_id = 1; string merchant_id = 2; string initiator_address = 3;
+  repeated string payout_ids = 4;
+  cosmos.base.v1beta1.Coin total_amount = 5 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin total_fee = 6 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin total_net = 7 [(gogoproto.nullable) = false];
+  int32 status = 8; string batch_reference = 9; string memo = 10; int64 created_at = 11; int64 updated_at = 12;
+}
+message GenesisState { Params params = 1 [(gogoproto.nullable) = false]; repeated Payout payouts = 2; repeated BatchPayout batch_payouts = 3; }
+
+message MsgCreatePayout { string initiator = 1; string payout_id = 2; string merchant_id = 3; string recipient_address = 4; cosmos.base.v1beta1.Coin amount = 5 [(gogoproto.nullable) = false]; string asset_denom = 6; int32 payout_type = 7; string payout_reference = 8; string memo = 9; }
+message MsgCreatePayoutResponse {}
+message PayoutInput { string payout_id = 1; string recipient_address = 2; cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false]; string asset_denom = 4; int32 payout_type = 5; string payout_reference = 6; string memo = 7; }
+message MsgCreateBatchPayout { string initiator = 1; string batch_id = 2; string merchant_id = 3; repeated PayoutInput payouts = 4; string batch_reference = 5; string memo = 6; }
+message MsgCreateBatchPayoutResponse {}
+message MsgApprovePayout { string signer = 1; string payout_id = 2; }
+message MsgApprovePayoutResponse {}
+message MsgMarkPayoutPaid { string authority = 1; string payout_id = 2; string external_reference = 3; string memo = 4; }
+message MsgMarkPayoutPaidResponse {}
+message MsgCancelPayout { string signer = 1; string payout_id = 2; string memo = 3; }
+message MsgCancelPayoutResponse {}
+message MsgFailPayout { string authority = 1; string payout_id = 2; string failure_reason = 3; }
+message MsgFailPayoutResponse {}
+message MsgUpdateParams { string authority = 1; Params params = 2 [(gogoproto.nullable) = false]; }
+message MsgUpdateParamsResponse {}
+
+message QueryParamsRequest {}; message QueryParamsResponse { Params params = 1 [(gogoproto.nullable) = false]; }
+message QueryPayoutRequest { string payout_id = 1; }; message QueryPayoutResponse { Payout payout = 1 [(gogoproto.nullable) = false]; }
+message QueryPayoutsRequest {}; message QueryPayoutsResponse { repeated Payout payouts = 1; }
+message QueryPayoutsByMerchantRequest { string merchant_id = 1; }; message QueryPayoutsByMerchantResponse { repeated Payout payouts = 1; }
+message QueryPayoutsByRecipientRequest { string recipient = 1; }; message QueryPayoutsByRecipientResponse { repeated Payout payouts = 1; }
+message QueryPayoutsByInitiatorRequest { string initiator = 1; }; message QueryPayoutsByInitiatorResponse { repeated Payout payouts = 1; }
+message QueryBatchPayoutRequest { string batch_id = 1; }; message QueryBatchPayoutResponse { BatchPayout batch_payout = 1 [(gogoproto.nullable) = false]; }
+message QueryBatchPayoutsRequest {}; message QueryBatchPayoutsResponse { repeated BatchPayout batch_payouts = 1; }
+message QueryPayoutExistsRequest { string payout_id = 1; }; message QueryPayoutExistsResponse { bool exists = 1; }
+
+service Msg { rpc CreatePayout(MsgCreatePayout) returns (MsgCreatePayoutResponse); rpc CreateBatchPayout(MsgCreateBatchPayout) returns (MsgCreateBatchPayoutResponse); rpc ApprovePayout(MsgApprovePayout) returns (MsgApprovePayoutResponse); rpc MarkPayoutPaid(MsgMarkPayoutPaid) returns (MsgMarkPayoutPaidResponse); rpc CancelPayout(MsgCancelPayout) returns (MsgCancelPayoutResponse); rpc FailPayout(MsgFailPayout) returns (MsgFailPayoutResponse); rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse); }
+service Query { rpc Params(QueryParamsRequest) returns (QueryParamsResponse); rpc Payout(QueryPayoutRequest) returns (QueryPayoutResponse); rpc Payouts(QueryPayoutsRequest) returns (QueryPayoutsResponse); rpc PayoutsByMerchant(QueryPayoutsByMerchantRequest) returns (QueryPayoutsByMerchantResponse); rpc PayoutsByRecipient(QueryPayoutsByRecipientRequest) returns (QueryPayoutsByRecipientResponse); rpc PayoutsByInitiator(QueryPayoutsByInitiatorRequest) returns (QueryPayoutsByInitiatorResponse); rpc BatchPayout(QueryBatchPayoutRequest) returns (QueryBatchPayoutResponse); rpc BatchPayouts(QueryBatchPayoutsRequest) returns (QueryBatchPayoutsResponse); rpc PayoutExists(QueryPayoutExistsRequest) returns (QueryPayoutExistsResponse); }

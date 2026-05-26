@@ -1,0 +1,66 @@
+syntax = "proto3";
+package nexarail.escrow.v1;
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+option go_package = "github.com/nexarail/chain/x/escrow/types";
+
+message Params {
+  bool escrows_enabled = 1;
+  uint32 max_reference_length = 2;
+  uint32 max_memo_length = 3;
+  uint32 max_dispute_reason_length = 4;
+  uint32 max_resolution_note_length = 5;
+  cosmos.base.v1beta1.Coin min_escrow_amount = 6 [(gogoproto.nullable) = false];
+  uint64 default_expiry_seconds = 7;
+}
+
+message Escrow {
+  string escrow_id = 1;
+  string buyer_address = 2;
+  string seller_address = 3;
+  string merchant_id = 4;
+  string asset_denom = 5;
+  cosmos.base.v1beta1.Coin amount = 6 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin platform_fee = 7 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin seller_amount = 8 [(gogoproto.nullable) = false];
+  int32 status = 9;
+  int32 dispute_status = 10;
+  string arbitrator_address = 11;
+  string payment_reference = 12;
+  string memo = 13;
+  string release_reference = 14;
+  string refund_reference = 15;
+  string dispute_reason = 16;
+  string resolution_note = 17;
+  int64 created_at = 18;
+  int64 updated_at = 19;
+  int64 expires_at = 20;
+}
+
+message GenesisState { Params params = 1 [(gogoproto.nullable) = false]; repeated Escrow escrows = 2; }
+
+message MsgCreateEscrow { string buyer = 1; string escrow_id = 2; string seller_address = 3; string merchant_id = 4; string asset_denom = 5; cosmos.base.v1beta1.Coin amount = 6 [(gogoproto.nullable) = false]; string payment_reference = 7; string memo = 8; int64 expires_at = 9; }
+message MsgCreateEscrowResponse {}
+message MsgReleaseEscrow { string signer = 1; string escrow_id = 2; string release_reference = 3; string memo = 4; }
+message MsgReleaseEscrowResponse {}
+message MsgRefundEscrow { string signer = 1; string escrow_id = 2; string refund_reference = 3; string memo = 4; }
+message MsgRefundEscrowResponse {}
+message MsgOpenDispute { string signer = 1; string escrow_id = 2; string dispute_reason = 3; }
+message MsgOpenDisputeResponse {}
+message MsgResolveDispute { string authority = 1; string escrow_id = 2; int32 dispute_status = 3; string resolution_note = 4; }
+message MsgResolveDisputeResponse {}
+message MsgCancelEscrow { string signer = 1; string escrow_id = 2; string memo = 3; }
+message MsgCancelEscrowResponse {}
+message MsgUpdateParams { string authority = 1; Params params = 2 [(gogoproto.nullable) = false]; }
+message MsgUpdateParamsResponse {}
+
+message QueryParamsRequest {}; message QueryParamsResponse { Params params = 1 [(gogoproto.nullable) = false]; }
+message QueryEscrowRequest { string escrow_id = 1; }; message QueryEscrowResponse { Escrow escrow = 1 [(gogoproto.nullable) = false]; }
+message QueryEscrowsRequest {}; message QueryEscrowsResponse { repeated Escrow escrows = 1; }
+message QueryEscrowsByBuyerRequest { string buyer = 1; }; message QueryEscrowsByBuyerResponse { repeated Escrow escrows = 1; }
+message QueryEscrowsBySellerRequest { string seller = 1; }; message QueryEscrowsBySellerResponse { repeated Escrow escrows = 1; }
+message QueryEscrowsByMerchantRequest { string merchant_id = 1; }; message QueryEscrowsByMerchantResponse { repeated Escrow escrows = 1; }
+message QueryEscrowExistsRequest { string escrow_id = 1; }; message QueryEscrowExistsResponse { bool exists = 1; }
+
+service Msg { rpc CreateEscrow(MsgCreateEscrow) returns (MsgCreateEscrowResponse); rpc ReleaseEscrow(MsgReleaseEscrow) returns (MsgReleaseEscrowResponse); rpc RefundEscrow(MsgRefundEscrow) returns (MsgRefundEscrowResponse); rpc OpenDispute(MsgOpenDispute) returns (MsgOpenDisputeResponse); rpc ResolveDispute(MsgResolveDispute) returns (MsgResolveDisputeResponse); rpc CancelEscrow(MsgCancelEscrow) returns (MsgCancelEscrowResponse); rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse); }
+service Query { rpc Params(QueryParamsRequest) returns (QueryParamsResponse); rpc Escrow(QueryEscrowRequest) returns (QueryEscrowResponse); rpc Escrows(QueryEscrowsRequest) returns (QueryEscrowsResponse); rpc EscrowsByBuyer(QueryEscrowsByBuyerRequest) returns (QueryEscrowsByBuyerResponse); rpc EscrowsBySeller(QueryEscrowsBySellerRequest) returns (QueryEscrowsBySellerResponse); rpc EscrowsByMerchant(QueryEscrowsByMerchantRequest) returns (QueryEscrowsByMerchantResponse); rpc EscrowExists(QueryEscrowExistsRequest) returns (QueryEscrowExistsResponse); }

@@ -1,0 +1,85 @@
+services:
+  val0:
+    build:
+      context: ../../..
+      dockerfile: scripts/docker/Dockerfile
+    container_name: nexarail-val0
+    hostname: val0
+    volumes:
+      - ./validator-notes/val0:/home/nexarail
+    ports:
+      - "26657:26657"
+      - "1317:1317"
+      - "9090:9090"
+    command:
+      - start
+      - --home
+      - /home/nexarail
+      - --minimum-gas-prices
+      - "0unxrl"
+      - --rpc.laddr
+      - "tcp://0.0.0.0:26657"
+      - --p2p.laddr
+      - "tcp://0.0.0.0:26656"
+      - --p2p.pex
+      - "true"
+    networks:
+      - nexarail-testnet
+
+  val1:
+    build:
+      context: ../../..
+      dockerfile: scripts/docker/Dockerfile
+    container_name: nexarail-val1
+    hostname: val1
+    volumes:
+      - ./validator-notes/val1:/home/nexarail
+    ports:
+      - "26667:26657"
+      - "1318:1317"
+      - "9091:9090"
+    command:
+      - start
+      - --home
+      - /home/nexarail
+      - --minimum-gas-prices
+      - "0unxrl"
+      - --rpc.laddr
+      - "tcp://0.0.0.0:26657"
+      - --p2p.laddr
+      - "tcp://0.0.0.0:26656"
+      - --p2p.pex
+      - "true"
+    networks:
+      - nexarail-testnet
+
+  val2:
+    build:
+      context: ../../..
+      dockerfile: scripts/docker/Dockerfile
+    container_name: nexarail-val2
+    hostname: val2
+    volumes:
+      - ./validator-notes/val2:/home/nexarail
+    ports:
+      - "26677:26657"
+      - "1319:1317"
+      - "9092:9090"
+    command:
+      - start
+      - --home
+      - /home/nexarail
+      - --minimum-gas-prices
+      - "0unxrl"
+      - --rpc.laddr
+      - "tcp://0.0.0.0:26657"
+      - --p2p.laddr
+      - "tcp://0.0.0.0:26656"
+      - --p2p.pex
+      - "true"
+    networks:
+      - nexarail-testnet
+
+networks:
+  nexarail-testnet:
+    driver: bridge

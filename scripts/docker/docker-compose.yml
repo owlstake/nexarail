@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  nexarail-validator-0:
+    build:
+      context: ../..
+      dockerfile: scripts/docker/Dockerfile
+    container_name: nexarail-validator-0
+    hostname: validator0
+    ports:
+      - "26656:26656"   # P2P
+      - "26657:26657"   # RPC
+      - "1317:1317"     # REST API
+      - "9090:9090"     # gRPC
+    volumes:
+      - nexarail-val0:/root/.nexarail
+    command: >
+      start
+      --home /root/.nexarail
+      --rpc.laddr tcp://0.0.0.0:26657
+      --api.address tcp://0.0.0.0:1317
+      --grpc.address 0.0.0.0:9090
+      --p2p.laddr tcp://0.0.0.0:26656
+      --minimum-gas-prices 0.025unxrl
+    networks:
+      - nexarail-net
+
+  nexarail-validator-1:
+    build:
+      context: ../..
+      dockerfile: scripts/docker/Dockerfile
+    container_name: nexarail-validator-1
+    hostname: validator1
+    depends_on:
+      - nexarail-validator-0
+    volumes:
+      - nexarail-val1:/root/.nexarail
+    command: >
+      start
+      --home /root/.nexarail
+      --rpc.laddr tcp://0.0.0.0:26657
+      --p2p.laddr tcp://0.0.0.0:26656
+      --minimum-gas-prices 0.025unxrl
+    networks:
+      - nexarail-net
+
+  nexarail-validator-2:
+    build:
+      context: ../..
+      dockerfile: scripts/docker/Dockerfile
+    container_name: nexarail-validator-2
+    hostname: validator2
+    depends_on:
+      - nexarail-validator-0
+    volumes:
+      - nexarail-val2:/root/.nexarail
+    command: >
+      start
+      --home /root/.nexarail
+      --rpc.laddr tcp://0.0.0.0:26657
+      --p2p.laddr tcp://0.0.0.0:26656
+      --minimum-gas-prices 0.025unxrl
+    networks:
+      - nexarail-net
+
+volumes:
+  nexarail-val0:
+  nexarail-val1:
+  nexarail-val2:
+
+networks:
+  nexarail-net:
+    driver: bridge

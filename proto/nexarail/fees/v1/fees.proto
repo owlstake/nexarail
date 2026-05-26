@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package nexarail.fees.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/nexarail/chain/x/fees/types";
+
+// Params defines the fee split parameters.
+message Params {
+  // ValidatorShareBps is the share for validators/delegators (basis points, default 6000).
+  uint32 validator_share_bps = 1;
+  // TreasuryShareBps is the share for the protocol treasury (basis points, default 2000).
+  uint32 treasury_share_bps = 2;
+  // BurnShareBps is the share that gets burned (basis points, default 2000).
+  uint32 burn_share_bps = 3;
+  // FeeCollectorName is the name of the fee collector module account.
+  string fee_collector_name = 4;
+  // TreasuryAccount is the bech32 address of the protocol treasury.
+  string treasury_account = 5;
+  // BurnEnabled enables the burn mechanism.
+  bool burn_enabled = 6;
+  // MinProtocolFee is the minimum fee for protocol fee splitting.
+  cosmos.base.v1beta1.Coin min_protocol_fee = 7 [(gogoproto.nullable) = false];
+}
+
+// GenesisState defines the genesis state for the fees module.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParams is the message for updating the fees module parameters.
+message MsgUpdateParams {
+  // Authority is the governance module account address.
+  string authority = 1;
+  // Params defines the new parameters.
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgUpdateParamsResponse is the response to MsgUpdateParams.
+message MsgUpdateParamsResponse {}
+
+// QueryParamsRequest is the request type for the Query/Params RPC.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC.
+message QueryParamsResponse {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryFeeSplitRequest is the request type for the Query/FeeSplit RPC.
+message QueryFeeSplitRequest {}
+
+// QueryFeeSplitResponse is the response type for the Query/FeeSplit RPC.
+message QueryFeeSplitResponse {
+  uint32 validator_share_bps = 1;
+  uint32 treasury_share_bps = 2;
+  uint32 burn_share_bps = 3;
+}
+
+// Msg defines the fees module Msg service.
+service Msg {
+  // UpdateParams updates the fees module parameters (governance only).
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+// Query defines the fees module Query service.
+service Query {
+  // Params queries the current fees module parameters.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse);
+  // FeeSplit queries the current fee split proportions.
+  rpc FeeSplit(QueryFeeSplitRequest) returns (QueryFeeSplitResponse);
+}

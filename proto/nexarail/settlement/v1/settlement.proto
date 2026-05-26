@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package nexarail.settlement.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/nexarail/chain/x/settlement/types";
+
+message Params {
+  uint32 fee_rate_bps = 1;
+  repeated uint32 rebate_tiers = 2;
+}
+
+message Settlement {
+  uint64 id = 1;
+  string payer = 2;
+  string merchant_owner = 3;
+  cosmos.base.v1beta1.Coin amount = 4 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin fee_amount = 5 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin validator_share = 6 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin treasury_share = 7 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin burn_share = 8 [(gogoproto.nullable) = false];
+  uint32 rebate_applied_bps = 9;
+  cosmos.base.v1beta1.Coin rebate_amount = 10 [(gogoproto.nullable) = false];
+  int32 status = 11;
+  string metadata = 12;
+  int64 created_at = 13;
+}
+
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated Settlement settlements = 2;
+}
+
+message MsgCreateSettlement {
+  string payer = 1;
+  string merchant_owner = 2;
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+  string metadata = 4;
+}
+
+message MsgCreateSettlementResponse {
+  uint64 id = 1;
+}
+
+message MsgUpdateSettlementStatus {
+  string authority = 1;
+  uint64 id = 2;
+  int32 status = 3;
+}
+
+message MsgUpdateSettlementStatusResponse {}
+
+message MsgUpdateParams {
+  string authority = 1;
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdateParamsResponse {}
+
+message QueryParamsRequest {}
+message QueryParamsResponse {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QuerySettlementRequest {
+  uint64 id = 1;
+}
+message QuerySettlementResponse {
+  Settlement settlement = 1 [(gogoproto.nullable) = false];
+}
+
+message QuerySettlementsByPayerRequest {
+  string payer = 1;
+}
+message QuerySettlementsByPayerResponse {
+  repeated Settlement settlements = 1;
+}
+
+message QuerySettlementsByMerchantRequest {
+  string merchant_owner = 1;
+}
+message QuerySettlementsByMerchantResponse {
+  repeated Settlement settlements = 1;
+}
+
+message QuerySettlementsRequest {}
+message QuerySettlementsResponse {
+  repeated Settlement settlements = 1;
+}
+
+service Msg {
+  rpc CreateSettlement(MsgCreateSettlement) returns (MsgCreateSettlementResponse);
+  rpc UpdateSettlementStatus(MsgUpdateSettlementStatus) returns (MsgUpdateSettlementStatusResponse);
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+service Query {
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse);
+  rpc Settlement(QuerySettlementRequest) returns (QuerySettlementResponse);
+  rpc SettlementsByPayer(QuerySettlementsByPayerRequest) returns (QuerySettlementsByPayerResponse);
+  rpc SettlementsByMerchant(QuerySettlementsByMerchantRequest) returns (QuerySettlementsByMerchantResponse);
+  rpc Settlements(QuerySettlementsRequest) returns (QuerySettlementsResponse);
+}

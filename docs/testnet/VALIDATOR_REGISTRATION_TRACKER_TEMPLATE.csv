@@ -1,0 +1,2 @@
+id,operator_name,organisation,country,contact_email,github_handle,discord_telegram,moniker,status,score,accepted_date,gentx_received,gentx_validated,genesis_included,node_id,validator_pubkey,account_address,self_delegation,commission_rate,max_commission,max_change_rate,hosting_provider,os,cpu_cores,ram_gb,disk_gb,public_ip,geographic_region,sentry_nodes,monitoring,key_management,notes
+APP-001,,,,,,,,application_received,,,,,,,,,,,,,,,,,,,,,,,,,

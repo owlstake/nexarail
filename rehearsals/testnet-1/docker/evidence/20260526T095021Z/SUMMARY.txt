@@ -1,0 +1,10 @@
+NexaRail Docker Rehearsal Evidence
+===================================
+Timestamp: 20260526T095021Z
+Chain ID: nexarail-testnet-1
+Height: 3
+Validators: 3
+Settlement live_enabled: N/A
+Escrow live_enabled: N/A
+Treasury live_enabled: N/A
+Payout live_enabled: N/A

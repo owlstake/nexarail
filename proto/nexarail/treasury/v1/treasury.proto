@@ -1,0 +1,47 @@
+syntax = "proto3"; package nexarail.treasury.v1;
+import "gogoproto/gogo.proto"; import "cosmos/base/v1beta1/coin.proto";
+option go_package = "github.com/nexarail/chain/x/treasury/types";
+
+message Params { bool treasury_enabled=1;bool spend_requests_enabled=2;bool grants_enabled=3;bool budgets_enabled=4;uint32 max_name_length=5;uint32 max_description_length=6;uint32 max_metadata_uri_length=7;uint32 max_purpose_length=8;uint32 max_memo_length=9;cosmos.base.v1beta1.Coin min_spend_amount=10[(gogoproto.nullable)=false];}
+message TreasuryAccount { string account_id=1;int32 category=2;string name=3;string description=4;string metadata_uri=5;cosmos.base.v1beta1.Coin nominal_balance=6[(gogoproto.nullable)=false];int64 created_at=7;int64 updated_at=8;}
+message Budget { string budget_id=1;string account_id=2;int32 category=3;string title=4;string description=5;cosmos.base.v1beta1.Coin total_amount=6[(gogoproto.nullable)=false];cosmos.base.v1beta1.Coin allocated_amount=7[(gogoproto.nullable)=false];cosmos.base.v1beta1.Coin spent_amount=8[(gogoproto.nullable)=false];int32 status=9;int64 start_time=10;int64 end_time=11;string metadata_uri=12;int64 created_at=13;int64 updated_at=14;}
+message Grant { string grant_id=1;string budget_id=2;string recipient_address=3;string title=4;string description=5;cosmos.base.v1beta1.Coin amount=6[(gogoproto.nullable)=false];int32 status=7;uint32 milestone_count=8;uint32 completed_milestones=9;string metadata_uri=10;int64 created_at=11;int64 updated_at=12;int64 approved_at=13;int64 completed_at=14;}
+message SpendRequest { string spend_id=1;string account_id=2;string budget_id=3;string grant_id=4;string requester_address=5;string recipient_address=6;cosmos.base.v1beta1.Coin amount=7[(gogoproto.nullable)=false];string purpose=8;int32 status=9;string reference=10;string memo=11;int64 created_at=12;int64 updated_at=13;int64 approved_at=14;int64 executed_at=15;int64 rejected_at=16;}
+message GenesisState { Params params=1[(gogoproto.nullable)=false];repeated TreasuryAccount accounts=2;repeated Budget budgets=3;repeated Grant grants=4;repeated SpendRequest spend_requests=5;}
+
+message MsgCreateTreasuryAccount { string authority=1;string account_id=2;int32 category=3;string name=4;string description=5;string metadata_uri=6;cosmos.base.v1beta1.Coin nominal_balance=7[(gogoproto.nullable)=false];}
+message MsgCreateTreasuryAccountResponse {}
+message MsgCreateBudget { string authority=1;string budget_id=2;string account_id=3;int32 category=4;string title=5;string description=6;cosmos.base.v1beta1.Coin total_amount=7[(gogoproto.nullable)=false];int64 start_time=8;int64 end_time=9;string metadata_uri=10;}
+message MsgCreateBudgetResponse {}
+message MsgUpdateBudgetStatus { string authority=1;string budget_id=2;int32 status=3;}
+message MsgUpdateBudgetStatusResponse {}
+message MsgCreateGrant { string authority=1;string grant_id=2;string budget_id=3;string recipient_address=4;string title=5;string description=6;cosmos.base.v1beta1.Coin amount=7[(gogoproto.nullable)=false];uint32 milestone_count=8;string metadata_uri=9;}
+message MsgCreateGrantResponse {}
+message MsgUpdateGrantStatus { string authority=1;string grant_id=2;int32 status=3;}
+message MsgUpdateGrantStatusResponse {}
+message MsgCreateSpendRequest { string requester=1;string spend_id=2;string account_id=3;string budget_id=4;string grant_id=5;string recipient_address=6;cosmos.base.v1beta1.Coin amount=7[(gogoproto.nullable)=false];string purpose=8;string reference=9;string memo=10;}
+message MsgCreateSpendRequestResponse {}
+message MsgApproveSpendRequest { string authority=1;string spend_id=2;}
+message MsgApproveSpendRequestResponse {}
+message MsgRejectSpendRequest { string authority=1;string spend_id=2;string memo=3;}
+message MsgRejectSpendRequestResponse {}
+message MsgMarkSpendExecuted { string authority=1;string spend_id=2;string reference=3;string memo=4;}
+message MsgMarkSpendExecutedResponse {}
+message MsgCancelSpendRequest { string signer=1;string spend_id=2;string memo=3;}
+message MsgCancelSpendRequestResponse {}
+message MsgUpdateParams { string authority=1;Params params=2[(gogoproto.nullable)=false];}
+message MsgUpdateParamsResponse {}
+
+message QueryParamsRequest {}; message QueryParamsResponse { Params params=1[(gogoproto.nullable)=false];}
+message QueryTreasuryAccountRequest { string account_id=1;}; message QueryTreasuryAccountResponse { TreasuryAccount account=1[(gogoproto.nullable)=false];}
+message QueryTreasuryAccountsRequest {}; message QueryTreasuryAccountsResponse { repeated TreasuryAccount accounts=1;}
+message QueryBudgetRequest { string budget_id=1;}; message QueryBudgetResponse { Budget budget=1[(gogoproto.nullable)=false];}
+message QueryBudgetsRequest {}; message QueryBudgetsResponse { repeated Budget budgets=1;}
+message QueryGrantRequest { string grant_id=1;}; message QueryGrantResponse { Grant grant=1[(gogoproto.nullable)=false];}
+message QueryGrantsRequest {}; message QueryGrantsResponse { repeated Grant grants=1;}
+message QuerySpendRequestRequest { string spend_id=1;}; message QuerySpendRequestResponse { SpendRequest spend_request=1[(gogoproto.nullable)=false];}
+message QuerySpendRequestsRequest {}; message QuerySpendRequestsResponse { repeated SpendRequest spend_requests=1;}
+message QueryTreasurySummaryRequest {}; message QueryTreasurySummaryResponse { uint64 total_accounts=1;uint64 total_budgets=2;uint64 total_grants=3;uint64 total_spend_requests=4;}
+
+service Msg { rpc CreateTreasuryAccount(MsgCreateTreasuryAccount) returns (MsgCreateTreasuryAccountResponse); rpc CreateBudget(MsgCreateBudget) returns (MsgCreateBudgetResponse); rpc UpdateBudgetStatus(MsgUpdateBudgetStatus) returns (MsgUpdateBudgetStatusResponse); rpc CreateGrant(MsgCreateGrant) returns (MsgCreateGrantResponse); rpc UpdateGrantStatus(MsgUpdateGrantStatus) returns (MsgUpdateGrantStatusResponse); rpc CreateSpendRequest(MsgCreateSpendRequest) returns (MsgCreateSpendRequestResponse); rpc ApproveSpendRequest(MsgApproveSpendRequest) returns (MsgApproveSpendRequestResponse); rpc RejectSpendRequest(MsgRejectSpendRequest) returns (MsgRejectSpendRequestResponse); rpc MarkSpendExecuted(MsgMarkSpendExecuted) returns (MsgMarkSpendExecutedResponse); rpc CancelSpendRequest(MsgCancelSpendRequest) returns (MsgCancelSpendRequestResponse); rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);}
+service Query { rpc Params(QueryParamsRequest) returns (QueryParamsResponse); rpc TreasuryAccount(QueryTreasuryAccountRequest) returns (QueryTreasuryAccountResponse); rpc TreasuryAccounts(QueryTreasuryAccountsRequest) returns (QueryTreasuryAccountsResponse); rpc Budget(QueryBudgetRequest) returns (QueryBudgetResponse); rpc Budgets(QueryBudgetsRequest) returns (QueryBudgetsResponse); rpc Grant(QueryGrantRequest) returns (QueryGrantResponse); rpc Grants(QueryGrantsRequest) returns (QueryGrantsResponse); rpc SpendRequest(QuerySpendRequestRequest) returns (QuerySpendRequestResponse); rpc SpendRequests(QuerySpendRequestsRequest) returns (QuerySpendRequestsResponse); rpc TreasurySummary(QueryTreasurySummaryRequest) returns (QueryTreasurySummaryResponse);}

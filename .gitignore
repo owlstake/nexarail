@@ -1,0 +1,22 @@
+# Build
+build/nexaraild
+build/nexaraild-linux
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testnet data
+rehearsals/testnet-1/docker/validator-notes/
+rehearsals/testnet-1/validator-notes/
+rehearsals/testnet-1/genesis/
+
+# Temp
+/tmp/
+*.log

@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package nexarail.merchant.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/nexarail/chain/x/merchant/types";
+
+message Params {
+  cosmos.base.v1beta1.Coin registration_fee = 1 [(gogoproto.nullable) = false];
+  uint32 min_name_length = 2;
+  uint32 max_name_length = 3;
+  uint32 max_description_length = 4;
+}
+
+message Merchant {
+  string owner = 1;
+  string name = 2;
+  string description = 3;
+  string website = 4;
+  int32 status = 5;
+  int64 created_at = 6;
+  int64 updated_at = 7;
+}
+
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated Merchant merchants = 2;
+}
+
+message MsgRegisterMerchant {
+  string owner = 1;
+  string name = 2;
+  string description = 3;
+  string website = 4;
+}
+
+message MsgRegisterMerchantResponse {}
+
+message MsgUpdateMerchant {
+  string owner = 1;
+  string name = 2;
+  string description = 3;
+  string website = 4;
+}
+
+message MsgUpdateMerchantResponse {}
+
+message QueryParamsRequest {}
+message QueryParamsResponse {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryMerchantRequest {
+  string owner = 1;
+}
+message QueryMerchantResponse {
+  Merchant merchant = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryMerchantsRequest {}
+message QueryMerchantsResponse {
+  repeated Merchant merchants = 1;
+}
+
+service Msg {
+  rpc RegisterMerchant(MsgRegisterMerchant) returns (MsgRegisterMerchantResponse);
+  rpc UpdateMerchant(MsgUpdateMerchant) returns (MsgUpdateMerchantResponse);
+}
+
+service Query {
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse);
+  rpc Merchant(QueryMerchantRequest) returns (QueryMerchantResponse);
+  rpc Merchants(QueryMerchantsRequest) returns (QueryMerchantsResponse);
+}

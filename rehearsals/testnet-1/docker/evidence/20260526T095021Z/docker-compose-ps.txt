@@ -1,0 +1,4 @@
+NAME            IMAGE         COMMAND                  SERVICE   CREATED          STATUS          PORTS
+nexarail-val0   docker-val0   "nexaraild start --h…"   val0      21 seconds ago   Up 20 seconds   0.0.0.0:1317->1317/tcp, [::]:1317->1317/tcp, 0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp, 0.0.0.0:26657->26657/tcp, [::]:26657->26657/tcp, 26656/tcp
+nexarail-val1   docker-val1   "nexaraild start --h…"   val1      21 seconds ago   Up 20 seconds   26656/tcp, 0.0.0.0:1318->1317/tcp, [::]:1318->1317/tcp, 0.0.0.0:9091->9090/tcp, [::]:9091->9090/tcp, 0.0.0.0:26667->26657/tcp, [::]:26667->26657/tcp
+nexarail-val2   docker-val2   "nexaraild start --h…"   val2      21 seconds ago   Up 20 seconds   26656/tcp, 0.0.0.0:1319->1317/tcp, [::]:1319->1317/tcp, 0.0.0.0:9092->9090/tcp, [::]:9092->9090/tcp, 0.0.0.0:26677->26657/tcp, [::]:26677->26657/tcp
