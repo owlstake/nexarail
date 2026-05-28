@@ -22,6 +22,21 @@ SKIP_TX=0
 SKIP_QUERY=0
 SKIP_GOV=1
 KEEP_RUNNING=0
+RESOURCE_SAMPLING=0
+RESOURCE_INTERVAL=30
+LABEL=""
+NO_CLEAN=0
+REUSE_RUNNING=0
+RESOURCE_PID=""
+RESOURCE_STOP_FILE=""
+
+cleanup_resource_sampler_on_exit() {
+    if [ -n "${RESOURCE_PID:-}" ] && kill -0 "$RESOURCE_PID" >/dev/null 2>&1; then
+        [ -n "${RESOURCE_STOP_FILE:-}" ] && touch "$RESOURCE_STOP_FILE"
+        wait "$RESOURCE_PID" 2>/dev/null || true
+    fi
+}
+trap cleanup_resource_sampler_on_exit EXIT
 
 AGENTS=(
     "alpha:27657:1417"
@@ -45,6 +60,11 @@ Options:
   --skip-query                  Disable query load
   --skip-gov                    Keep governance vote reliability skipped
   --keep-running                Leave agents running after evidence capture
+  --resource-sampling           Capture process/resource metrics during load
+  --resource-interval <seconds> Resource sample interval. Default: 30
+  --label <name>                Optional run label for summaries
+  --no-clean                    Skip explicit pre-clean; spawn still performs safe clean validation
+  --reuse-running               Reuse already-running local five-agent runtime; skip spawn/clean
   --evidence-dir <path>         Evidence output directory
 EOF
 }
@@ -60,13 +80,18 @@ while [ "$#" -gt 0 ]; do
         --skip-query) SKIP_QUERY=1; shift ;;
         --skip-gov) SKIP_GOV=1; shift ;;
         --keep-running) KEEP_RUNNING=1; shift ;;
+        --resource-sampling) RESOURCE_SAMPLING=1; shift ;;
+        --resource-interval) RESOURCE_INTERVAL="${2:-}"; shift 2 ;;
+        --label) LABEL="${2:-}"; shift 2 ;;
+        --no-clean) NO_CLEAN=1; shift ;;
+        --reuse-running) REUSE_RUNNING=1; shift ;;
         --evidence-dir) EVIDENCE_DIR="${2:-}"; shift 2 ;;
         -h|--help) usage; exit 0 ;;
         *) echo "Unknown argument: $1" >&2; usage >&2; exit 2 ;;
     esac
 done
 
-case "$DURATION:$TX_RATE:$QUERY_RATE:$CONCURRENCY:$SAMPLE_INTERVAL" in
+case "$DURATION:$TX_RATE:$QUERY_RATE:$CONCURRENCY:$SAMPLE_INTERVAL:$RESOURCE_INTERVAL" in
     *[!0-9:]*|"") echo "Numeric options must be positive integers." >&2; exit 2 ;;
 esac
 [ "$DURATION" -gt 0 ] || { echo "--duration must be >0" >&2; exit 2; }
@@ -74,6 +99,7 @@ esac
 [ "$QUERY_RATE" -ge 0 ] || { echo "--query-rate must be >=0" >&2; exit 2; }
 [ "$CONCURRENCY" -gt 0 ] || { echo "--concurrency must be >0" >&2; exit 2; }
 [ "$SAMPLE_INTERVAL" -gt 0 ] || { echo "--sample-interval must be >0" >&2; exit 2; }
+[ "$RESOURCE_INTERVAL" -gt 0 ] || { echo "--resource-interval must be >0" >&2; exit 2; }
 
 mkdir -p "$EVIDENCE_DIR"/{accounts,cleanup,health,logs,queries,spawn,tx}
 
@@ -389,6 +415,32 @@ scan_logs() {
     grep -rniE "descriptor|unknownproto|unknown proto|gzip invalid|gzip" "$EVIDENCE_DIR/logs" > "$EVIDENCE_DIR/descriptor-scan.txt" 2>/dev/null || true
 }
 
+start_resource_sampler() {
+    [ "$RESOURCE_SAMPLING" -eq 1 ] || return 0
+    RESOURCE_STOP_FILE="$EVIDENCE_DIR/resource-stop.signal"
+    rm -f "$RESOURCE_STOP_FILE" 2>/dev/null || true
+    echo "  Resource sampling active every ${RESOURCE_INTERVAL}s"
+    "$SCRIPT_DIR/sample-agent-resources.sh" \
+        --evidence-dir "$EVIDENCE_DIR" \
+        --interval "$RESOURCE_INTERVAL" \
+        --stop-file "$RESOURCE_STOP_FILE" \
+        > "$EVIDENCE_DIR/resource-sampler.log" 2>&1 &
+    RESOURCE_PID="$!"
+    echo "$RESOURCE_PID" > "$EVIDENCE_DIR/resource-sampler.pid"
+}
+
+stop_resource_sampler() {
+    [ "$RESOURCE_SAMPLING" -eq 1 ] || return 0
+    [ -n "$RESOURCE_STOP_FILE" ] && touch "$RESOURCE_STOP_FILE"
+    if [ -n "$RESOURCE_PID" ]; then
+        wait "$RESOURCE_PID" 2>/dev/null || true
+    fi
+    if [ ! -f "$EVIDENCE_DIR/resources-summary.json" ]; then
+        "$SCRIPT_DIR/sample-agent-resources.sh" --evidence-dir "$EVIDENCE_DIR" --once \
+            >> "$EVIDENCE_DIR/resource-sampler.log" 2>&1 || true
+    fi
+}
+
 run_cleanup() {
     if [ "$KEEP_RUNNING" -eq 1 ]; then
         cat > "$EVIDENCE_DIR/cleanup/cleanup-status.json" <<EOF
@@ -413,11 +465,11 @@ EOF
 }
 
 write_summaries() {
-    python3 - "$EVIDENCE_DIR" "$DURATION" "$TX_RATE" "$QUERY_RATE" "$CONCURRENCY" "$SAMPLE_INTERVAL" "$SKIP_GOV" <<'PY'
+    python3 - "$EVIDENCE_DIR" "$DURATION" "$TX_RATE" "$QUERY_RATE" "$CONCURRENCY" "$SAMPLE_INTERVAL" "$SKIP_GOV" "$RESOURCE_SAMPLING" "$RESOURCE_INTERVAL" "$LABEL" <<'PY'
 import json, math, os, statistics, sys
 from collections import Counter, defaultdict
 
-evidence, duration, tx_rate, query_rate, concurrency, sample_interval, skip_gov = sys.argv[1:]
+evidence, duration, tx_rate, query_rate, concurrency, sample_interval, skip_gov, resource_sampling, resource_interval, label = sys.argv[1:]
 duration = int(duration)
 
 def read_jsonl(path):
@@ -511,6 +563,7 @@ rpc_health = load_json(os.path.join(evidence, "rpc-health.json"), [])
 rest_health = load_json(os.path.join(evidence, "rest-health.json"), [])
 live_flags = load_json(os.path.join(evidence, "live-flags-final.json"), [])
 cleanup = load_json(os.path.join(evidence, "cleanup", "cleanup-status.json"), {})
+resource_summary = load_json(os.path.join(evidence, "resources-summary.json"), {})
 
 scan_counts = {}
 for name, file_name in [
@@ -558,6 +611,7 @@ success = {
     "no_panic_or_fatal": scan_counts.get("panic") == 0,
     "no_unrecovered_checktx": scan_counts.get("checktx") == 0 and "checktx" not in tx_summary["failed_by_class"],
     "no_descriptor_unknownproto_gzip": scan_counts.get("descriptor") == 0,
+    "resource_metrics_captured": int(resource_sampling) == 0 or resource_summary.get("samples", 0) > 0,
     "cleanup_clean": cleanup.get("stopped") is True or cleanup.get("keep_running") is True,
 }
 phase_pass = all(success.values())
@@ -565,14 +619,18 @@ phase_pass = all(success.values())
 summary = {
     "phase": "16C",
     "evidence": evidence,
+    "label": label,
     "duration_seconds": duration,
     "settings": {
+        "label": label,
         "duration_seconds": duration,
         "tx_rate": int(tx_rate),
         "query_rate": int(query_rate),
         "concurrency": int(concurrency),
         "sample_interval": int(sample_interval),
         "skip_gov": bool(int(skip_gov)),
+        "resource_sampling": bool(int(resource_sampling)),
+        "resource_interval": int(resource_interval),
     },
     "observed_duration_seconds": observed_duration,
     "sample_rows": len(samples),
@@ -588,6 +646,7 @@ summary = {
     "rest_health_pass": rest_pass,
     "final_live_flags_false": live_false,
     "scan_counts": scan_counts,
+    "resource": resource_summary,
     "governance": {"skipped": bool(int(skip_gov)), "reason": "Skipped to keep Phase 16C bank/query throughput baseline isolated from proposal/vote timing." if int(skip_gov) else "not implemented in this run"},
     "cleanup": cleanup,
     "success_criteria": success,
@@ -625,6 +684,7 @@ Evidence: `{evidence}`
 | Query rate target | {query_rate}/s |
 | Concurrency | {concurrency} |
 | Sample interval | {sample_interval}s |
+| Label | {label or 'n/a'} |
 
 ## Chain Progress
 
@@ -668,6 +728,7 @@ Failed by endpoint: `{query_summary['failed_by_endpoint']}`
 - Panic/fatal scan lines: `{scan_counts.get('panic')}`
 - CheckTx scan lines: `{scan_counts.get('checktx')}`
 - Descriptor/unknown proto/gzip scan lines: `{scan_counts.get('descriptor')}`
+- Resource samples: `{resource_summary.get('samples', 0) if resource_summary else 0}`
 - Cleanup: `{cleanup}`
 
 ## Governance
@@ -686,6 +747,7 @@ echo "╔═══════════════════════�
 echo "║  NexaRail — Five-Agent Load Simulation                     ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 echo "  Duration: ${DURATION}s | tx-rate: ${TX_RATE}/s | query-rate: ${QUERY_RATE}/s | concurrency: ${CONCURRENCY}"
+[ -n "$LABEL" ] && echo "  Label: $LABEL"
 echo "  Evidence: $EVIDENCE_DIR"
 echo ""
 
@@ -708,13 +770,28 @@ Skip tx: $SKIP_TX
 Skip query: $SKIP_QUERY
 Skip gov: $SKIP_GOV
 Keep running: $KEEP_RUNNING
+Resource sampling: $RESOURCE_SAMPLING
+Resource interval: $RESOURCE_INTERVAL
+Label: $LABEL
+No clean: $NO_CLEAN
+Reuse running: $REUSE_RUNNING
 EOF
 
 echo "── Runtime Setup ───────────────────────────────────────────────"
-bash "$SCRIPT_DIR/clean-validator-agent-runtime.sh" --force > "$EVIDENCE_DIR/cleanup/pre-clean.log" 2>&1 || true
-if ! bash "$SCRIPT_DIR/spawn-validator-agents.sh" --clean --force-clean --no-tmux --agent-count 5 --evidence-dir "$EVIDENCE_DIR/spawn" > "$EVIDENCE_DIR/spawn/spawn.log" 2>&1; then
-    echo "  Spawn failed. See $EVIDENCE_DIR/spawn/spawn.log" >&2
-    exit 1
+if [ "$REUSE_RUNNING" -eq 1 ]; then
+    echo "  Reusing already-running local five-agent runtime"
+    echo "reuse_running=true" > "$EVIDENCE_DIR/spawn/reuse-running.txt"
+else
+    if [ "$NO_CLEAN" -eq 0 ]; then
+        bash "$SCRIPT_DIR/clean-validator-agent-runtime.sh" --force > "$EVIDENCE_DIR/cleanup/pre-clean.log" 2>&1 || true
+    else
+        echo "  Skipping explicit pre-clean; spawn still runs safe clean validation"
+        echo "no_clean=true" > "$EVIDENCE_DIR/cleanup/pre-clean.log"
+    fi
+    if ! bash "$SCRIPT_DIR/spawn-validator-agents.sh" --clean --force-clean --no-tmux --agent-count 5 --evidence-dir "$EVIDENCE_DIR/spawn" > "$EVIDENCE_DIR/spawn/spawn.log" 2>&1; then
+        echo "  Spawn failed. See $EVIDENCE_DIR/spawn/spawn.log" >&2
+        exit 1
+    fi
 fi
 if ! wait_for_readiness; then
     echo "  Agents did not become ready. See $EVIDENCE_DIR/spawn/." >&2
@@ -746,6 +823,7 @@ RUN_END_EPOCH=$((RUN_START_EPOCH + DURATION))
 
 echo "── Load Window ─────────────────────────────────────────────────"
 sample_agents 0
+start_resource_sampler
 
 PIDS=()
 if [ "$SKIP_TX" -eq 0 ] && [ "$TX_RATE" -gt 0 ]; then
@@ -789,6 +867,7 @@ collect_rpc_health
 collect_rest_health
 collect_live_flags
 scan_logs
+stop_resource_sampler
 
 if [ "$SKIP_GOV" -eq 1 ]; then
     cat > "$EVIDENCE_DIR/gov-summary.json" <<EOF

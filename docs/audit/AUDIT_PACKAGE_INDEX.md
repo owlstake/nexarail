@@ -235,6 +235,18 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `docs/testnet/PHASE_16C_LOAD_SIMULATION_RESULTS.md` — Smoke, 10-minute, and heavier local load results with evidence paths
 - `scripts/testnet/run-five-agent-load-sim.sh` — Controlled five-agent local load runner with tx/query metrics, health checks, live-flag readback, log scans, and cleanup
 
+### Phase 16D/16E — Trend Profiling and RC2 Evidence Rollup
+- `docs/testnet/PHASE_16D_TREND_LIMIT_PROFILING_PLAN.md` — Local trend/load-level plan and interpretation rules
+- `scripts/testnet/sample-agent-resources.sh` — Local per-agent process/resource sampler
+- `scripts/testnet/run-load-trend-profile.sh` — Sequential local load-level trend runner
+- `docs/release/RC2_DECISION_CRITERIA.md` — RC2 evidence criteria and decision options
+- `docs/release/POST_RC1_HARDENING_EVIDENCE_ROLLUP.md` — Phase 14B through 16D evidence summary
+- `docs/release/RC2_RECOMMENDATION.md` — RC2 preparation/defer recommendation
+- `docs/release/RC2_RELEASE_CHECKLIST.md` — RC2 release checklist
+- `docs/release/GITHUB_RELEASE_V0.1.1_RC2_DRAFT.md` — Draft RC2 release notes
+- `docs/release/RC1_TO_RC2_COMPARISON.md` — RC1-to-RC2 comparison
+- `scripts/release/check-rc2-readiness.sh` — Local RC2 readiness checker
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly

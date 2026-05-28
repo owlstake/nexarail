@@ -1,4 +1,12 @@
-# NexaRail RC1 — Technical Status One-Pager
+# NexaRail Technical Status One-Pager
+
+## Release Status
+- RC1 is public at tag `v0.1.0-rc1`
+- Post-RC1 hardening is complete enough for RC2 preparation
+- RC2 is under evaluation; tag/release is deferred pending canonical soak and targeted governance replay evidence
+- Public testnet remains NO-GO
+- Mainnet remains NO-GO
+- External validators remain pending
 
 ## Architecture
 - Cosmos SDK v0.47.x
@@ -26,6 +34,13 @@
 - Voting period: 30 seconds (devnet)
 - All live flags: false
 
+## Post-RC1 Hardening
+- Phase 14B/14C validation, governance safety, params-event, and error-message hardening completed
+- Phase 14D state-transition and invariant tests expanded
+- Phase 15A bounded fuzz tests and runtime invariant framework added
+- Phase 16A five-agent local runtime validation completed
+- Phase 16A.7 governance vote reliability hardened with per-agent RPC voting and retry/sequence refresh
+
 ## Product-Flow Evidence
 - Full product-flow suite: 487 pass / 0 fail
 - Semantic assertions: 36 pass / 0 fail
@@ -37,6 +52,9 @@
 - Five-agent 120s smoke: 45 / 45 tx included, 208 / 208 queries passed
 - Five-agent 10-minute profile: 220 / 220 tx included, 2330 / 2330 queries passed
 - Five-agent heavier profile: 876 / 876 tx included, 9020 / 9020 queries passed
+- Phase 16D L1: 224 / 224 tx included, 2600 / 2600 queries passed
+- Phase 16D L2: 448 / 448 tx included, 5030 / 5030 queries passed
+- Phase 16D L3: 515 / 515 tx included, 7300 / 7300 queries passed
 - Peer count stable at 4 per node; validator set stable at 5
 - Final live flags remained false; no panic, unrecovered CheckTx, descriptor, unknownproto, or gzip errors observed
 
@@ -57,6 +75,7 @@
 - Predeployment code gates: 23/23 pass
 - RC1 verification: 37/37 pass
 - Phase 16C local load simulation: pass
+- RC2 readiness: under evaluation; expected recommendation is defer until canonical soak and targeted governance replay gates are complete
 
 ## Remaining NO-GO Items
 - Public testnet launch

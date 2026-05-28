@@ -1,16 +1,17 @@
-# NexaRail RC1 — Reviewer Handoff
+# NexaRail Reviewer Handoff
 
 ## Repository
 - URL: `https://github.com/Bookings-cpu/nexarail`
 - Branch: `main`
-- Tag: `v0.1.0-rc1`
-- Latest commit: `b6737e5e562a5d52cf1e07d6879ff0718d538b9c`
+- Public release tag: `v0.1.0-rc1`
+- Post-RC1 main baseline before Phase 16E rollup: `fb859d9b13188838ddda6f783a073b6e5d25a71d`
 
 ## What NexaRail Is
 NexaRail is a Cosmos SDK-based application chain with built-in business logic modules for settlement, escrow, merchant management, payout processing, treasury management, and fee collection. This RC1 release provides a controlled local development environment for evaluation purposes.
 
 ## Current Status
 - **RC1**: Released for controlled local evaluation
+- **RC2**: Under evaluation; preparation recommended, tag/release deferred
 - **Mainnet**: NO-GO
 - **Public testnet**: NO-GO
 - **External validators**: PENDING
@@ -19,6 +20,7 @@ NexaRail is a Cosmos SDK-based application chain with built-in business logic mo
 
 ## What Is Proven
 - Local single-node devnet launches and reaches consensus
+- Local five-agent devnet harnesses run on one machine
 - All 7 product modules compile, deploy, and respond to queries
 - All product modules report `live_enabled: false` by default
 - 36 REST endpoints respond with structured data
@@ -28,13 +30,15 @@ NexaRail is a Cosmos SDK-based application chain with built-in business logic mo
 - Regression matrix: 9 fast checks pass
 - SDK package checks: 24 pass
 - Portal checks: 6 pass
+- Post-RC1 validation, invariant, fuzz, restart, load, and trend evidence is documented in `docs/release/POST_RC1_HARDENING_EVIDENCE_ROLLUP.md`
 
 ## What Is Not Proven
-- Multi-validator consensus
+- External validator participation
 - Public testnet operation
 - Token economics at scale
 - External validator coordination
 - Mainnet readiness
+- Production throughput
 
 ## How to Clone
 ```bash
@@ -95,6 +99,8 @@ bash scripts/dev/check-developer-portal.sh
 | RC1 verification | `rehearsals/rc1-devnet/evidence/<timestamp>/` |
 | SDK packaging | `releases/sdk-local/` |
 | Developer bundle | `releases/developer-bundles/` |
+| Post-RC1 rollup | `docs/release/POST_RC1_HARDENING_EVIDENCE_ROLLUP.md` |
+| RC2 decision | `docs/release/RC2_RECOMMENDATION.md` |
 
 ## Known Limitations
 See [Known Limitations Index](KNOWN_LIMITATIONS_INDEX.md) for full list.
@@ -105,7 +111,7 @@ Key limitations:
 - No private key handling in SDKs
 - REST gateway is read-only
 - Governance UX is script-heavy
-- Burn routing requires explicit evidence collection
+- RC2 tag is deferred until canonical one-hour soak and targeted governance replay evidence are complete
 
 ## Safety Disclaimer
 ```

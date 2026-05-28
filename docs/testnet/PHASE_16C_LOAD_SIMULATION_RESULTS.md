@@ -140,6 +140,17 @@ Two harness issues were fixed before accepting the canonical 10-minute evidence:
 - No live-value or token-buyability claim is implied.
 - Query latency reflects local loopback REST/RPC access, not internet-facing endpoint behavior.
 
+## Follow-On Trend Profiling
+
+Phase 16D added local resource sampling and repeated trend profiles:
+
+- L1: 224 / 224 tx included, 2600 / 2600 queries
+- L2: 448 / 448 tx included, 5030 / 5030 queries
+- L3: 515 / 515 tx included, 7300 / 7300 queries
+- L4: interrupted during Phase 16E handoff and treated as non-canonical
+
+These remain local five-agent devnet observations only.
+
 ## Verification
 
 | Command | Result |

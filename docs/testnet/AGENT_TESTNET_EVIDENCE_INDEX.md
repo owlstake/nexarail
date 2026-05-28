@@ -1,7 +1,7 @@
 # Agent Testnet Evidence Index
 
-**Date:** 2026-05-28
-**Scope:** consolidated evidence index for NexaRail local validator-agent rehearsals through Phase 16C
+**Date:** 2026-05-29
+**Scope:** consolidated evidence index for NexaRail local validator-agent rehearsals through Phase 16E rollup
 **Chain ID:** `nexarail-agent-testnet-1`
 
 ## Phase Evidence Paths
@@ -17,6 +17,9 @@
 | Phase 16C smoke load | `rehearsals/validator-agents/load-sim/evidence/phase16c-smoke-20260528T213401Z/` | 120s local bank tx/query load smoke |
 | Phase 16C 10-minute load | `rehearsals/validator-agents/load-sim/evidence/phase16c-10min-stable-20260528T215108Z/` | Canonical 10-minute local throughput profile |
 | Phase 16C heavier load | `rehearsals/validator-agents/load-sim/evidence/phase16c-heavy-20260528T220345Z/` | Optional 20-minute heavier local throughput profile |
+| Phase 16D L1/L2 trend | `rehearsals/validator-agents/load-trends/evidence/phase16d-L1L2-20260528T225534Z/` | Local trend/resource profile for L1 and L2 |
+| Phase 16D L3 trend | `rehearsals/validator-agents/load-trends/evidence/phase16d-L3L4-20260528T231938Z/L3/` | Local trend/resource profile for completed L3 |
+| Phase 16D partial L4 | `rehearsals/validator-agents/load-trends/evidence/phase16d-L3L4-20260528T231938Z/L4/` | Interrupted during Phase 16E handoff; non-canonical |
 
 ## Key Summaries
 
@@ -36,6 +39,10 @@
 | Phase 16C load results | `docs/testnet/PHASE_16C_LOAD_SIMULATION_RESULTS.md` |
 | Phase 16C 10-minute summary | `rehearsals/validator-agents/load-sim/evidence/phase16c-10min-stable-20260528T215108Z/summary.json` |
 | Phase 16C heavier summary | `rehearsals/validator-agents/load-sim/evidence/phase16c-heavy-20260528T220345Z/summary.json` |
+| Phase 16D L1/L2 trend summary | `rehearsals/validator-agents/load-trends/evidence/phase16d-L1L2-20260528T225534Z/trend-summary.json` |
+| Phase 16D L3 level summary | `rehearsals/validator-agents/load-trends/evidence/phase16d-L3L4-20260528T231938Z/L3/summary.json` |
+| Post-RC1 rollup | `docs/release/POST_RC1_HARDENING_EVIDENCE_ROLLUP.md` |
+| RC2 recommendation | `docs/release/RC2_RECOMMENDATION.md` |
 
 ## Genesis Checksums
 
@@ -62,6 +69,9 @@
 | Phase 9V all-direct simultaneous post-restart bank send | `9F85BD88F936818D6A910BEE640DDAF3B1D437F993519BE2FACCCF3D0E0E52A5` | inclusion code `0` |
 | Phase 16C 10-minute bank load | 220 attempted / 220 included | all inclusion code `0` |
 | Phase 16C heavier bank load | 876 attempted / 876 included | all inclusion code `0` |
+| Phase 16D L1 bank load | 224 attempted / 224 included | all inclusion code `0` |
+| Phase 16D L2 bank load | 448 attempted / 448 included | all inclusion code `0` |
+| Phase 16D L3 bank load | 515 attempted / 515 included | all inclusion code `0` |
 
 ## Governance Proposal IDs
 

@@ -1,7 +1,12 @@
-# NexaRail RC1 — Known Limitations Index
+# NexaRail Known Limitations Index
+
+## Release Candidate Status
+- RC1 is public for controlled local evaluation.
+- RC2 is under evaluation and should not be tagged until the canonical one-hour soak rerun and targeted post-fix governance/product-flow replay are complete.
 
 ## Devnet Limitations
-- Single-node only — no multi-validator consensus
+- RC1 binaries are single-node oriented; post-RC1 `main` includes local five-agent validator-agent evidence
+- Five-agent evidence is local single-machine evidence only
 - Voting period shortened to 30 seconds (not realistic for mainnet)
 - No persistent validator set management across restarts
 - REST API gateway uses default Cosmos SDK proxy (limited configurability)
@@ -27,7 +32,7 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 
 ## Mainnet Limitations
 - Mainnet: NO-GO
-- Requires: public testnet, independent validators, community governance, token distribution, exchange listing
+- Requires: public testnet, external validator evidence, community governance, legal/economic review
 
 ## External Validator Limitations
 - External validators: PENDING
@@ -38,6 +43,7 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 - On-chain governance exists but has not been tested with external proposers
 - Governance UX is script-heavy
 - Product toggle proposals require exact parameter JSON construction
+- Phase 16A.7 fixed local vote routing/sequence handling, but a targeted post-fix replay remains recommended before RC2 tag
 
 ## Audit and Legal
 - No external security audit has been performed
@@ -50,7 +56,7 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 - Docker: NO DOCKER IMAGE
 
 ## Additional
-- Burn routing requires explicit evidence collection to verify
+- Burn routing has local product-flow evidence, but remains devnet-only
 - Dashboard is read-only static HTML — no live data refresh
 - Portal is static HTML — no server-side rendering
 - Developer bundle is generated locally — not distributed via CDN
