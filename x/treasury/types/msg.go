@@ -2,7 +2,9 @@ package types
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/nexarail/chain/x/common"
 )
 
 var _ sdk.Msg = (*MsgCreateTreasuryAccount)(nil)
@@ -18,19 +20,22 @@ var _ sdk.Msg = (*MsgCancelSpendRequest)(nil)
 var _ sdk.Msg = (*MsgUpdateParams)(nil)
 
 type MsgCreateTreasuryAccount struct {
-	Authority      string
-	AccountId      string
-	Category       int32
-	Name           string
-	Description    string
-	MetadataUri    string
-	NominalBalance sdk.Coin
+	Authority      string   `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	AccountId      string   `json:"account_id" protobuf:"bytes,2,opt,name=account_id,json=accountId,proto3"`
+	Category       int32    `json:"category" protobuf:"varint,3,opt,name=category,proto3"`
+	Name           string   `json:"name" protobuf:"bytes,4,opt,name=name,proto3"`
+	Description    string   `json:"description" protobuf:"bytes,5,opt,name=description,proto3"`
+	MetadataUri    string   `json:"metadata_uri" protobuf:"bytes,6,opt,name=metadata_uri,json=metadataUri,proto3"`
+	NominalBalance sdk.Coin `json:"nominal_balance" protobuf:"bytes,7,opt,name=nominal_balance,json=nominalBalance,proto3"`
 }
 
 func NewMsgCreateTreasuryAccount(auth, id string, cat int32, name, desc, uri string, bal sdk.Coin) *MsgCreateTreasuryAccount {
 	return &MsgCreateTreasuryAccount{auth, id, cat, name, desc, uri, bal}
 }
-func (m *MsgCreateTreasuryAccount) ProtoMessage()  {}
+func (m *MsgCreateTreasuryAccount) ProtoMessage() {}
+func (m *MsgCreateTreasuryAccount) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{1}
+}
 func (m *MsgCreateTreasuryAccount) Reset()         { *m = MsgCreateTreasuryAccount{} }
 func (m *MsgCreateTreasuryAccount) String() string { return fmt.Sprintf("CreateAcct{%s}", m.AccountId) }
 func (m MsgCreateTreasuryAccount) Route() string   { return RouterKey }
@@ -48,22 +53,25 @@ func (m MsgCreateTreasuryAccount) GetSignBytes() []byte {
 }
 
 type MsgCreateBudget struct {
-	Authority   string
-	BudgetId    string
-	AccountId   string
-	Category    int32
-	Title       string
-	Description string
-	TotalAmount sdk.Coin
-	StartTime   int64
-	EndTime     int64
-	MetadataUri string
+	Authority   string   `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	BudgetId    string   `json:"budget_id" protobuf:"bytes,2,opt,name=budget_id,json=budgetId,proto3"`
+	AccountId   string   `json:"account_id" protobuf:"bytes,3,opt,name=account_id,json=accountId,proto3"`
+	Category    int32    `json:"category" protobuf:"varint,4,opt,name=category,proto3"`
+	Title       string   `json:"title" protobuf:"bytes,5,opt,name=title,proto3"`
+	Description string   `json:"description" protobuf:"bytes,6,opt,name=description,proto3"`
+	TotalAmount sdk.Coin `json:"total_amount" protobuf:"bytes,7,opt,name=total_amount,json=totalAmount,proto3"`
+	StartTime   int64    `json:"start_time" protobuf:"varint,8,opt,name=start_time,json=startTime,proto3"`
+	EndTime     int64    `json:"end_time" protobuf:"varint,9,opt,name=end_time,json=endTime,proto3"`
+	MetadataUri string   `json:"metadata_uri" protobuf:"bytes,10,opt,name=metadata_uri,json=metadataUri,proto3"`
 }
 
 func NewMsgCreateBudget(auth, bid, aid string, cat int32, title, desc string, total sdk.Coin, st, et int64, uri string) *MsgCreateBudget {
 	return &MsgCreateBudget{auth, bid, aid, cat, title, desc, total, st, et, uri}
 }
-func (m *MsgCreateBudget) ProtoMessage()  {}
+func (m *MsgCreateBudget) ProtoMessage() {}
+func (m *MsgCreateBudget) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{2}
+}
 func (m *MsgCreateBudget) Reset()         { *m = MsgCreateBudget{} }
 func (m *MsgCreateBudget) String() string { return fmt.Sprintf("CreateBudget{%s}", m.BudgetId) }
 func (m MsgCreateBudget) Route() string   { return RouterKey }
@@ -81,15 +89,18 @@ func (m MsgCreateBudget) GetSignBytes() []byte {
 }
 
 type MsgUpdateBudgetStatus struct {
-	Authority string
-	BudgetId  string
-	Status    int32
+	Authority string `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	BudgetId  string `json:"budget_id" protobuf:"bytes,2,opt,name=budget_id,json=budgetId,proto3"`
+	Status    int32  `json:"status" protobuf:"varint,3,opt,name=status,proto3"`
 }
 
 func NewMsgUpdateBudgetStatus(auth, id string, status int32) *MsgUpdateBudgetStatus {
 	return &MsgUpdateBudgetStatus{auth, id, status}
 }
-func (m *MsgUpdateBudgetStatus) ProtoMessage()  {}
+func (m *MsgUpdateBudgetStatus) ProtoMessage() {}
+func (m *MsgUpdateBudgetStatus) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{3}
+}
 func (m *MsgUpdateBudgetStatus) Reset()         { *m = MsgUpdateBudgetStatus{} }
 func (m *MsgUpdateBudgetStatus) String() string { return fmt.Sprintf("UpdateBudget{%s}", m.BudgetId) }
 func (m MsgUpdateBudgetStatus) Route() string   { return RouterKey }
@@ -107,21 +118,24 @@ func (m MsgUpdateBudgetStatus) GetSignBytes() []byte {
 }
 
 type MsgCreateGrant struct {
-	Authority        string
-	GrantId          string
-	BudgetId         string
-	RecipientAddress string
-	Title            string
-	Description      string
-	Amount           sdk.Coin
-	MilestoneCount   uint32
-	MetadataUri      string
+	Authority        string   `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	GrantId          string   `json:"grant_id" protobuf:"bytes,2,opt,name=grant_id,json=grantId,proto3"`
+	BudgetId         string   `json:"budget_id" protobuf:"bytes,3,opt,name=budget_id,json=budgetId,proto3"`
+	RecipientAddress string   `json:"recipient_address" protobuf:"bytes,4,opt,name=recipient_address,json=recipientAddress,proto3"`
+	Title            string   `json:"title" protobuf:"bytes,5,opt,name=title,proto3"`
+	Description      string   `json:"description" protobuf:"bytes,6,opt,name=description,proto3"`
+	Amount           sdk.Coin `json:"amount" protobuf:"bytes,7,opt,name=amount,proto3"`
+	MilestoneCount   uint32   `json:"milestone_count" protobuf:"varint,8,opt,name=milestone_count,json=milestoneCount,proto3"`
+	MetadataUri      string   `json:"metadata_uri" protobuf:"bytes,9,opt,name=metadata_uri,json=metadataUri,proto3"`
 }
 
 func NewMsgCreateGrant(auth, gid, bid, recip, title, desc string, amt sdk.Coin, mc uint32, uri string) *MsgCreateGrant {
 	return &MsgCreateGrant{auth, gid, bid, recip, title, desc, amt, mc, uri}
 }
-func (m *MsgCreateGrant) ProtoMessage()  {}
+func (m *MsgCreateGrant) ProtoMessage() {}
+func (m *MsgCreateGrant) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{4}
+}
 func (m *MsgCreateGrant) Reset()         { *m = MsgCreateGrant{} }
 func (m *MsgCreateGrant) String() string { return fmt.Sprintf("CreateGrant{%s}", m.GrantId) }
 func (m MsgCreateGrant) Route() string   { return RouterKey }
@@ -137,15 +151,18 @@ func (m MsgCreateGrant) GetSigners() []sdk.AccAddress {
 func (m MsgCreateGrant) GetSignBytes() []byte { return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m)) }
 
 type MsgUpdateGrantStatus struct {
-	Authority string
-	GrantId   string
-	Status    int32
+	Authority string `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	GrantId   string `json:"grant_id" protobuf:"bytes,2,opt,name=grant_id,json=grantId,proto3"`
+	Status    int32  `json:"status" protobuf:"varint,3,opt,name=status,proto3"`
 }
 
 func NewMsgUpdateGrantStatus(auth, id string, status int32) *MsgUpdateGrantStatus {
 	return &MsgUpdateGrantStatus{auth, id, status}
 }
-func (m *MsgUpdateGrantStatus) ProtoMessage()  {}
+func (m *MsgUpdateGrantStatus) ProtoMessage() {}
+func (m *MsgUpdateGrantStatus) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{5}
+}
 func (m *MsgUpdateGrantStatus) Reset()         { *m = MsgUpdateGrantStatus{} }
 func (m *MsgUpdateGrantStatus) String() string { return fmt.Sprintf("UpdateGrant{%s}", m.GrantId) }
 func (m MsgUpdateGrantStatus) Route() string   { return RouterKey }
@@ -163,22 +180,25 @@ func (m MsgUpdateGrantStatus) GetSignBytes() []byte {
 }
 
 type MsgCreateSpendRequest struct {
-	Requester        string
-	SpendId          string
-	AccountId        string
-	BudgetId         string
-	GrantId          string
-	RecipientAddress string
-	Amount           sdk.Coin
-	Purpose          string
-	Reference        string
-	Memo             string
+	Requester        string   `json:"requester" protobuf:"bytes,1,opt,name=requester,proto3"`
+	SpendId          string   `json:"spend_id" protobuf:"bytes,2,opt,name=spend_id,json=spendId,proto3"`
+	AccountId        string   `json:"account_id" protobuf:"bytes,3,opt,name=account_id,json=accountId,proto3"`
+	BudgetId         string   `json:"budget_id" protobuf:"bytes,4,opt,name=budget_id,json=budgetId,proto3"`
+	GrantId          string   `json:"grant_id" protobuf:"bytes,5,opt,name=grant_id,json=grantId,proto3"`
+	RecipientAddress string   `json:"recipient_address" protobuf:"bytes,6,opt,name=recipient_address,json=recipientAddress,proto3"`
+	Amount           sdk.Coin `json:"amount" protobuf:"bytes,7,opt,name=amount,proto3"`
+	Purpose          string   `json:"purpose" protobuf:"bytes,8,opt,name=purpose,proto3"`
+	Reference        string   `json:"reference" protobuf:"bytes,9,opt,name=reference,proto3"`
+	Memo             string   `json:"memo" protobuf:"bytes,10,opt,name=memo,proto3"`
 }
 
 func NewMsgCreateSpendRequest(req, sid, aid, bid, gid, recip string, amt sdk.Coin, purpose, ref, memo string) *MsgCreateSpendRequest {
 	return &MsgCreateSpendRequest{req, sid, aid, bid, gid, recip, amt, purpose, ref, memo}
 }
-func (m *MsgCreateSpendRequest) ProtoMessage()  {}
+func (m *MsgCreateSpendRequest) ProtoMessage() {}
+func (m *MsgCreateSpendRequest) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{6}
+}
 func (m *MsgCreateSpendRequest) Reset()         { *m = MsgCreateSpendRequest{} }
 func (m *MsgCreateSpendRequest) String() string { return fmt.Sprintf("CreateSpend{%s}", m.SpendId) }
 func (m MsgCreateSpendRequest) Route() string   { return RouterKey }
@@ -196,14 +216,17 @@ func (m MsgCreateSpendRequest) GetSignBytes() []byte {
 }
 
 type MsgApproveSpendRequest struct {
-	Authority string
-	SpendId   string
+	Authority string `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	SpendId   string `json:"spend_id" protobuf:"bytes,2,opt,name=spend_id,json=spendId,proto3"`
 }
 
 func NewMsgApproveSpendRequest(auth, id string) *MsgApproveSpendRequest {
 	return &MsgApproveSpendRequest{auth, id}
 }
-func (m *MsgApproveSpendRequest) ProtoMessage()  {}
+func (m *MsgApproveSpendRequest) ProtoMessage() {}
+func (m *MsgApproveSpendRequest) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{7}
+}
 func (m *MsgApproveSpendRequest) Reset()         { *m = MsgApproveSpendRequest{} }
 func (m *MsgApproveSpendRequest) String() string { return fmt.Sprintf("ApproveSpend{%s}", m.SpendId) }
 func (m MsgApproveSpendRequest) Route() string   { return RouterKey }
@@ -221,15 +244,18 @@ func (m MsgApproveSpendRequest) GetSignBytes() []byte {
 }
 
 type MsgRejectSpendRequest struct {
-	Authority string
-	SpendId   string
-	Memo      string
+	Authority string `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	SpendId   string `json:"spend_id" protobuf:"bytes,2,opt,name=spend_id,json=spendId,proto3"`
+	Memo      string `json:"memo" protobuf:"bytes,3,opt,name=memo,proto3"`
 }
 
 func NewMsgRejectSpendRequest(auth, id, memo string) *MsgRejectSpendRequest {
 	return &MsgRejectSpendRequest{auth, id, memo}
 }
-func (m *MsgRejectSpendRequest) ProtoMessage()  {}
+func (m *MsgRejectSpendRequest) ProtoMessage() {}
+func (m *MsgRejectSpendRequest) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{8}
+}
 func (m *MsgRejectSpendRequest) Reset()         { *m = MsgRejectSpendRequest{} }
 func (m *MsgRejectSpendRequest) String() string { return fmt.Sprintf("RejectSpend{%s}", m.SpendId) }
 func (m MsgRejectSpendRequest) Route() string   { return RouterKey }
@@ -247,16 +273,19 @@ func (m MsgRejectSpendRequest) GetSignBytes() []byte {
 }
 
 type MsgMarkSpendExecuted struct {
-	Authority string
-	SpendId   string
-	Reference string
-	Memo      string
+	Authority string `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	SpendId   string `json:"spend_id" protobuf:"bytes,2,opt,name=spend_id,json=spendId,proto3"`
+	Reference string `json:"reference" protobuf:"bytes,3,opt,name=reference,proto3"`
+	Memo      string `json:"memo" protobuf:"bytes,4,opt,name=memo,proto3"`
 }
 
 func NewMsgMarkSpendExecuted(auth, id, ref, memo string) *MsgMarkSpendExecuted {
 	return &MsgMarkSpendExecuted{auth, id, ref, memo}
 }
-func (m *MsgMarkSpendExecuted) ProtoMessage()  {}
+func (m *MsgMarkSpendExecuted) ProtoMessage() {}
+func (m *MsgMarkSpendExecuted) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{9}
+}
 func (m *MsgMarkSpendExecuted) Reset()         { *m = MsgMarkSpendExecuted{} }
 func (m *MsgMarkSpendExecuted) String() string { return fmt.Sprintf("ExecuteSpend{%s}", m.SpendId) }
 func (m MsgMarkSpendExecuted) Route() string   { return RouterKey }
@@ -274,15 +303,18 @@ func (m MsgMarkSpendExecuted) GetSignBytes() []byte {
 }
 
 type MsgCancelSpendRequest struct {
-	Signer  string
-	SpendId string
-	Memo    string
+	Signer  string `json:"signer" protobuf:"bytes,1,opt,name=signer,proto3"`
+	SpendId string `json:"spend_id" protobuf:"bytes,2,opt,name=spend_id,json=spendId,proto3"`
+	Memo    string `json:"memo" protobuf:"bytes,3,opt,name=memo,proto3"`
 }
 
 func NewMsgCancelSpendRequest(signer, id, memo string) *MsgCancelSpendRequest {
 	return &MsgCancelSpendRequest{signer, id, memo}
 }
-func (m *MsgCancelSpendRequest) ProtoMessage()  {}
+func (m *MsgCancelSpendRequest) ProtoMessage() {}
+func (m *MsgCancelSpendRequest) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{10}
+}
 func (m *MsgCancelSpendRequest) Reset()         { *m = MsgCancelSpendRequest{} }
 func (m *MsgCancelSpendRequest) String() string { return fmt.Sprintf("CancelSpend{%s}", m.SpendId) }
 func (m MsgCancelSpendRequest) Route() string   { return RouterKey }
@@ -300,16 +332,21 @@ func (m MsgCancelSpendRequest) GetSignBytes() []byte {
 }
 
 type MsgUpdateParams struct {
-	Authority string
-	Params    Params
+	Authority string `json:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	Params    Params `json:"params" protobuf:"bytes,2,opt,name=params,proto3"`
 }
 
 func NewMsgUpdateParams(auth string, p Params) *MsgUpdateParams { return &MsgUpdateParams{auth, p} }
 func (m *MsgUpdateParams) ProtoMessage()                        {}
-func (m *MsgUpdateParams) Reset()                               { *m = MsgUpdateParams{} }
-func (m *MsgUpdateParams) String() string                       { return fmt.Sprintf("UpdateParams{%s}", m.Authority) }
-func (m MsgUpdateParams) Route() string                         { return RouterKey }
-func (m MsgUpdateParams) Type() string                          { return "update_params" }
+
+// Descriptor implements the descriptorIface for proto unknown field checking.
+func (m *MsgUpdateParams) Descriptor() ([]byte, []int) {
+	return common.TreasuryDescriptorBytes, []int{11}
+}
+func (m *MsgUpdateParams) Reset()         { *m = MsgUpdateParams{} }
+func (m *MsgUpdateParams) String() string { return fmt.Sprintf("UpdateParams{%s}", m.Authority) }
+func (m MsgUpdateParams) Route() string   { return RouterKey }
+func (m MsgUpdateParams) Type() string    { return "update_params" }
 func (m MsgUpdateParams) ValidateBasic() error {
 	_, e := sdk.AccAddressFromBech32(m.Authority)
 	return e

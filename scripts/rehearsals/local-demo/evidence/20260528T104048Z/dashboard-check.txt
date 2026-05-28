@@ -1,0 +1,52 @@
+═══════════════════════════════════════════════════════════════
+  NexaRail — Developer Dashboard File Check
+  Dashboard: /Users/bradleyjohnston/workspace/nexarail/examples/dashboard
+═══════════════════════════════════════════════════════════════
+
+── File Existence ───────────────────────────────────────
+  [PASS]  index.html exists (243 lines)
+  [PASS]  app.js exists (844 lines)
+  [PASS]  styles.css exists (608 lines)
+  [PASS]  README.md exists (61 lines)
+
+── Safety Banner (index.html) ───────────────────────────────────────
+  [PASS]  Safety banner phrase found: "not mainnet"
+  [PASS]  Safety banner phrase found: "no token sale"
+  [PASS]  Safety banner phrase found: "no monetary value"
+  [PASS]  Safety banner phrase found: "live funds disabled"
+  → Safety-related markers found: 4
+
+── Forbidden Code Patterns (app.js) ───────────────────────────────────────
+  [PASS]  No "wallet" pattern found
+  [PASS]  No "privateKey" pattern found
+  [PASS]  No "mnemonic" pattern found
+  [PASS]  No "private_key" pattern found
+  [PASS]  No "secret" pattern found
+  [PASS]  No "keystore" pattern found
+
+── External API Endpoints ───────────────────────────────────────
+  [PASS]  index.html: No external API endpoints hardcoded
+  [PASS]  app.js: No external API endpoints hardcoded
+  [PASS]  styles.css: No external API endpoints hardcoded
+
+── Forbidden Wording ───────────────────────────────────────
+  [PASS]  index.html: No forbidden wording
+  [PASS]  app.js: No forbidden wording
+  [PASS]  styles.css: No forbidden wording
+  [PASS]  README.md: No forbidden wording
+
+── Line Counts ───────────────────────────────────────
+  File                      Lines
+  ─────────────────────────────────
+  index.html                  243
+  app.js                      844
+  styles.css                  608
+  README.md                    61
+  ─────────────────────────────────
+  Total                      1756
+
+── Summary ──────────────────────────────────────────────────
+  PASS: 21  FAIL: 0
+─────────────────────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════

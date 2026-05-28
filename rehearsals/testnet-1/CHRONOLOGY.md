@@ -22,3 +22,15 @@ Announcement posted by Bradley Johnston to the designated outreach channel.
 - Docs linked ✅
 
 **Pipeline status:** Phase 7G active. Awaiting first validator applications.
+
+## 2026-05-26 13:18 BST — Cosmos Forum Announcement Posted
+
+Announcement posted by Bradley Johnston to forum.cosmos.network (Validators category).
+
+**Outreach channels active:**
+1. GitHub repo: https://github.com/Bookings-cpu/nexarail ✅
+2. Cosmos Forum: Validators category ✅
+
+**Still pending:**
+- GitHub Issue announcement (token scope issue — needs manual post or token upgrade)
+- Direct outreach to known validators (needs target list)

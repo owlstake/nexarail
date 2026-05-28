@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/cometbft/cometbft/libs/log"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -213,7 +212,7 @@ func (k Keeper) CreateEscrow(ctx sdk.Context, msg *types.MsgCreateEscrow) (*type
 	}
 
 	// Expiry
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	expires := msg.ExpiresAt
 	if expires == 0 {
 		expires = now + int64(params.DefaultExpirySeconds)
@@ -282,7 +281,7 @@ func (k Keeper) ReleaseEscrow(ctx sdk.Context, msg *types.MsgReleaseEscrow) erro
 	if msg.Memo != "" {
 		e.Memo = strings.TrimSpace(msg.Memo)
 	}
-	e.UpdatedAt = time.Now().Unix()
+	e.UpdatedAt = ctx.BlockTime().Unix()
 
 	if err := k.SetEscrow(ctx, e); err != nil {
 		return err
@@ -326,7 +325,7 @@ func (k Keeper) RefundEscrow(ctx sdk.Context, msg *types.MsgRefundEscrow) error 
 	if msg.Memo != "" {
 		e.Memo = strings.TrimSpace(msg.Memo)
 	}
-	e.UpdatedAt = time.Now().Unix()
+	e.UpdatedAt = ctx.BlockTime().Unix()
 
 	if err := k.SetEscrow(ctx, e); err != nil {
 		return err
@@ -360,7 +359,7 @@ func (k Keeper) OpenDispute(ctx sdk.Context, msg *types.MsgOpenDispute) error {
 	e.Status = int32(types.EscrowDisputed)
 	e.DisputeStatus = int32(types.DisputeOpen)
 	e.DisputeReason = strings.TrimSpace(msg.DisputeReason)
-	e.UpdatedAt = time.Now().Unix()
+	e.UpdatedAt = ctx.BlockTime().Unix()
 
 	if err := k.SetEscrow(ctx, e); err != nil {
 		return err
@@ -430,7 +429,7 @@ func (k Keeper) ResolveDispute(ctx sdk.Context, msg *types.MsgResolveDispute) er
 
 	e.DisputeStatus = ds
 	e.ResolutionNote = strings.TrimSpace(msg.ResolutionNote)
-	e.UpdatedAt = time.Now().Unix()
+	e.UpdatedAt = ctx.BlockTime().Unix()
 
 	if err := k.SetEscrow(ctx, e); err != nil {
 		return err
@@ -475,7 +474,7 @@ func (k Keeper) CancelEscrow(ctx sdk.Context, msg *types.MsgCancelEscrow) error 
 	if msg.Memo != "" {
 		e.Memo = strings.TrimSpace(msg.Memo)
 	}
-	e.UpdatedAt = time.Now().Unix()
+	e.UpdatedAt = ctx.BlockTime().Unix()
 
 	if err := k.SetEscrow(ctx, e); err != nil {
 		return err

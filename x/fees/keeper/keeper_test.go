@@ -140,3 +140,40 @@ func TestKeeperAuthority(t *testing.T) {
 	auth := k.GetAuthority()
 	require.NotEmpty(t, auth)
 }
+
+// Phase 8B: Query edge-case tests
+
+func TestQueryParams_Phase8B(t *testing.T) {
+	k, ctx := setupKeeper(t)
+	params := types.DefaultParams()
+	k.SetParams(ctx, params)
+
+	qs := keeper.NewQueryServerImpl(k)
+	resp, err := qs.Params(sdk.WrapSDKContext(ctx), &types.QueryParamsRequest{})
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+}
+
+// =============================================================================
+// Phase 8E: Stress Tests — Invariants, Fuzz, Randomized, Failure Injection
+// =============================================================================
+
+func TestInvariant_SharesSumTo10000Bps(t *testing.T) {
+	k, ctx := setupKeeper(t)
+	params := types.DefaultParams()
+	k.SetParams(ctx, params)
+
+	v, tr, b := k.GetFeeSplit(ctx)
+	require.Equal(t, uint32(10000), v+tr+b, "invariant broken: fee shares must sum to 10000 bps")
+}
+
+func TestFailure_FeeSplitInvalidRejected(t *testing.T) {
+	k, ctx := setupKeeper(t)
+	params := types.DefaultParams()
+	params.ValidatorShareBps = 0
+	params.TreasuryShareBps = 0
+	params.BurnShareBps = 0
+	err := k.SetParams(ctx, params)
+	require.Error(t, err, "SetParams should reject zero-total shares")
+	require.Contains(t, err.Error(), "10000")
+}

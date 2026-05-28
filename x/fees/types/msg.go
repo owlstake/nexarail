@@ -3,6 +3,8 @@ package types
 import (
 	"fmt"
 
+	"github.com/nexarail/chain/x/common"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -13,8 +15,8 @@ var (
 
 // MsgUpdateParams is the message for updating the fees module parameters.
 type MsgUpdateParams struct {
-	Authority string `json:"authority" yaml:"authority"`
-	Params    Params `json:"params" yaml:"params"`
+	Authority string `json:"authority" yaml:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	Params    Params `json:"params" yaml:"params" protobuf:"bytes,2,opt,name=params,proto3"`
 }
 
 // NewMsgUpdateParams creates a new MsgUpdateParams.
@@ -26,9 +28,10 @@ func NewMsgUpdateParams(authority string, params Params) *MsgUpdateParams {
 }
 
 // proto.Message interface
-func (msg *MsgUpdateParams) ProtoMessage()  {}
-func (msg *MsgUpdateParams) Reset()         { *msg = MsgUpdateParams{} }
-func (msg *MsgUpdateParams) String() string { return fmt.Sprintf("MsgUpdateParams{%s}", msg.Authority) }
+func (msg *MsgUpdateParams) ProtoMessage()               {}
+func (msg *MsgUpdateParams) Descriptor() ([]byte, []int) { return common.FeesDescriptorBytes, []int{1} }
+func (msg *MsgUpdateParams) Reset()                      { *msg = MsgUpdateParams{} }
+func (msg *MsgUpdateParams) String() string              { return fmt.Sprintf("MsgUpdateParams{%s}", msg.Authority) }
 
 // Route implements sdk.Msg.
 func (msg MsgUpdateParams) Route() string { return RouterKey }

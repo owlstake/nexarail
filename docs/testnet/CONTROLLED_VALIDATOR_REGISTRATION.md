@@ -6,7 +6,7 @@
 
 ## Purpose
 
-NexaRail is onboarding a controlled set of external validators for `nexarail-testnet-1`. This is infrastructure testing — not mainnet, not a token sale, not an investment launch. Validators will run nodes, test consensus stability, and exercise governance workflows before any consideration of mainnet readiness.
+NexaRail is preparing controlled external validator onboarding for `nexarail-testnet-1`; launch remains pending until applicants are accepted and gentxs are collected. This is infrastructure testing — not mainnet, not a token sale, not an investment launch. Accepted validators will run nodes, test consensus stability, and exercise governance workflows before any consideration of mainnet readiness.
 
 ## ⚠️ Critical Disclaimers
 

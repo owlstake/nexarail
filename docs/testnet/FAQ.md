@@ -9,7 +9,7 @@
 
 ### What is NexaRail?
 
-NexaRail is a sovereign Layer 1 blockchain built with Cosmos SDK, designed for decentralised railway settlement and payments. It provides modules for fee splitting, merchant registration, payment settlement, escrow custody, automated payouts, and treasury management.
+NexaRail is a sovereign Layer 1 blockchain built with Cosmos SDK, designed for controlled testnet evaluation of railway settlement and payments. It provides modules for fee splitting, merchant registration, payment settlement, escrow custody, automated payouts, and treasury management. External validator distribution is not yet live.
 
 ### What is NXRL?
 

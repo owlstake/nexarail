@@ -3,6 +3,8 @@ package types
 import (
 	"fmt"
 
+	"github.com/nexarail/chain/x/common"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,10 +16,10 @@ var (
 // --- MsgRegisterMerchant ---
 
 type MsgRegisterMerchant struct {
-	Owner       string `json:"owner" yaml:"owner"`
-	Name        string `json:"name" yaml:"name"`
-	Description string `json:"description" yaml:"description"`
-	Website     string `json:"website" yaml:"website"`
+	Owner       string `json:"owner" yaml:"owner" protobuf:"bytes,1,opt,name=owner,proto3"`
+	Name        string `json:"name" yaml:"name" protobuf:"bytes,2,opt,name=name,proto3"`
+	Description string `json:"description" yaml:"description" protobuf:"bytes,3,opt,name=description,proto3"`
+	Website     string `json:"website" yaml:"website" protobuf:"bytes,4,opt,name=website,proto3"`
 }
 
 func NewMsgRegisterMerchant(owner sdk.AccAddress, name, description, website string) *MsgRegisterMerchant {
@@ -30,7 +32,10 @@ func NewMsgRegisterMerchant(owner sdk.AccAddress, name, description, website str
 }
 
 func (msg *MsgRegisterMerchant) ProtoMessage() {}
-func (msg *MsgRegisterMerchant) Reset()        { *msg = MsgRegisterMerchant{} }
+func (msg *MsgRegisterMerchant) Descriptor() ([]byte, []int) {
+	return common.MerchantDescriptorBytes, []int{1}
+}
+func (msg *MsgRegisterMerchant) Reset() { *msg = MsgRegisterMerchant{} }
 func (msg *MsgRegisterMerchant) String() string {
 	return fmt.Sprintf("MsgRegisterMerchant{%s}", msg.Owner)
 }
@@ -60,10 +65,10 @@ func (msg MsgRegisterMerchant) GetSignBytes() []byte {
 // --- MsgUpdateMerchant ---
 
 type MsgUpdateMerchant struct {
-	Owner       string `json:"owner" yaml:"owner"`
-	Name        string `json:"name" yaml:"name"`
-	Description string `json:"description" yaml:"description"`
-	Website     string `json:"website" yaml:"website"`
+	Owner       string `json:"owner" yaml:"owner" protobuf:"bytes,1,opt,name=owner,proto3"`
+	Name        string `json:"name" yaml:"name" protobuf:"bytes,2,opt,name=name,proto3"`
+	Description string `json:"description" yaml:"description" protobuf:"bytes,3,opt,name=description,proto3"`
+	Website     string `json:"website" yaml:"website" protobuf:"bytes,4,opt,name=website,proto3"`
 }
 
 func NewMsgUpdateMerchant(owner sdk.AccAddress, name, description, website string) *MsgUpdateMerchant {
@@ -75,7 +80,10 @@ func NewMsgUpdateMerchant(owner sdk.AccAddress, name, description, website strin
 	}
 }
 
-func (msg *MsgUpdateMerchant) ProtoMessage()  {}
+func (msg *MsgUpdateMerchant) ProtoMessage() {}
+func (msg *MsgUpdateMerchant) Descriptor() ([]byte, []int) {
+	return common.MerchantDescriptorBytes, []int{2}
+}
 func (msg *MsgUpdateMerchant) Reset()         { *msg = MsgUpdateMerchant{} }
 func (msg *MsgUpdateMerchant) String() string { return fmt.Sprintf("MsgUpdateMerchant{%s}", msg.Owner) }
 
@@ -114,8 +122,8 @@ func (r *MsgUpdateMerchantResponse) String() string { return "MsgUpdateMerchantR
 // --- MsgUpdateParams (authority-only) ---
 
 type MsgUpdateParams struct {
-	Authority string `json:"authority" yaml:"authority"`
-	Params    Params `json:"params" yaml:"params"`
+	Authority string `json:"authority" yaml:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	Params    Params `json:"params" yaml:"params" protobuf:"bytes,2,opt,name=params,proto3"`
 }
 
 var _ sdk.Msg = (*MsgUpdateParams)(nil)
@@ -124,7 +132,10 @@ func NewMsgUpdateParams(authority string, params Params) *MsgUpdateParams {
 	return &MsgUpdateParams{Authority: authority, Params: params}
 }
 
-func (msg *MsgUpdateParams) ProtoMessage()  {}
+func (msg *MsgUpdateParams) ProtoMessage() {}
+func (msg *MsgUpdateParams) Descriptor() ([]byte, []int) {
+	return common.MerchantDescriptorBytes, []int{3}
+}
 func (msg *MsgUpdateParams) Reset()         { *msg = MsgUpdateParams{} }
 func (msg *MsgUpdateParams) String() string { return fmt.Sprintf("MsgUpdateParams{%s}", msg.Authority) }
 func (msg MsgUpdateParams) Route() string   { return RouterKey }
@@ -152,9 +163,9 @@ func (r *MsgUpdateParamsResponse) String() string { return "MsgUpdateParamsRespo
 // --- MsgSetMerchantStatus (authority-only) ---
 
 type MsgSetMerchantStatus struct {
-	Authority string `json:"authority" yaml:"authority"`
-	Owner     string `json:"owner" yaml:"owner"`
-	Status    int32  `json:"status" yaml:"status"`
+	Authority string `json:"authority" yaml:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	Owner     string `json:"owner" yaml:"owner" protobuf:"bytes,2,opt,name=owner,proto3"`
+	Status    int32  `json:"status" yaml:"status" protobuf:"varint,3,opt,name=status,proto3"`
 }
 
 var _ sdk.Msg = (*MsgSetMerchantStatus)(nil)
@@ -164,7 +175,10 @@ func NewMsgSetMerchantStatus(authority, owner string, status int32) *MsgSetMerch
 }
 
 func (msg *MsgSetMerchantStatus) ProtoMessage() {}
-func (msg *MsgSetMerchantStatus) Reset()        { *msg = MsgSetMerchantStatus{} }
+func (msg *MsgSetMerchantStatus) Descriptor() ([]byte, []int) {
+	return common.MerchantDescriptorBytes, []int{4}
+}
+func (msg *MsgSetMerchantStatus) Reset() { *msg = MsgSetMerchantStatus{} }
 func (msg *MsgSetMerchantStatus) String() string {
 	return fmt.Sprintf("MsgSetMerchantStatus{%s->%d}", msg.Owner, msg.Status)
 }
@@ -199,9 +213,9 @@ func (r *MsgSetMerchantStatusResponse) String() string { return "MsgSetMerchantS
 // --- MsgSetVerificationStatus (authority-only) ---
 
 type MsgSetVerificationStatus struct {
-	Authority string `json:"authority" yaml:"authority"`
-	Owner     string `json:"owner" yaml:"owner"`
-	Status    int32  `json:"status" yaml:"status"`
+	Authority string `json:"authority" yaml:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	Owner     string `json:"owner" yaml:"owner" protobuf:"bytes,2,opt,name=owner,proto3"`
+	Status    int32  `json:"status" yaml:"status" protobuf:"varint,3,opt,name=status,proto3"`
 }
 
 var _ sdk.Msg = (*MsgSetVerificationStatus)(nil)
@@ -211,7 +225,10 @@ func NewMsgSetVerificationStatus(authority, owner string, status int32) *MsgSetV
 }
 
 func (msg *MsgSetVerificationStatus) ProtoMessage() {}
-func (msg *MsgSetVerificationStatus) Reset()        { *msg = MsgSetVerificationStatus{} }
+func (msg *MsgSetVerificationStatus) Descriptor() ([]byte, []int) {
+	return common.MerchantDescriptorBytes, []int{5}
+}
+func (msg *MsgSetVerificationStatus) Reset() { *msg = MsgSetVerificationStatus{} }
 func (msg *MsgSetVerificationStatus) String() string {
 	return fmt.Sprintf("MsgSetVerificationStatus{%s->%d}", msg.Owner, msg.Status)
 }
@@ -248,9 +265,9 @@ func (r *MsgSetVerificationStatusResponse) String() string {
 // --- MsgSetRebateTier (authority-only) ---
 
 type MsgSetRebateTier struct {
-	Authority string `json:"authority" yaml:"authority"`
-	Owner     string `json:"owner" yaml:"owner"`
-	Tier      int32  `json:"tier" yaml:"tier"`
+	Authority string `json:"authority" yaml:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	Owner     string `json:"owner" yaml:"owner" protobuf:"bytes,2,opt,name=owner,proto3"`
+	Tier      int32  `json:"tier" yaml:"tier" protobuf:"varint,3,opt,name=tier,proto3"`
 }
 
 var _ sdk.Msg = (*MsgSetRebateTier)(nil)
@@ -260,7 +277,10 @@ func NewMsgSetRebateTier(authority, owner string, tier int32) *MsgSetRebateTier 
 }
 
 func (msg *MsgSetRebateTier) ProtoMessage() {}
-func (msg *MsgSetRebateTier) Reset()        { *msg = MsgSetRebateTier{} }
+func (msg *MsgSetRebateTier) Descriptor() ([]byte, []int) {
+	return common.MerchantDescriptorBytes, []int{6}
+}
+func (msg *MsgSetRebateTier) Reset() { *msg = MsgSetRebateTier{} }
 func (msg *MsgSetRebateTier) String() string {
 	return fmt.Sprintf("MsgSetRebateTier{%s->%d}", msg.Owner, msg.Tier)
 }

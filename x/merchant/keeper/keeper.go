@@ -3,7 +3,6 @@ package keeper
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/cometbft/cometbft/libs/log"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -126,7 +125,7 @@ func (k Keeper) RegisterMerchant(ctx sdk.Context, msg *types.MsgRegisterMerchant
 	}
 
 	params := k.GetParams(ctx)
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 
 	m := types.NewMerchant(owner, msg.Name, msg.Description, msg.Website, now, now)
 	if err := m.ValidateWithParams(params); err != nil {
@@ -186,7 +185,7 @@ func (k Keeper) UpdateMerchant(ctx sdk.Context, msg *types.MsgUpdateMerchant) er
 	if msg.Website != "" {
 		m.Website = msg.Website
 	}
-	m.UpdatedAt = time.Now().Unix()
+	m.UpdatedAt = ctx.BlockTime().Unix()
 
 	if err := m.ValidateWithParams(params); err != nil {
 		return err
@@ -225,7 +224,7 @@ func (k Keeper) SetMerchantStatus(ctx sdk.Context, authority, ownerStr string, s
 		return fmt.Errorf("merchant %s: %w", ownerStr, types.ErrMerchantNotFound)
 	}
 	m.Status = status
-	m.UpdatedAt = time.Now().Unix()
+	m.UpdatedAt = ctx.BlockTime().Unix()
 	if err := k.SetMerchant(ctx, m); err != nil {
 		return err
 	}
@@ -253,7 +252,7 @@ func (k Keeper) SetVerificationStatus(ctx sdk.Context, authority, ownerStr strin
 		return fmt.Errorf("merchant %s: %w", ownerStr, types.ErrMerchantNotFound)
 	}
 	m.VerificationStatus = status
-	m.UpdatedAt = time.Now().Unix()
+	m.UpdatedAt = ctx.BlockTime().Unix()
 	if err := k.SetMerchant(ctx, m); err != nil {
 		return err
 	}
@@ -281,7 +280,7 @@ func (k Keeper) SetRebateTier(ctx sdk.Context, authority, ownerStr string, tier 
 		return fmt.Errorf("merchant %s: %w", ownerStr, types.ErrMerchantNotFound)
 	}
 	m.RebateTier = tier
-	m.UpdatedAt = time.Now().Unix()
+	m.UpdatedAt = ctx.BlockTime().Unix()
 	if err := k.SetMerchant(ctx, m); err != nil {
 		return err
 	}

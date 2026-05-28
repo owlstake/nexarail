@@ -3,7 +3,6 @@ package keeper
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/cometbft/cometbft/libs/log"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -256,7 +255,7 @@ func (k Keeper) CreateSettlement(ctx sdk.Context, msg *types.MsgCreateSettlement
 	burnShare := netFee.Sub(valShare).Sub(treasuryShare) // remainder → burn
 
 	denom := msg.Amount.Denom
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 
 	settlement := types.NewSettlement(
 		id,
@@ -397,7 +396,7 @@ func (k Keeper) UpdateSettlementStatus(ctx sdk.Context, authority string, id uin
 	}
 
 	s.Status = newStatus
-	s.UpdatedAt = time.Now().Unix()
+	s.UpdatedAt = ctx.BlockTime().Unix()
 
 	if err := k.SetSettlement(ctx, s); err != nil {
 		return err

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexaRail RC1 — Local Devnet Dashboard</title>
+  <meta name="description" content="Read-only local devnet dashboard for NexaRail RC1. NOT a public explorer. NOT mainnet.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- SAFETY BANNER — PROMINENT & UNMISTAKEABLE    -->
+  <!-- ════════════════════════════════════════════ -->
+
+  <div class="safety-banner" role="alert">
+    <span class="banner-icon">⚠️</span>
+    <strong>LOCAL DEVNET ONLY — NOT MAINNET</strong>
+    <span class="banner-warning">READ ONLY</span>
+    <span class="banner-warning">NO VALUE</span>
+    <span class="banner-sub">
+      🔒 No token sale &bull; No monetary value &bull; No wallet/signing &bull; No private keys &bull;
+      Live funds disabled &bull; For development and testing only
+    </span>
+  </div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- HEADER                                       -->
+  <!-- ════════════════════════════════════════════ -->
+
+  <div class="container">
+
+    <div class="header">
+      <h1>
+        NexaRail RC1
+        <span>Local Devnet Dashboard</span>
+      </h1>
+      <div class="header-controls">
+        <div class="control-group">
+          <label for="api-url" style="font-size:0.78rem;color:var(--text-secondary);">API:</label>
+          <input
+            type="text"
+            id="api-url"
+            class="api-input"
+            value="http://localhost:1317"
+            placeholder="http://localhost:1317"
+            spellcheck="false"
+            autocomplete="off"
+          >
+          <button id="refresh-btn" class="btn btn-primary">⟳ Refresh</button>
+        </div>
+        <div class="control-group">
+          <span id="auto-refresh-toggle" class="toggle-label" role="button" tabindex="0" aria-label="Toggle auto-refresh">
+            <span class="toggle-track">
+              <span class="toggle-knob"></span>
+            </span>
+            <span class="toggle-label-text">Auto-refresh OFF</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- LAST UPDATED                                -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <div id="last-updated" class="last-updated">Last updated: —</div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- DASHBOARD GRID                             -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <div class="dashboard-grid">
+
+      <!-- Node Status -->
+      <div class="card grid-full" id="card-node-status">
+        <div class="card-header">
+          <h2>🖥️ Node Status</h2>
+          <span class="card-status loading">Loading</span>
+        </div>
+        <div class="card-body loading">
+          <div class="loading-pulse">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span>Connecting to node…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Flags -->
+      <div class="card" id="card-live-flags">
+        <div class="card-header">
+          <h2>🚩 Live Flags</h2>
+          <span class="card-status loading">Loading</span>
+        </div>
+        <div class="card-body loading">
+          <div class="loading-pulse">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span>Checking live status…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Parameters -->
+      <div class="card" id="card-module-params">
+        <div class="card-header">
+          <h2>⚙️ Module Parameters</h2>
+          <span class="card-status loading">Loading</span>
+        </div>
+        <div class="card-body loading">
+          <div class="loading-pulse">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span>Loading params…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Treasury Summary -->
+      <div class="card" id="card-treasury-summary">
+        <div class="card-header">
+          <h2>🏦 Treasury Summary</h2>
+          <span class="card-status loading">Loading</span>
+        </div>
+        <div class="card-body loading">
+          <div class="loading-pulse">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span>Loading treasury…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Merchant List -->
+      <div class="card" id="card-merchant-list">
+        <div class="card-header">
+          <h2>🏪 Merchant List</h2>
+          <span class="card-status loading">Loading</span>
+        </div>
+        <div class="card-body loading">
+          <div class="loading-pulse">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span>Loading merchants…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settlement List -->
+      <div class="card" id="card-settlement-list">
+        <div class="card-header">
+          <h2>📋 Settlement List</h2>
+          <span class="card-status loading">Loading</span>
+        </div>
+        <div class="card-body loading">
+          <div class="loading-pulse">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span>Loading settlements…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Escrow List -->
+      <div class="card" id="card-escrow-list">
+        <div class="card-header">
+          <h2>🔒 Escrow List</h2>
+          <span class="card-status loading">Loading</span>
+        </div>
+        <div class="card-body loading">
+          <div class="loading-pulse">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span>Loading escrows…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payout List -->
+      <div class="card" id="card-payout-list">
+        <div class="card-header">
+          <h2>💸 Payout List</h2>
+          <span class="card-status loading">Loading</span>
+        </div>
+        <div class="card-body loading">
+          <div class="loading-pulse">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span>Loading payouts…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Log -->
+      <div class="card grid-full" id="card-error-log">
+        <div class="card-header">
+          <h2>📋 Error Log</h2>
+        </div>
+        <div class="card-body">
+          <div id="error-log-toggle" class="error-log-toggle" role="button" tabindex="0">
+            <span class="arrow">▶</span>
+            <span>Show errors (<span id="error-count">0</span>)</span>
+          </div>
+          <div id="error-log-content" class="error-log-content">
+            <div class="error-log-empty">No errors recorded</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- FOOTER                                     -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <div class="footer">
+      <p>
+        <strong>NexaRail RC1 Local Dashboard</strong> — Read Only — Local Devnet Only
+      </p>
+      <p style="margin-top:6px;">
+        <a href="https://docs.nexarail.dev" target="_blank" rel="noopener">Developer Docs</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/nexarail" target="_blank" rel="noopener">GitHub</a>
+        &nbsp;·&nbsp;
+        <a href="README.md">About This Dashboard</a>
+      </p>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

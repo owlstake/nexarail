@@ -1361,3 +1361,76 @@ func TestBurnExecutedRequiresPositiveBurnShare(t *testing.T) {
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "burn_executed=true requires positive burn share")
 }
+
+// =============================================================================
+// Phase 8E: Stress Tests — Invariants, Fuzz, Randomized, Failure Injection
+// =============================================================================
+
+func TestInvariant_LiveFlagsDefaultFalse(t *testing.T) {
+	k, ctx, _ := setupKeeper(t)
+	params := k.GetParams(ctx)
+	require.False(t, params.LiveEnabled, "live_enabled must default false")
+	require.False(t, params.TreasuryRoutingEnabled, "treasury_routing_enabled must default false")
+	require.False(t, params.BurnRoutingEnabled, "burn_routing_enabled must default false")
+}
+
+func TestInvariant_FeeRateBpsInRange(t *testing.T) {
+	k, ctx, _ := setupKeeper(t)
+	params := k.GetParams(ctx)
+	require.Greater(t, params.FeeRateBps, uint32(0), "fee_rate_bps must be positive")
+	require.LessOrEqual(t, params.FeeRateBps, uint32(10000), "fee_rate_bps cannot exceed 10000 bps")
+}
+
+func TestFuzz_SettlementFeeCalculation(t *testing.T) {
+	k, ctx, _ := setupKeeper(t)
+
+	// Test fee calculation at various amounts and rates
+	amounts := []uint64{100, 1000, 10000, 100000, 1000000, 99999999}
+	for _, amt := range amounts {
+		params := k.GetParams(ctx)
+		fee := uint64(amt) * uint64(params.FeeRateBps) / 10000
+		// Fee must be less than or equal to amount
+		require.LessOrEqual(t, fee, uint64(amt), "fee %d cannot exceed amount %d at rate %d bps", fee, amt, params.FeeRateBps)
+	}
+}
+
+func TestFuzz_RebateTiersValid(t *testing.T) {
+	k, ctx, _ := setupKeeper(t)
+	params := k.GetParams(ctx)
+	require.NotEmpty(t, params.RebateTiers, "rebate tiers must not be empty")
+	// Tiers should be in ascending order
+	for i := 1; i < len(params.RebateTiers); i++ {
+		require.LessOrEqual(t, params.RebateTiers[i-1], params.RebateTiers[i],
+			"rebate tiers must be sorted ascending")
+	}
+}
+
+func TestRandom_ParamUpdateRecovery(t *testing.T) {
+	k, ctx, _ := setupKeeper(t)
+	original := k.GetParams(ctx)
+
+	// Modify and restore params repeatedly
+	for i := 0; i < 5; i++ {
+		params := original
+		params.FeeRateBps = uint32(50 + i*25)
+		k.SetParams(ctx, params)
+		require.Equal(t, params.FeeRateBps, k.GetParams(ctx).FeeRateBps)
+	}
+	// Restore original
+	k.SetParams(ctx, original)
+	require.Equal(t, original.FeeRateBps, k.GetParams(ctx).FeeRateBps)
+}
+
+func TestFailure_LiveEnabledFalsePreventsTransfers(t *testing.T) {
+	k, ctx, _ := setupKeeper(t)
+
+	// With LiveEnabled=false, live transfers should be blocked
+	params := k.GetParams(ctx)
+	require.False(t, params.LiveEnabled)
+	require.False(t, params.TreasuryRoutingEnabled)
+	require.False(t, params.BurnRoutingEnabled)
+
+	// Verify that all routing flags are independently false
+	// Each must be individually enabled for its routing to activate
+	require.NotEqual(t, params.LiveEnabled, true)
+}

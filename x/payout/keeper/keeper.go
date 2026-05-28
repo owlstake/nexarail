@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/cometbft/cometbft/libs/log"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -200,7 +199,7 @@ func (k Keeper) CreatePayout(ctx sdk.Context, msg *types.MsgCreatePayout) error 
 		return fmt.Errorf("below min: %w", types.ErrAmountNotPositive)
 	}
 
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	p := types.NewPayout(msg.PayoutId, "", msg.MerchantId, msg.Initiator, msg.RecipientAddress, msg.AssetDenom, msg.Amount, msg.PayoutType, msg.PayoutReference, msg.Memo, now)
 	if params.ApprovalRequired {
 		p.Status = int32(types.PayoutCreated)
@@ -236,7 +235,7 @@ func (k Keeper) CreateBatchPayout(ctx sdk.Context, msg *types.MsgCreateBatchPayo
 		return err
 	}
 
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	seen := make(map[string]bool)
 	var totalAmt, totalNet sdk.Coin
 	totalFee := sdk.NewInt64Coin("unxrl", 0)
@@ -313,7 +312,7 @@ func (k Keeper) ApprovePayout(ctx sdk.Context, msg *types.MsgApprovePayout) erro
 	if p.Status != int32(types.PayoutCreated) {
 		return fmt.Errorf("status %s: %w", types.PayoutStatus(p.Status), types.ErrInvalidTransition)
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	p.Status = int32(types.PayoutApproved)
 	p.ApprovedAt = now
 	p.UpdatedAt = now
@@ -350,7 +349,7 @@ func (k Keeper) MarkPayoutPaid(ctx sdk.Context, msg *types.MsgMarkPayoutPaid) er
 	}
 
 	params := k.GetParams(ctx)
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 
 	// Live execution: transfer treasury -> recipient before mutating any state.
 	if params.LiveEnabled {
@@ -432,7 +431,7 @@ func (k Keeper) CancelPayout(ctx sdk.Context, msg *types.MsgCancelPayout) error 
 	if p.Status != int32(types.PayoutCreated) && p.Status != int32(types.PayoutApproved) {
 		return fmt.Errorf("status %s: %w", types.PayoutStatus(p.Status), types.ErrInvalidTransition)
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	p.Status = int32(types.PayoutCancelled)
 	p.CancelledAt = now
 	p.UpdatedAt = now
@@ -459,7 +458,7 @@ func (k Keeper) FailPayout(ctx sdk.Context, msg *types.MsgFailPayout) error {
 	if p.Status != int32(types.PayoutCreated) && p.Status != int32(types.PayoutApproved) {
 		return fmt.Errorf("status %s: %w", types.PayoutStatus(p.Status), types.ErrInvalidTransition)
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	p.Status = int32(types.PayoutFailed)
 	p.FailedAt = now
 	p.UpdatedAt = now

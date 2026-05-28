@@ -1,7 +1,7 @@
 # Phase 7G — Intake Live Status
 
 **Date:** 2026-05-26 12:31 BST
-**Updated:** Real-time as applications processed
+**Updated:** 2026-05-26 15:23 BST — Phase 9A cohort formation
 **Chain:** nexarail-testnet-1
 
 ---
@@ -58,6 +58,7 @@
 | # | Blocker | Severity | Status |
 |---|---|---|---|
 | 1 | No validator applications received | Blocking | ⬜ |
+| 2 | Technical readiness confirmed GO (Phase 8G) | Info | ✅ |
 | 2 | No accepted validators | Blocking | ⬜ |
 | 3 | No gentxs received | Blocking | ⬜ |
 | 4 | No genesis candidate built | Blocking | ⬜ |

@@ -1,20 +1,19 @@
 package merchant
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
-
-	"github.com/gorilla/mux"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/spf13/cobra"
-
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-
+	"github.com/gorilla/mux"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
+	"github.com/nexarail/chain/x/common"
 	"github.com/nexarail/chain/x/merchant/client/cli"
 	"github.com/nexarail/chain/x/merchant/keeper"
 	"github.com/nexarail/chain/x/merchant/types"
@@ -56,7 +55,16 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingCo
 }
 
 func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router)              {}
-func (AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {}
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/merchant/v1/params", func() (interface{}, error) {
+		qc := types.NewQueryClient(clientCtx)
+		return qc.Params(context.Background(), &types.QueryParamsRequest{})
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/merchant/v1/merchants", func() (interface{}, error) {
+		qc := types.NewQueryClient(clientCtx)
+		return qc.Merchants(context.Background(), &types.QueryMerchantsRequest{})
+	})
+}
 
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
 	return cli.GetTxCmd()

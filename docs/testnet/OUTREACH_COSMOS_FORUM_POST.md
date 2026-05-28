@@ -1,6 +1,6 @@
 # NexaRail — Controlled Validator Registration Open
 
-**NexaRail** is a sovereign Layer 1 blockchain for decentralised railway settlement and payments, built with **Cosmos SDK v0.47.17** and **CometBFT v0.37.18**. We're opening controlled validator registration for our initial testnet.
+**NexaRail** is a sovereign Layer 1 blockchain for controlled testnet evaluation of railway settlement and payments, built with **Cosmos SDK v0.47.17** and **CometBFT v0.37.18**. We're opening controlled validator registration for our initial testnet. External validator distribution is not yet live.
 
 ## What this is
 

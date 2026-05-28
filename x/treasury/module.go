@@ -1,6 +1,7 @@
 package treasury
 
 import (
+	"context"
 	"encoding/json"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -10,10 +11,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
+	"github.com/nexarail/chain/x/common"
 	"github.com/nexarail/chain/x/treasury/client/cli"
 	"github.com/nexarail/chain/x/treasury/keeper"
 	"github.com/nexarail/chain/x/treasury/types"
-	"github.com/spf13/cobra"
 )
 
 var _ module.AppModule = AppModule{}
@@ -38,7 +40,16 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingCo
 	return gs.Validate()
 }
 func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router)              {}
-func (AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {}
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/treasury/v1/params", func() (interface{}, error) {
+		qc := types.NewQueryClient(clientCtx)
+		return qc.Params(context.Background(), &types.QueryParamsRequest{})
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/treasury/v1/summary", func() (interface{}, error) {
+		qc := types.NewQueryClient(clientCtx)
+		return qc.TreasurySummary(context.Background(), &types.QueryTreasurySummaryRequest{})
+	})
+}
 func (AppModuleBasic) GetTxCmd() *cobra.Command                                        { return cli.GetTxCmd() }
 func (AppModuleBasic) GetQueryCmd() *cobra.Command                                     { return cli.GetQueryCmd() }
 

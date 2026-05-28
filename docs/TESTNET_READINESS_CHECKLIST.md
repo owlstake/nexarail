@@ -2,7 +2,7 @@
 
 **Document:** docs/TESTNET_READINESS_CHECKLIST.md
 **Date:** 2026-05-26
-**Target:** Phase 6 (Preparation) → Phase 7E (Gentx Collection & Genesis Assembly)
+**Target:** Phase 6 (Preparation) → Phase 8A (API, CLI, Runtime Hardening) (Gentx Collection & Genesis Assembly)
 
 ## Code & Tests
 
@@ -153,3 +153,63 @@
 | Community | 🔜 Needs Discord + announcement |
 | Pre-launch actions | 🔜 Pending |
 | External reviews | 🔜 Pending |
+
+## Phase 8A — API, CLI & Runtime Hardening
+
+- [x] `PHASE_8A_API_ROUTE_AUDIT.md` — full audit of all 6 custom modules
+- [x] REST gateway routes implemented — 17 new endpoints across 6 modules
+- [x] `x/common/rest.go` — shared REST gateway helper
+- [x] `cli-e2e-smoke-test.sh` — CLI E2E smoke test
+- [x] `api-smoke-test.sh` — REST/gRPC smoke test
+- [x] `RUNTIME_CONFIG_HARDENING.md` — devnet, testnet, and production configs
+- [x] Debug commands: `debug-live-flags`, `debug-module-summary` (in addition to existing `debug-p2p-config`)
+- [x] `CLI_E2E_TESTING.md` — CLI test documentation
+- [x] `API_SMOKE_TESTING.md` — API test documentation
+- [x] Unsafe wording audit clean
+- [x] Full verification (go mod tidy/verify, build, vet, test) green — 15 packages
+
+## Phase 8B — Module Test Gap Hardening
+
+- [x] `PHASE_8B_TEST_GAP_AUDIT.md` — gap analysis across all 6 modules
+- [x] CLI command registration tests — 4 new app tests (command trees, help, debug)
+- [x] REST gateway route tests — verified via build + documented
+- [x] Genesis tests added — escrow, payout, treasury (15 tests)
+- [x] Query edge-case tests — not-found, empty state, exists (8 tests)
+- [x] Live flag safety tests — app-level all-flags-false invariant
+- [x] Module account permission tests — burner permission verification
+- [x] Debug command tests — Help() non-panic across all modules
+- [x] `TEST_COVERAGE_MATRIX.md` — per-package coverage breakdown
+- [x] `LIVE_FUNDS_TEST_COVERAGE.md` — live flag and invariant coverage
+- [x] `API_CLI_TEST_COVERAGE.md` — CLI, REST, gRPC test coverage
+- [x] `test-coverage-summary.sh` — automated coverage reporting
+- [x] Unsafe wording audit clean
+- [x] Full verification green — all 15 packages pass
+
+## Phase 8G — Final Hardening & Pre-Launch Sign-Off
+
+- [x] `PHASE_8G_FINAL_HARDENING_REPORT.md` — technical GO / operational NO-GO
+- [x] `PRE_LAUNCH_SIGN_OFF.md` — 7-section sign-off (engineering, security, release, ops, docs, validators, legal)
+- [x] `LINUX_HARDENING_EXECUTION_GUIDE.md` — Linux environment, Docker rehearsal, hardening suite
+- [x] `FINAL_RELEASE_CANDIDATE_NOTES.md` — version, checksums, live flags, limitations
+- [x] Ops scripts improved — export-state.sh, check-upgrade-readiness.sh
+- [x] Release checklist updated — Phase 8G gates added
+- [x] Full verification green — all 15 packages pass (~497 tests)
+- [x] Stress suite passes — invariants, fuzz, random, failure
+- [x] Predeployment check: 23/23
+- [x] Unsafe wording audit clean
+- [x] Technical: ✅ GO | Operational: 🔴 NO-GO (0 validators)
+
+## Phase 9W — Agent Testnet Runtime Readiness Consolidation
+
+- [x] `PHASE_9W_AGENT_RUNTIME_READINESS_REPORT.md` — consolidated runtime readiness report complete
+- [x] `AGENT_TESTNET_EVIDENCE_INDEX.md` — Phase 9T, 9U, and 9V evidence index complete
+- [x] `AGENT_TESTNET_LIMITATIONS.md` — limitations documented; agent validators are not external validators
+- [x] `CONTROLLED_TESTNET_NEXT_STEPS.md` — next operational phase documented
+- [x] Restart matrix passed — single-validator, 3-agent, 5-agent, height-20, post-soak, one-node, simultaneous all-node, sequential all-node, standard direct
+- [x] Long soak passed — 3602s, height 12 to 685, 425 pass / 0 fail / 0 skip
+- [x] Governance evidenced — proposal 1 enabled escrow live flag, proposal 2 disabled it, final flags false
+- [x] Runtime bank tx evidenced — inclusion code 0
+- [x] Final live flags all false
+- [x] Technical agent-testnet readiness: GO
+- [x] Public/external testnet launch: NO-GO until external validators and gentxs are complete
+- [x] Mainnet: NO-GO

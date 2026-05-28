@@ -11,7 +11,7 @@
 
 Hey [Name] — hope you're well.
 
-I'm opening controlled validator registration for a new Cosmos SDK chain called NexaRail. It's a sovereign L1 for decentralised railway settlement and payments — 16 standard modules + 6 custom ones (fees, merchant, settlement, escrow, payout, treasury).
+I'm opening controlled validator registration for a new Cosmos SDK chain called NexaRail. It's a sovereign L1 for controlled testnet evaluation of railway settlement and payments — 16 standard modules + 6 custom ones (fees, merchant, settlement, escrow, payout, treasury). External validator distribution is not yet live.
 
 This is **infrastructure testing only** — controlled testnet, no mainnet, no token sale, testnet tokens have zero monetary value. All live fund modules are disabled by default. Looking for technical operators to test consensus, governance, and module workflows.
 

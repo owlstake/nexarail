@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaRail Developer Portal</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; color: #1a1a2e; background: #f8f9fa; }
+
+/* ── Sidebar ── */
+nav { width: 260px; background: #16213e; color: #e8e8e8; overflow-y: auto; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; transition: transform 0.3s; display: flex; flex-direction: column; }
+nav h1 { font-size: 1.1rem; padding: 0.8rem 1.2rem; margin: 0 0 0.5rem; color: #0fcc9e; flex-shrink: 0; }
+nav a { display: block; padding: 0.5rem 1.2rem; color: #b0b8c8; text-decoration: none; font-size: 0.9rem; border-left: 3px solid transparent; }
+nav a:hover, nav a.active { color: #fff; background: rgba(255,255,255,0.08); border-left-color: #0fcc9e; }
+nav .section { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; padding: 1rem 1.2rem 0.3rem; flex-shrink: 0; }
+#search-box { margin: 0.3rem 0.8rem; padding: 0.5rem; border: 1px solid #2d3a6e; border-radius: 4px; background: #1a2444; color: #e8e8e8; font-size: 0.85rem; flex-shrink: 0; }
+#search-box::placeholder { color: #6b7280; }
+#search-results { font-size: 0.85rem; padding: 0.3rem 1.2rem; color: #0fcc9e; flex-shrink: 0; }
+
+/* ── Hamburger ── */
+#hamburger { display: none; position: fixed; top: 0.5rem; left: 0.5rem; z-index: 101; background: #16213e; color: #e8e8e8; border: none; font-size: 1.5rem; padding: 0.3rem 0.7rem; cursor: pointer; border-radius: 4px; }
+#hamburger:hover { background: #2d3a6e; }
+
+/* ── Main ── */
+main { margin-left: 260px; padding: 0.5rem 3rem 3rem; max-width: 860px; flex: 1; transition: margin-left 0.3s; }
+h2 { color: #16213e; border-bottom: 2px solid #0fcc9e; padding-bottom: 0.3rem; margin-top: 2.5rem; }
+h3 { color: #2d3a6e; margin-top: 1.5rem; }
+code { background: #e8edf5; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.85rem; }
+pre { background: #1a1a2e; color: #d4d4d4; padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; position: relative; }
+pre code { background: transparent; padding: 0; color: inherit; }
+.copy-btn { position: absolute; top: 0.3rem; right: 0.3rem; background: #2d3a6e; color: #b0b8c8; border: none; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.75rem; cursor: pointer; }
+.copy-btn:hover { background: #0fcc9e; color: #16213e; }
+.box { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.2rem 1.5rem; margin: 1rem 0; }
+.warn { background: #fff8e6; border: 1px solid #f0c674; }
+.danger { background: #ffe8e8; border: 1px solid #e57373; }
+.ok { background: #e8f5e9; border: 1px solid #81c784; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+th, td { text-align: left; padding: 0.5rem; border-bottom: 1px solid #dee2e6; }
+th { background: #f0f2f5; }
+.safety-banner { background: #cc0000; color: #fff; text-align: center; padding: 0.5rem; font-weight: bold; font-size: 0.85rem; margin-left: 260px; }
+
+/* ── Highlight for search ── */
+.highlight { background: #fff3cd; padding: 0.1rem 0.2rem; border-radius: 2px; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  nav { transform: translateX(-100%); }
+  nav.open { transform: translateX(0); }
+  #hamburger { display: block; }
+  main { margin-left: 0; padding: 0.5rem 1rem 2rem; }
+  .safety-banner { margin-left: 0; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<button id="hamburger" onclick="document.querySelector('nav').classList.toggle('open')">☰</button>
+
+<nav>
+  <h1>NexaRail ⚡ Developer Portal</h1>
+  <input id="search-box" type="text" placeholder="Search sections..." oninput="searchPortal(this.value)">
+  <div id="search-results"></div>
+  <div class="section">Getting Started</div>
+  <a href="#overview">Overview</a>
+  <a href="#current-status">Current Status</a>
+  <a href="#quickstart">Quickstart</a>
+  <a href="#local-demo">Local Demo</a>
+  <a href="#end-to-end-demo">End-to-End Demo</a>
+  <a href="#onboarding-bundle">Onboarding Bundle</a>
+  <div class="section">Developer Docs</div>
+  <a href="#developer-quickstart">Developer Quickstart</a>
+  <a href="#rest-api">REST API</a>
+  <a href="#node-sdk">Node.js SDK</a>
+  <a href="#python-sdk">Python SDK</a>
+  <a href="#dashboard">Dashboard</a>
+  <a href="#write-flows">Write Flows</a>
+  <a href="#contributing">Contributing</a>
+  <div class="section">Reference</div>
+  <a href="#rc1-reviewer">RC1 Reviewer Guide</a>
+  <a href="#assets-inventory">Developer Assets</a>
+  <a href="#phase-summary">Phase 10–12 Summary</a>
+  <a href="#litepaper">Litepaper</a>
+  <a href="#evidence">Evidence</a>
+  <a href="#regression-matrix">Regression Matrix</a>
+  <div class="section">Safety</div>
+  <a href="#safety">Safety / What Not To Assume</a>
+  <a href="#limitations">Limitations</a>
+  <a href="#version">Version</a>
+</nav>
+
+<div class="safety-banner">
+  LOCAL DEVNET ONLY — NOT MAINNET — NO TOKEN SALE — NO INVESTMENT
+</div>
+
+<main>
+
+<h2 id="overview">Overview</h2>
+<p>NexaRail is a Cosmos SDK-based chain for managing settlement, escrow, merchant, payout, treasury, and fee product modules. This portal provides developer documentation, SDK references, and tooling guides for evaluating the RC1 release candidate.</p>
+<div class="box warn">
+  <strong>⚠️ Development Status</strong><br>
+  NexaRail is in controlled local development. No mainnet. No public testnet. No token sale. No investment.
+</div>
+
+<h2 id="current-status">Current Status</h2>
+<table>
+<tr><th>Component</th><th>Status</th></tr>
+<tr><td>Chain (Go/Cosmos SDK)</td><td class="ok">RC1 — Local devnet only</td></tr>
+<tr><td>Node.js SDK</td><td class="ok">v0.1.0-dev — LOCAL, NOT PUBLISHED</td></tr>
+<tr><td>Python SDK</td><td class="ok">v0.1.0-dev — LOCAL, NOT PUBLISHED</td></tr>
+<tr><td>REST API</td><td class="ok">36 endpoints, read-only queries</td></tr>
+<tr><td>Dashboard</td><td class="ok">Read-only static HTML/JS/CSS</td></tr>
+<tr><td>Write-flow examples</td><td class="ok">7 examples, dry-run safe</td></tr>
+<tr><td>End-to-end demo</td><td class="ok">10 checks pass</td></tr>
+<tr><td>Regression checks</td><td class="ok">9 fast checks pass</td></tr>
+<tr><td>SDK package checks</td><td class="ok">24 checks pass</td></tr>
+<tr><td>Portal check</td><td class="ok">6 checks pass</td></tr>
+<tr><td>Public testnet</td><td style="background:#ffe8e8">NO-GO</td></tr>
+<tr><td>Mainnet</td><td style="background:#ffe8e8">NO-GO</td></tr>
+</table>
+
+<h2 id="quickstart">Quickstart</h2>
+<p>Get started with the RC1 local devnet:</p>
+<pre><code># 1. Verify the RC1 package
+bash scripts/release/verify-testnet-rc1.sh
+
+# 2. Launch a local devnet
+bash scripts/release/launch-rc1-devnet.sh --single-node --clean
+
+# 3. Check node status
+curl http://localhost:26657/status | python3 -m json.tool
+
+# 4. Check live flags (all false)
+examples/rest/check_live_flags.sh
+
+# 5. Read treasury summary
+examples/rest/check_treasury.sh</code></pre>
+<p>Full guide: <a href="../../docs/release/RC1_QUICKSTART.md">RC1 Quickstart</a></p>
+
+<h2 id="local-demo">Local Demo</h2>
+<p>The local demo script performs a complete review workflow:</p>
+<pre><code>bash scripts/dev/run-local-demo.sh</code></pre>
+<p>It runs: RC1 verification → devnet launch → smoke tests → write-flow evidence → dashboard check → collect evidence.</p>
+<p>Full guide: <a href="../../docs/developers/LOCAL_DEMO_GUIDE.md">Local Demo Guide</a></p>
+
+<h2 id="end-to-end-demo">End-to-End Demo</h2>
+<p>A comprehensive walkthrough covering launch → inspect → query → SDK → dashboard:</p>
+<pre><code># Full demo with dashboard
+bash scripts/dev/run-end-to-end-demo.sh
+
+# Skip dashboard (faster)
+bash scripts/dev/run-end-to-end-demo.sh --skip-dashboard
+
+# With dashboard served on port 8089
+bash scripts/dev/run-end-to-end-demo.sh --serve-dashboard
+
+# Leave devnet running after demo
+bash scripts/dev/run-end-to-end-demo.sh --keep-running</code></pre>
+<p>See: <a href="../../docs/developers/END_TO_END_DEMO_SCENARIO.md">Demo Scenario Doc</a> | <a href="../../docs/developers/END_TO_END_DEMO_SUMMARY.md">Summary</a></p>
+
+<h2 id="onboarding-bundle">Onboarding Bundle</h2>
+<p>Get all developer assets in one archive:</p>
+<pre><code>bash scripts/dev/prepare-developer-bundle.sh</code></pre>
+<p>The bundle is saved to <code>releases/developer-bundles/</code> and includes docs, SDK archives, examples, scripts, and manifests.</p>
+<p>See: <a href="../../docs/developers/ONBOARDING_CHECKLIST.md">Onboarding Checklist</a> | <a href="../../CONTRIBUTING.md">Contributing Guide</a></p>
+
+<h2 id="developer-quickstart">Developer Quickstart</h2>
+<p>The full developer quickstart covers SDK installation, REST examples, write-flow examples, and dashboard usage.</p>
+<p><a href="../../docs/developers/DEVELOPER_QUICKSTART.md">Developer Quickstart →</a></p>
+
+<h2 id="rest-api">REST API</h2>
+<p>All 36 REST readback endpoints are documented with examples. Read-only queries against the REST API gateway.</p>
+<p><a href="../../docs/api/REST_READBACK_ROUTES.md">REST Readback Routes →</a></p>
+<p>Example scripts in <code>examples/rest/</code>:</p>
+<pre style="padding-bottom:2rem"><code>bash examples/rest/check_live_flags.sh
+bash examples/rest/check_treasury.sh
+bash examples/rest/check_merchants.sh
+bash examples/rest/check_settlements.sh
+bash examples/rest/check_escrows.sh
+bash examples/rest/check_payouts.sh
+bash examples/rest/check_fees.sh</code></pre>
+
+<h2 id="node-sdk">Node.js SDK</h2>
+<p>Package: <code>@nexarail/devnet-client v0.1.0-dev</code> — LOCAL ONLY, NOT PUBLISHED TO npm.</p>
+<p><a href="../../docs/developers/NODE_SDK_API_REFERENCE.md">Full API Reference →</a></p>
+<p>Quick test:</p>
+<pre><code>cd examples/node-client
+node test/client.test.js
+node -e "import('./src/client.js').then(c => c.treasurySummary()).then(r => console.log(JSON.stringify(r)))"</code></pre>
+
+<h2 id="python-sdk">Python SDK</h2>
+<p>Package: <code>nexarail-devnet-client v0.1.0-dev</code> — LOCAL ONLY, NOT PUBLISHED TO PyPI.</p>
+<p><a href="../../docs/developers/PYTHON_SDK_API_REFERENCE.md">Full API Reference →</a></p>
+<p>Quick test:</p>
+<pre><code>cd examples/python-client
+python3 test_client.py
+python3 -c "import nexarail_client as n; print(n.treasury_summary())"</code></pre>
+
+<h2 id="dashboard">Dashboard</h2>
+<p>Read-only static dashboard for local devnet inspection. Open <code>examples/dashboard/index.html</code> in a browser or serve via HTTP:</p>
+<pre><code>python3 -m http.server 8089 --directory examples/dashboard</code></pre>
+
+<h2 id="write-flows">Write Flows</h2>
+<p>Seven write-flow examples for building CLI command strings. All scripts are dry-run ready and do NOT execute transactions against live chains:</p>
+<table>
+<tr><th>Script</th><th>Description</th></tr>
+<tr><td><code>merchant_register.sh</code></td><td>Register merchant profile</td></tr>
+<tr><td><code>settlement_metadata.sh</code></td><td>Create settlement record</td></tr>
+<tr><td><code>escrow_lifecycle.sh</code></td><td>Create/dispute/release escrow</td></tr>
+<tr><td><code>payout_lifecycle.sh</code></td><td>Create and mark payout paid</td></tr>
+<tr><td><code>treasury_spend.sh</code></td><td>Request treasury spend</td></tr>
+<tr><td><code>governance_toggle_demo.sh</code></td><td>Governance proposal for live flag</td></tr>
+<tr><td><code>bank_send_smoke.sh</code></td><td>Bank send smoke test</td></tr>
+</table>
+
+<h2 id="contributing">Contributing</h2>
+<p>NexaRail is in controlled local development. Before contributing, read:</p>
+<ul>
+<li><a href="../../CONTRIBUTING.md">CONTRIBUTING.md</a> — coding standards, safety wording, prohibited changes</li>
+<li><a href="../../docs/developers/CONTRIBUTOR_TESTING_GUIDE.md">Contributor Testing Guide</a> — expected pass counts, evidence paths, troubleshooting</li>
+<li><a href="../../docs/developers/SDK_PACKAGE_PREPARATION.md">SDK Package Preparation</a> — SDK status and local install instructions</li>
+<li><a href="../../docs/developers/DEVELOPER_ASSETS_INVENTORY.md">Developer Assets Inventory</a> — full list of deliverables</li>
+</ul>
+
+<h2 id="rc1-reviewer">RC1 Reviewer Guide</h2>
+<p><a href="../../docs/release/RC1_REVIEWER_README.md">RC1 Reviewer Guide →</a></p>
+<p>Covers: reviewer workflow, CI checks, devnet launch, REST examples, SDK testing, write-flow examples, dashboard, evidence, regression matrix, and safety disclaimers.</p>
+
+<h2 id="assets-inventory">Developer Assets Inventory</h2>
+<p><a href="../../docs/developers/DEVELOPER_ASSETS_INVENTORY.md">Full Developer Assets Inventory →</a></p>
+<p>Complete index of every major deliverable: release package, scripts, documentation, examples, SDK packages, CI, evidence, and safety notes.</p>
+
+<h2 id="phase-summary">Phase 10–12 Deliverable Summary</h2>
+<p><a href="../../docs/release/PHASE_10_TO_12_DELIVERABLE_SUMMARY.md">Full Phase 10–12 Summary →</a></p>
+<p>Concise overview of all outputs from Phases 10–12: RC1/product-flow, developer docs/SDKs/dashboard, regression/end-to-end/bundle/portal. Includes key pass counts, safety posture, and remaining NO-GO items.</p>
+
+<h2 id="litepaper">Litepaper</h2>
+<p><a href="../../docs/NEXARAIL_LITEPAPER.md">Litepaper →</a></p>
+<p>Project overview, motivation, module architecture, and developer roadmap.</p>
+
+<h2 id="evidence">Evidence</h2>
+<p>All check results are saved as timestamped evidence:</p>
+<table>
+<tr><th>Test</th><th>Evidence Path</th></tr>
+<tr><td>Fast regression (9 checks)</td><td><code>rehearsals/regression-matrix/evidence/&lt;timestamp&gt;/</code></td></tr>
+<tr><td>Full regression</td><td><code>rehearsals/regression-matrix/evidence/&lt;timestamp&gt;/</code></td></tr>
+<tr><td>End-to-end demo</td><td><code>rehearsals/end-to-end-demo/evidence/&lt;timestamp&gt;/</code></td></tr>
+<tr><td>SDK packaging</td><td><code>releases/sdk-local/</code></td></tr>
+<tr><td>Developer bundle</td><td><code>releases/developer-bundles/</code></td></tr>
+</table>
+
+<h2 id="regression-matrix">Regression Matrix</h2>
+<p>Run the regression matrix before every PR:</p>
+<pre><code># Fast checks (no devnet needed): 9 checks
+bash scripts/dev/run-nexarail-regression-matrix.sh --fast
+
+# Full checks (with running devnet):
+bash scripts/dev/run-nexarail-regression-matrix.sh --full --with-devnet --with-e2e-demo</code></pre>
+<p>See: <a href="../../docs/developers/DEMO_REGRESSION_MATRIX.md">Regression Matrix Doc</a> | <a href="../../docs/release/RC1_CI_CHECKS.md">CI Checks</a></p>
+
+<div class="box danger" id="safety">
+<h2>⚠️ Safety / What Not To Assume</h2>
+<ul>
+<li><strong>Mainnet is not live.</strong> There is no NexaRail mainnet.</li>
+<li><strong>NXRL is not buyable or tradeable.</strong> The test token (unxrl) has zero monetary value.</li>
+<li><strong>No token sale exists or has existed.</strong></li>
+<li><strong>No investment product, returns, profit, or APY.</strong></li>
+<li><strong>External decentralisation has not been achieved.</strong> The devnet runs on a single machine.</li>
+<li><strong>No independent validators.</strong> All validation is local.</li>
+<li><strong>SDK packages are NOT published</strong> to npm or PyPI. Local install only.</li>
+<li><strong>REST endpoints are read-only queries.</strong> No TX submission via REST gateway.</li>
+<li><strong>Write-flow scripts build CLI command strings only.</strong> They do not execute transactions, even on devnet, unless invoked with explicit execution flags.</li>
+</ul>
+</div>
+
+<div class="box warn" id="limitations">
+<h2>Limitations</h2>
+<ul>
+<li>Single-node devnet only — no multi-validator consensus testing</li>
+<li>No wallet integration in SDK clients</li>
+<li>No private key or mnemonic handling in SDK clients</li>
+<li>REST gateway is partial (read-only queries only, no TX submission)</li>
+<li>Some governance-executed events have limited indexing</li>
+<li>Burn routing supply delta is tracked but requires explicit evidence collection</li>
+<li>Local developer setup required (Go, Node.js, Python, jq)</li>
+</ul>
+</div>
+
+<h2 id="version">Version</h2>
+<table>
+<tr><td>Chain</td><td>RC1 (nexarail-devnet-1)</td></tr>
+<tr><td>Node SDK</td><td>v0.1.0-dev (local install only)</td></tr>
+<tr><td>Python SDK</td><td>v0.1.0-dev (local install only)</td></tr>
+<tr><td>Portal</td><td>2.0 (responsive, searchable, copy buttons)</td></tr>
+</table>
+
+<p style="margin-top: 3rem; color: #6b7280; font-size: 0.85rem;">
+  NexaRail Developer Portal — Generated from <code>docs/portal/</code><br>
+  LOCAL DEVNET ONLY — NOT MAINNET
+</p>
+
+</main>
+
+<script>
+// ── Search ──
+function searchPortal(q) {
+  const sections = document.querySelectorAll('main h2');
+  const results = document.getElementById('search-results');
+  const query = q.toLowerCase().trim();
+
+  // Clear previous highlights
+  document.querySelectorAll('.highlight').forEach(el => {
+    const parent = el.parentNode;
+    parent.replaceChild(document.createTextNode(el.textContent), el);
+    parent.normalize();
+  });
+
+  if (!query) { results.textContent = ''; return; }
+
+  let count = 0;
+  sections.forEach(h2 => {
+    const text = h2.textContent.toLowerCase();
+    if (text.includes(query)) {
+      count++;
+      // Highlight the matching text in the h2
+      const idx = h2.textContent.toLowerCase().indexOf(query);
+      if (idx >= 0) {
+        const orig = h2.textContent;
+        h2.innerHTML = orig.slice(0, idx) + '<span class="highlight">' + orig.slice(idx, idx + q.length) + '</span>' + orig.slice(idx + q.length);
+      }
+    }
+  });
+
+  results.textContent = count > 0 ? `Found ${count} section(s)` : 'No matching sections';
+}
+
+// ── Copy buttons for code blocks ──
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('pre').forEach(pre => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = '📋 Copy';
+    btn.onclick = function() {
+      const code = pre.querySelector('code');
+      const text = code ? code.textContent : pre.textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text.trim()).then(() => {
+          btn.textContent = '✅ Copied!';
+          setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+        }).catch(() => { fallbackCopy(text, btn); });
+      } else {
+        fallbackCopy(text, btn);
+      }
+    };
+    pre.style.paddingBottom = '2rem';
+    pre.appendChild(btn);
+  });
+
+  function fallbackCopy(text, btn) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); btn.textContent = '✅ Copied!'; } catch(e) { btn.textContent = '❌ Failed'; }
+    document.body.removeChild(ta);
+    setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+  }
+
+  // Clicking a sidebar link highlights it and closes sidebar on mobile
+  document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+      // Close sidebar on mobile
+      if (window.innerWidth <= 768) {
+        document.querySelector('nav').classList.remove('open');
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

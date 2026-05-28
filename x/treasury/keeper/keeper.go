@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/cometbft/cometbft/libs/log"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -14,8 +13,8 @@ import (
 )
 
 type Keeper struct {
-	storeKey  storetypes.StoreKey
-	authority string
+	storeKey   storetypes.StoreKey
+	authority  string
 	bankKeeper types.BankKeeper
 }
 
@@ -276,7 +275,7 @@ func (k Keeper) CreateTreasuryAccount(ctx sdk.Context, msg *types.MsgCreateTreas
 	if k.HasTreasuryAccount(ctx, msg.AccountId) {
 		return fmt.Errorf("%s: %w", msg.AccountId, types.ErrRecordExists)
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	a := types.NewTreasuryAccount(msg.AccountId, msg.Category, msg.Name, msg.Description, msg.MetadataUri, msg.NominalBalance, now)
 	if err := a.ValidateWithParams(p); err != nil {
 		return err
@@ -301,7 +300,7 @@ func (k Keeper) CreateBudget(ctx sdk.Context, msg *types.MsgCreateBudget) error 
 	if k.HasBudget(ctx, msg.BudgetId) {
 		return fmt.Errorf("%s: %w", msg.BudgetId, types.ErrRecordExists)
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	b := types.NewBudget(msg.BudgetId, msg.AccountId, msg.Category, msg.Title, msg.Description, msg.TotalAmount, msg.StartTime, msg.EndTime, msg.MetadataUri, now)
 	if err := b.ValidateWithParams(p); err != nil {
 		return err
@@ -328,7 +327,7 @@ func (k Keeper) UpdateBudgetStatus(ctx sdk.Context, msg *types.MsgUpdateBudgetSt
 		return fmt.Errorf("closed budgets cannot reopen: %w", types.ErrInvalidTransition)
 	}
 	b.Status = msg.Status
-	b.UpdatedAt = time.Now().Unix()
+	b.UpdatedAt = ctx.BlockTime().Unix()
 	k.SetBudget(ctx, b)
 	ctx.EventManager().EmitEvent(sdk.NewEvent(types.EventUpdateBudget, sdk.NewAttribute(types.AttrBudgetId, b.BudgetId), sdk.NewAttribute(types.AttrStatus, fmt.Sprintf("%d", b.Status))))
 	return nil
@@ -353,7 +352,7 @@ func (k Keeper) CreateGrant(ctx sdk.Context, msg *types.MsgCreateGrant) error {
 	if k.HasGrant(ctx, msg.GrantId) {
 		return fmt.Errorf("%s: %w", msg.GrantId, types.ErrRecordExists)
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	g := types.NewGrant(msg.GrantId, msg.BudgetId, msg.RecipientAddress, msg.Title, msg.Description, msg.Amount, msg.MilestoneCount, msg.MetadataUri, now)
 	if err := g.ValidateWithParams(p); err != nil {
 		return err
@@ -388,7 +387,7 @@ func (k Keeper) UpdateGrantStatus(ctx sdk.Context, msg *types.MsgUpdateGrantStat
 		return fmt.Errorf("cancelled grant: %w", types.ErrInvalidTransition)
 	}
 	g.Status = msg.Status
-	g.UpdatedAt = time.Now().Unix()
+	g.UpdatedAt = ctx.BlockTime().Unix()
 	if msg.Status == int32(types.GrantCompleted) {
 		g.CompletedAt = g.UpdatedAt
 	}
@@ -419,7 +418,7 @@ func (k Keeper) CreateSpendRequest(ctx sdk.Context, msg *types.MsgCreateSpendReq
 			return fmt.Errorf("grant %s: %w", msg.GrantId, types.ErrRecordNotFound)
 		}
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	s := types.NewSpendRequest(msg.SpendId, msg.AccountId, msg.BudgetId, msg.GrantId, msg.Requester, msg.RecipientAddress, msg.Amount, msg.Purpose, msg.Reference, msg.Memo, now)
 	if err := s.ValidateWithParams(p); err != nil {
 		return err
@@ -448,7 +447,7 @@ func (k Keeper) ApproveSpendRequest(ctx sdk.Context, msg *types.MsgApproveSpendR
 			return fmt.Errorf("%w", types.ErrBudgetCapacity)
 		}
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	s.Status = int32(types.SpendApproved)
 	s.ApprovedAt = now
 	s.UpdatedAt = now
@@ -469,7 +468,7 @@ func (k Keeper) RejectSpendRequest(ctx sdk.Context, msg *types.MsgRejectSpendReq
 	if s.Status != int32(types.SpendRequested) {
 		return fmt.Errorf("status: %w", types.ErrInvalidTransition)
 	}
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	s.Status = int32(types.SpendRejected)
 	s.RejectedAt = now
 	s.UpdatedAt = now
@@ -494,7 +493,7 @@ func (k Keeper) MarkSpendExecuted(ctx sdk.Context, msg *types.MsgMarkSpendExecut
 		return fmt.Errorf("status: %w", types.ErrInvalidTransition)
 	}
 
-	now := time.Now().Unix()
+	now := ctx.BlockTime().Unix()
 	params := k.GetParams(ctx)
 
 	// Live execution: transfer treasury module → recipient
@@ -571,7 +570,7 @@ func (k Keeper) CancelSpendRequest(ctx sdk.Context, msg *types.MsgCancelSpendReq
 		return fmt.Errorf("status %s: %w", types.SpendStatus(s.Status), types.ErrInvalidTransition)
 	}
 	s.Status = int32(types.SpendCancelled)
-	s.UpdatedAt = time.Now().Unix()
+	s.UpdatedAt = ctx.BlockTime().Unix()
 	if msg.Memo != "" {
 		s.Memo = strings.TrimSpace(msg.Memo)
 	}

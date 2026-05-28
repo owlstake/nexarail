@@ -19,10 +19,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/server"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
+	authcli "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	bankcli "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	govcli "github.com/cosmos/cosmos-sdk/x/gov/client/cli"
+	paramscli "github.com/cosmos/cosmos-sdk/x/params/client/cli"
 
 	"github.com/nexarail/chain/app"
 	escrowcli "github.com/nexarail/chain/x/escrow/client/cli"
@@ -39,7 +43,8 @@ func NewRootCmd() *cobra.Command {
 		Short: "NexaRail blockchain daemon",
 		Long: `NexaRail is a sovereign Layer 1 blockchain for railway settlement and payments.
 
-Built on Cosmos SDK, NexaRail provides a decentralised payment protocol for the rail industry
+Built on Cosmos SDK, NexaRail provides a controlled testnet-stage payment protocol for the rail industry
+with external validator distribution still pending
 with capabilities for merchant settlement, fee splitting, escrow, and treasury management.`,
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			cmd.SetOut(cmd.OutOrStdout())
@@ -102,6 +107,8 @@ with capabilities for merchant settlement, fee splitting, escrow, and treasury m
 		server.ExportCmd(exportAppStateAndValidators, app.DefaultNodeHome),
 		server.VersionCmd(),
 		DebugP2PConfigCmd(),
+		DebugLiveFlagsCmd(),
+		DebugModuleSummaryCmd(),
 		rpc.StatusCommand(),
 		rpc.ValidatorCommand(),
 		rpc.BlockCommand(),
@@ -129,7 +136,8 @@ func newAppCreator() servertypes.AppCreator {
 			chainID = genDoc.ChainID
 		}
 
-		baseAppOpts := []func(*baseapp.BaseApp){baseapp.SetChainID(chainID)}
+		baseAppOpts := server.DefaultBaseappOptions(appOpts)
+		baseAppOpts = append(baseAppOpts, baseapp.SetChainID(chainID))
 
 		return app.NewNexaRailApp(
 			logger,
@@ -194,10 +202,18 @@ func queryCommand() *cobra.Command {
 		SuggestionsMinimumDistance: 2,
 		RunE:                       sdkclient.ValidateCmd,
 	}
+	cmd.PersistentFlags().String(flags.FlagNode, "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
+	cmd.PersistentFlags().String(flags.FlagGRPC, "", "the gRPC endpoint to use for this chain")
+	cmd.PersistentFlags().Bool(flags.FlagGRPCInsecure, false, "allow gRPC over insecure channels, if not TLS the server must use TLS")
+	cmd.PersistentFlags().Int64(flags.FlagHeight, 0, "Use a specific height to query state at")
+	cmd.PersistentFlags().StringP(flags.FlagOutput, "o", "text", "Output format (text|json)")
 
 	cmd.AddCommand(
 		rpc.ValidatorCommand(),
 		rpc.BlockCommand(),
+		authcli.GetQueryCmd(),
+		bankcli.GetQueryCmd(),
+		govcli.GetQueryCmd(),
 		feescli.GetQueryCmd(),
 		merchantcli.GetQueryCmd(),
 		settlementcli.GetQueryCmd(),
@@ -219,7 +235,19 @@ func txCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-	// tx broadcast and signing commands will be added in Phase 2 refinement
+		bankcli.NewSendTxCmd(),
+		govcli.NewTxCmd(nil),
+		paramscli.NewSubmitParamChangeProposalTxCmd(),
+		feescli.GetTxCmd(),
+		merchantcli.GetTxCmd(),
+		settlementcli.GetTxCmd(),
+		escrowcli.GetTxCmd(),
+		treasurycli.GetTxCmd(),
+		payoutcli.GetTxCmd(),
+		authcli.GetSignCommand(),
+		authcli.GetBroadcastCommand(),
+		authcli.GetEncodeCommand(),
+		authcli.GetDecodeCommand(),
 	)
 
 	return cmd

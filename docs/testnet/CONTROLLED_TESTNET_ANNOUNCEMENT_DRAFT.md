@@ -9,7 +9,7 @@
 
 ## Subject: NexaRail Controlled Validator Registration Now Open
 
-NexaRail — a sovereign Layer 1 blockchain for decentralised railway settlement and payments — is opening controlled validator registration for its initial testnet, `nexarail-testnet-1`.
+NexaRail — a sovereign Layer 1 blockchain for controlled testnet evaluation of railway settlement and payments — is opening controlled validator registration for its initial testnet, `nexarail-testnet-1`. External validator distribution is not yet live.
 
 ### What This Is
 

@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "nexarail-devnet-client"
+version = "0.1.0.dev"
+description = "NexaRail RC1 devnet read-only client + command builders. LOCAL DEVNET ONLY."
+authors = [{ name = "NexaRail" }]
+license = { text = "UNLICENSED" }
+readme = "README.md"
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://github.com/nexarail/chain"

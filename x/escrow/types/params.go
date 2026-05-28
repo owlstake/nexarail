@@ -3,6 +3,8 @@ package types
 import (
 	"fmt"
 
+	"github.com/nexarail/chain/x/common"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -17,14 +19,14 @@ const (
 var DefaultMinEscrowAmount = sdk.NewInt64Coin("unxrl", 1)
 
 type Params struct {
-	EscrowsEnabled          bool     `json:"escrows_enabled" yaml:"escrows_enabled"`
-	LiveEnabled             bool     `json:"live_enabled" yaml:"live_enabled"`
-	MaxReferenceLength      uint32   `json:"max_reference_length" yaml:"max_reference_length"`
-	MaxMemoLength           uint32   `json:"max_memo_length" yaml:"max_memo_length"`
-	MaxDisputeReasonLength  uint32   `json:"max_dispute_reason_length" yaml:"max_dispute_reason_length"`
-	MaxResolutionNoteLength uint32   `json:"max_resolution_note_length" yaml:"max_resolution_note_length"`
-	MinEscrowAmount         sdk.Coin `json:"min_escrow_amount" yaml:"min_escrow_amount"`
-	DefaultExpirySeconds    uint64   `json:"default_expiry_seconds" yaml:"default_expiry_seconds"`
+	EscrowsEnabled          bool     `json:"escrows_enabled" yaml:"escrows_enabled" protobuf:"varint,1,opt,name=escrows_enabled,json=escrowsEnabled,proto3"`
+	LiveEnabled             bool     `json:"live_enabled" yaml:"live_enabled" protobuf:"varint,2,opt,name=live_enabled,json=liveEnabled,proto3"`
+	MaxReferenceLength      uint32   `json:"max_reference_length" yaml:"max_reference_length" protobuf:"varint,3,opt,name=max_reference_length,json=maxReferenceLength,proto3"`
+	MaxMemoLength           uint32   `json:"max_memo_length" yaml:"max_memo_length" protobuf:"varint,4,opt,name=max_memo_length,json=maxMemoLength,proto3"`
+	MaxDisputeReasonLength  uint32   `json:"max_dispute_reason_length" yaml:"max_dispute_reason_length" protobuf:"varint,5,opt,name=max_dispute_reason_length,json=maxDisputeReasonLength,proto3"`
+	MaxResolutionNoteLength uint32   `json:"max_resolution_note_length" yaml:"max_resolution_note_length" protobuf:"varint,6,opt,name=max_resolution_note_length,json=maxResolutionNoteLength,proto3"`
+	MinEscrowAmount         sdk.Coin `json:"min_escrow_amount" yaml:"min_escrow_amount" protobuf:"bytes,7,opt,name=min_escrow_amount,json=minEscrowAmount,proto3"`
+	DefaultExpirySeconds    uint64   `json:"default_expiry_seconds" yaml:"default_expiry_seconds" protobuf:"varint,8,opt,name=default_expiry_seconds,json=defaultExpirySeconds,proto3"`
 }
 
 func DefaultParams() Params {
@@ -40,9 +42,10 @@ func DefaultParams() Params {
 	}
 }
 
-func (p *Params) ProtoMessage()  {}
-func (p *Params) Reset()         { *p = Params{} }
-func (p *Params) String() string { return "EscrowParams{}" }
+func (p *Params) ProtoMessage()               {}
+func (p *Params) Descriptor() ([]byte, []int) { return common.EscrowDescriptorBytes, []int{0} }
+func (p *Params) Reset()                      { *p = Params{} }
+func (p *Params) String() string              { return "EscrowParams{}" }
 
 func (p Params) Validate() error {
 	if p.MaxReferenceLength == 0 {

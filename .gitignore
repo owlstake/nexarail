@@ -20,3 +20,59 @@ rehearsals/testnet-1/genesis/
 # Temp
 /tmp/
 *.log
+
+# Release binaries (download from tagged release)
+releases/testnet-rc1/binaries/
+releases/testnet-rc1/checksums/
+
+# Devnet state
+rehearsals/rc1-devnet/
+~/.nexarail-devnet/
+
+# Agent home data (contains private keys)
+rehearsals/validator-agents/*/config/
+rehearsals/validator-agents/*/data/
+
+
+# Compiled test/utility binaries
+*.test
+/govtxbuilder
+/tools/govtxbuilder/
+/tools/storeinspector/
+
+# Runtime evidence (regenerated each run)
+rehearsals/*/evidence/
+rehearsals/*/logs/
+rehearsals/rc1-devnet/
+
+# Portal build output (regenerated from source)
+site/
+
+# Large local runtime files
+*.db
+*.log
+
+# App test files
+/app/bench_test.go
+/app/governance_test.go
+/app/integration_test.go
+/app/query_multistore.go
+
+# SDK test binaries
+examples/node-client/node_modules/
+
+# Developer bundle archives (keep manifest + checksums only)
+releases/developer-bundles/*.tar.gz
+
+
+# Agent validator data (contains private keys, node data)
+rehearsals/validator-agents/*/config/
+rehearsals/validator-agents/*/data/
+rehearsals/validator-agents/*/keyring-test/
+
+# Phase 9 validation agent runtime evidence
+rehearsals/validator-agents/phase9v-latest-evidence-path.txt
+rehearsals/validator-agents/phase9t-latest-evidence-timestamp.txt
+
+# Product flow gov toggle runtime data
+rehearsals/validator-agents/product-flows/gov-toggles/

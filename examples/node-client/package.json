@@ -1,0 +1,21 @@
+{
+  "name": "@nexarail/devnet-client",
+  "version": "0.1.0-dev",
+  "description": "NexaRail RC1 devnet read-only client + command builders. LOCAL DEVNET ONLY. NOT for mainnet.",
+  "type": "module",
+  "main": "src/client.js",
+  "exports": {
+    ".": "./src/client.js",
+    "./buildCommands": "./src/buildCommands.js"
+  },
+  "scripts": {
+    "test": "node --experimental-vm-modules test/client.test.js",
+    "check": "node -e \"import('./src/client.js').then(m => { console.log('OK:'); const names = Object.keys(m).filter(k => !k.startsWith('_')).join(', '); console.log('  exports:', names); })\"",
+    "examples": "node src/buildCommands.js"
+  },
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  }
+}

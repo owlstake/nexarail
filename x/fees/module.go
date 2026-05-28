@@ -1,20 +1,19 @@
 package fees
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
-
 	abci "github.com/cometbft/cometbft/abci/types"
-	"github.com/gorilla/mux"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/spf13/cobra"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-
+	"github.com/gorilla/mux"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
+	"github.com/nexarail/chain/x/common"
 	"github.com/nexarail/chain/x/fees/client/cli"
 	"github.com/nexarail/chain/x/fees/keeper"
 	"github.com/nexarail/chain/x/fees/types"
@@ -66,8 +65,17 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingCo
 // RegisterRESTRoutes registers REST routes (none in v1).
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {}
 
-// RegisterGRPCGatewayRoutes registers gRPC gateway routes (none in v1).
-func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {}
+// RegisterGRPCGatewayRoutes registers gRPC gateway routes for the fees module.
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/fees/v1/params", func() (interface{}, error) {
+		qc := types.NewQueryClient(clientCtx)
+		return qc.Params(context.Background(), &types.QueryParamsRequest{})
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/fees/v1/fee_split", func() (interface{}, error) {
+		qc := types.NewQueryClient(clientCtx)
+		return qc.FeeSplit(context.Background(), &types.QueryFeeSplitRequest{})
+	})
+}
 
 // GetTxCmd returns the transaction CLI commands.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {

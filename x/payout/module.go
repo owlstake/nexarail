@@ -1,20 +1,19 @@
 package payout
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
-
-	"github.com/gorilla/mux"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/spf13/cobra"
-
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-
+	"github.com/gorilla/mux"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
+	"github.com/nexarail/chain/x/common"
 	"github.com/nexarail/chain/x/payout/client/cli"
 	"github.com/nexarail/chain/x/payout/keeper"
 	"github.com/nexarail/chain/x/payout/types"
@@ -44,7 +43,16 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingCo
 	return gs.Validate()
 }
 func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router)              {}
-func (AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {}
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/payout/v1/params", func() (interface{}, error) {
+		qc := types.NewQueryClient(clientCtx)
+		return qc.Params(context.Background(), &types.QueryParamsRequest{})
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/payout/v1/payouts", func() (interface{}, error) {
+		qc := types.NewQueryClient(clientCtx)
+		return qc.Payouts(context.Background(), &types.QueryPayoutsRequest{})
+	})
+}
 func (AppModuleBasic) GetTxCmd() *cobra.Command                                        { return cli.GetTxCmd() }
 func (AppModuleBasic) GetQueryCmd() *cobra.Command                                     { return cli.GetQueryCmd() }
 

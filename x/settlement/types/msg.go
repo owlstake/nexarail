@@ -3,6 +3,8 @@ package types
 import (
 	"fmt"
 
+	"github.com/nexarail/chain/x/common"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -16,10 +18,10 @@ var (
 // --- MsgCreateSettlement ---
 
 type MsgCreateSettlement struct {
-	Payer         string   `json:"payer" yaml:"payer"`
-	MerchantOwner string   `json:"merchant_owner" yaml:"merchant_owner"`
-	Amount        sdk.Coin `json:"amount" yaml:"amount"`
-	Metadata      string   `json:"metadata" yaml:"metadata"`
+	Payer         string   `json:"payer" yaml:"payer" protobuf:"bytes,1,opt,name=payer,proto3"`
+	MerchantOwner string   `json:"merchant_owner" yaml:"merchant_owner" protobuf:"bytes,2,opt,name=merchant_owner,json=merchantOwner,proto3"`
+	Amount        sdk.Coin `json:"amount" yaml:"amount" protobuf:"bytes,3,opt,name=amount,proto3"`
+	Metadata      string   `json:"metadata" yaml:"metadata" protobuf:"bytes,4,opt,name=metadata,proto3"`
 }
 
 func NewMsgCreateSettlement(payer, merchantOwner string, amount sdk.Coin, metadata string) *MsgCreateSettlement {
@@ -32,7 +34,10 @@ func NewMsgCreateSettlement(payer, merchantOwner string, amount sdk.Coin, metada
 }
 
 func (msg *MsgCreateSettlement) ProtoMessage() {}
-func (msg *MsgCreateSettlement) Reset()        { *msg = MsgCreateSettlement{} }
+func (msg *MsgCreateSettlement) Descriptor() ([]byte, []int) {
+	return common.SettlementDescriptorBytes, []int{1}
+}
+func (msg *MsgCreateSettlement) Reset() { *msg = MsgCreateSettlement{} }
 func (msg *MsgCreateSettlement) String() string {
 	return fmt.Sprintf("MsgCreateSettlement{%s->%s, %s}", msg.Payer, msg.MerchantOwner, msg.Amount)
 }
@@ -61,9 +66,9 @@ func (msg MsgCreateSettlement) GetSignBytes() []byte {
 // --- MsgUpdateSettlementStatus (authority-only) ---
 
 type MsgUpdateSettlementStatus struct {
-	Authority string `json:"authority" yaml:"authority"`
-	Id        uint64 `json:"id" yaml:"id"`
-	Status    int32  `json:"status" yaml:"status"`
+	Authority string `json:"authority" yaml:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	Id        uint64 `json:"id" yaml:"id" protobuf:"varint,2,opt,name=id,proto3"`
+	Status    int32  `json:"status" yaml:"status" protobuf:"varint,3,opt,name=status,proto3"`
 }
 
 func NewMsgUpdateSettlementStatus(authority string, id uint64, status int32) *MsgUpdateSettlementStatus {
@@ -71,7 +76,10 @@ func NewMsgUpdateSettlementStatus(authority string, id uint64, status int32) *Ms
 }
 
 func (msg *MsgUpdateSettlementStatus) ProtoMessage() {}
-func (msg *MsgUpdateSettlementStatus) Reset()        { *msg = MsgUpdateSettlementStatus{} }
+func (msg *MsgUpdateSettlementStatus) Descriptor() ([]byte, []int) {
+	return common.SettlementDescriptorBytes, []int{2}
+}
+func (msg *MsgUpdateSettlementStatus) Reset() { *msg = MsgUpdateSettlementStatus{} }
 func (msg *MsgUpdateSettlementStatus) String() string {
 	return fmt.Sprintf("MsgUpdateSettlementStatus{id=%d, status=%d}", msg.Id, msg.Status)
 }
@@ -97,8 +105,8 @@ func (msg MsgUpdateSettlementStatus) GetSignBytes() []byte {
 // --- MsgUpdateParams (authority-only) ---
 
 type MsgUpdateParams struct {
-	Authority string `json:"authority" yaml:"authority"`
-	Params    Params `json:"params" yaml:"params"`
+	Authority string `json:"authority" yaml:"authority" protobuf:"bytes,1,opt,name=authority,proto3"`
+	Params    Params `json:"params" yaml:"params" protobuf:"bytes,2,opt,name=params,proto3"`
 }
 
 func NewMsgUpdateParams(authority string, params Params) *MsgUpdateParams {
@@ -106,7 +114,10 @@ func NewMsgUpdateParams(authority string, params Params) *MsgUpdateParams {
 }
 
 func (msg *MsgUpdateParams) ProtoMessage() {}
-func (msg *MsgUpdateParams) Reset()        { *msg = MsgUpdateParams{} }
+func (msg *MsgUpdateParams) Descriptor() ([]byte, []int) {
+	return common.SettlementDescriptorBytes, []int{3}
+}
+func (msg *MsgUpdateParams) Reset() { *msg = MsgUpdateParams{} }
 func (msg *MsgUpdateParams) String() string {
 	return fmt.Sprintf("MsgUpdateParams{authority=%s}", msg.Authority)
 }
@@ -129,7 +140,7 @@ func (msg MsgUpdateParams) GetSignBytes() []byte {
 // --- Responses ---
 
 type MsgCreateSettlementResponse struct {
-	Id uint64 `json:"id" yaml:"id"`
+	Id uint64 `json:"id" yaml:"id" protobuf:"varint,1,opt,name=id,proto3"`
 }
 
 func (r *MsgCreateSettlementResponse) ProtoMessage() {}

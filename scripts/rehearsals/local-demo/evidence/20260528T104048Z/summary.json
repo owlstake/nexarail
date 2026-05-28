@@ -1,0 +1,12 @@
+{
+  "demo": "NexaRail Local Demo",
+  "timestamp": "20260528T104048Z",
+  "pass": 3,
+  "fail": 7,
+  "skip": 2,
+  "total_checks": 12,
+  "binary": "/Users/bradleyjohnston/workspace/nexarail/scripts/releases/testnet-rc1/binaries/nexaraild-darwin-arm64",
+  "keep_running": 0,
+  "serve_dashboard": 0,
+  "live_flags": {"settlement": false, "escrow": false, "treasury": false, "payout": false}
+}

@@ -2,14 +2,17 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	dbm "github.com/cometbft/cometbft-db"
 	abci "github.com/cometbft/cometbft/abci/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cometbft/cometbft/libs/log"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	cmttypes "github.com/cometbft/cometbft/types"
 	gogogrpc "github.com/cosmos/gogoproto/grpc"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -74,7 +77,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
+	"github.com/nexarail/chain/x/common"
 	feessdk "github.com/nexarail/chain/x/fees"
 	feeskeeper "github.com/nexarail/chain/x/fees/keeper"
 	feestypes "github.com/nexarail/chain/x/fees/types"
@@ -199,10 +204,9 @@ func NewNexaRailApp(
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 	bApp.SetTxEncoder(txConfig.TxEncoder())
 
-	// Set up a simple in-memory ParamStore for consensus params.
-	// In production, use x/consensus keeper. For devnet/testnet,
-	// an in-memory store is sufficient.
-	bApp.SetParamStore(&paramStore{})
+	// Set up a small ParamStore for consensus params. BaseApp calls this during
+	// PrepareProposal/ProcessProposal, including after process restarts.
+	bApp.SetParamStore(newParamStore(homePath))
 
 	app := &NexaRailApp{
 		BaseApp:           bApp,
@@ -233,6 +237,7 @@ func NewNexaRailApp(
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		crisistypes.ModuleName:         nil,
+		merchanttypes.ModuleName:       nil,
 		NexaRailEscrowModuleAccount:    nil,
 		NexaRailTreasuryModuleAccount:  nil,
 		NexaRailFeeRouterModuleAccount: nil,
@@ -428,6 +433,11 @@ func NewNexaRailApp(
 	configurator := module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 	app.mm.RegisterServices(configurator)
 
+	// Phase 8F: Register no-op upgrade handlers for testnet
+	// These prove upgrade infrastructure works without changing state.
+	// WARNING: Do not enable on mainnet without full audit.
+	app.registerUpgradeHandlers()
+
 	// Ante handler
 	anteHandler, err := ante.NewAnteHandler(ante.HandlerOptions{
 		AccountKeeper:   app.AccountKeeper,
@@ -444,6 +454,7 @@ func NewNexaRailApp(
 	app.MountKVStores(app.keys)
 	app.MountTransientStores(app.tkeys)
 	app.MountMemoryStores(app.memKeys)
+	app.SetQueryMultiStore(newLatestQueryMultiStore(app.CommitMultiStore()))
 
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
@@ -503,7 +514,224 @@ func (app *NexaRailApp) SimulationManager() *module.SimulationManager { return a
 
 // servertypes.Application interface
 func (app *NexaRailApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+	app.RegisterRuntimeReadbackRoutes(apiSvr.GRPCGatewayRouter)
 	ModuleBasics.RegisterGRPCGatewayRoutes(apiSvr.ClientCtx, apiSvr.GRPCGatewayRouter)
+}
+
+func (app *NexaRailApp) RegisterRuntimeReadbackRoutes(mux *runtime.ServeMux) {
+	paramsContext := func() sdk.Context {
+		return app.BaseApp.NewUncachedContext(false, tmproto.Header{})
+	}
+
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/fees/v1/params", func() (interface{}, error) {
+		return map[string]interface{}{"params": app.FeesKeeper.GetParams(paramsContext())}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/merchant/v1/params", func() (interface{}, error) {
+		return map[string]interface{}{"params": app.MerchantKeeper.GetParams(paramsContext())}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/merchant/v1/merchants", func() (interface{}, error) {
+		return map[string]interface{}{"merchants": app.MerchantKeeper.GetAllMerchants(paramsContext())}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/merchant/v1/merchant/{owner}", "owner", func(owner string) (interface{}, error) {
+		if owner == "" {
+			return nil, fmt.Errorf("merchant owner address required")
+		}
+		addr, err := sdk.AccAddressFromBech32(owner)
+		if err != nil {
+			return nil, fmt.Errorf("invalid merchant owner address '%s': %w", owner, err)
+		}
+		merchant, found := app.MerchantKeeper.GetMerchant(paramsContext(), addr)
+		if !found {
+			return nil, fmt.Errorf("merchant %s not found", owner)
+		}
+		return map[string]interface{}{"merchant": merchant}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/settlement/v1/params", func() (interface{}, error) {
+		return map[string]interface{}{"params": app.SettlementKeeper.GetParams(paramsContext())}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/settlement/v1/settlements", func() (interface{}, error) {
+		return map[string]interface{}{"settlements": app.SettlementKeeper.GetAllSettlements(paramsContext())}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/settlement/v1/settlement/{id}", "id", func(idRaw string) (interface{}, error) {
+		id, err := strconv.ParseUint(idRaw, 10, 64)
+		if err != nil {
+			return nil, fmt.Errorf("settlement id: %w", err)
+		}
+		settlement, found := app.SettlementKeeper.GetSettlement(paramsContext(), id)
+		if !found {
+			return nil, fmt.Errorf("settlement %d not found", id)
+		}
+		return map[string]interface{}{"settlement": settlement}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/settlement/v1/settlements/by-merchant/{owner}", "owner", func(owner string) (interface{}, error) {
+		if owner == "" {
+			return nil, fmt.Errorf("merchant owner address required")
+		}
+		return map[string]interface{}{"settlements": app.SettlementKeeper.GetSettlementsByMerchant(paramsContext(), owner)}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/settlement/v1/settlements/by-payer/{payer}", "payer", func(payer string) (interface{}, error) {
+		if payer == "" {
+			return nil, fmt.Errorf("payer address required")
+		}
+		return map[string]interface{}{"settlements": app.SettlementKeeper.GetSettlementsByPayer(paramsContext(), payer)}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/escrow/v1/params", func() (interface{}, error) {
+		return map[string]interface{}{"params": app.EscrowKeeper.GetParams(paramsContext())}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/escrow/v1/escrows", func() (interface{}, error) {
+		return map[string]interface{}{"escrows": app.EscrowKeeper.GetAllEscrows(paramsContext())}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/escrow/v1/escrow/{id}", "id", func(idRaw string) (interface{}, error) {
+		if idRaw == "" {
+			return nil, fmt.Errorf("escrow id required")
+		}
+		escrow, found := app.EscrowKeeper.GetEscrow(paramsContext(), idRaw)
+		if !found {
+			return nil, fmt.Errorf("escrow %s not found", idRaw)
+		}
+		return map[string]interface{}{"escrow": escrow}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/escrow/v1/escrows/by-buyer/{buyer}", "buyer", func(buyer string) (interface{}, error) {
+		if buyer == "" {
+			return nil, fmt.Errorf("buyer address required")
+		}
+		return map[string]interface{}{"escrows": app.EscrowKeeper.GetEscrowsByBuyer(paramsContext(), buyer)}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/escrow/v1/escrows/by-seller/{seller}", "seller", func(seller string) (interface{}, error) {
+		if seller == "" {
+			return nil, fmt.Errorf("seller address required")
+		}
+		return map[string]interface{}{"escrows": app.EscrowKeeper.GetEscrowsBySeller(paramsContext(), seller)}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/escrow/v1/escrows/by-merchant/{merchant}", "merchant", func(merchant string) (interface{}, error) {
+		if merchant == "" {
+			return nil, fmt.Errorf("merchant id required")
+		}
+		return map[string]interface{}{"escrows": app.EscrowKeeper.GetEscrowsByMerchant(paramsContext(), merchant)}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/escrow/v1/escrow/exists/{id}", "id", func(idRaw string) (interface{}, error) {
+		if idRaw == "" {
+			return nil, fmt.Errorf("escrow id required")
+		}
+		return map[string]interface{}{"exists": app.EscrowKeeper.HasEscrow(paramsContext(), idRaw)}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/payout/v1/params", func() (interface{}, error) {
+		return map[string]interface{}{"params": app.PayoutKeeper.GetParams(paramsContext())}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/payout/v1/payouts", func() (interface{}, error) {
+		return map[string]interface{}{"payouts": app.PayoutKeeper.GetAllPayouts(paramsContext())}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/payout/v1/payout/{id}", "id", func(id string) (interface{}, error) {
+		if id == "" {
+			return nil, fmt.Errorf("payout id required")
+		}
+		payout, found := app.PayoutKeeper.GetPayout(paramsContext(), id)
+		if !found {
+			return nil, fmt.Errorf("payout %s not found", id)
+		}
+		return map[string]interface{}{"payout": payout}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/payout/v1/payout/exists/{id}", "id", func(id string) (interface{}, error) {
+		if id == "" {
+			return nil, fmt.Errorf("payout id required")
+		}
+		return map[string]interface{}{"exists": app.PayoutKeeper.HasPayout(paramsContext(), id)}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/payout/v1/payouts/by-merchant/{merchant}", "merchant", func(merchant string) (interface{}, error) {
+		if merchant == "" {
+			return nil, fmt.Errorf("merchant id required")
+		}
+		return map[string]interface{}{"payouts": app.PayoutKeeper.GetPayoutsByMerchant(paramsContext(), merchant)}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/payout/v1/payouts/by-recipient/{recipient}", "recipient", func(recipient string) (interface{}, error) {
+		if recipient == "" {
+			return nil, fmt.Errorf("recipient address required")
+		}
+		return map[string]interface{}{"payouts": app.PayoutKeeper.GetPayoutsByRecipient(paramsContext(), recipient)}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/payout/v1/payouts/by-initiator/{initiator}", "initiator", func(initiator string) (interface{}, error) {
+		if initiator == "" {
+			return nil, fmt.Errorf("initiator address required")
+		}
+		return map[string]interface{}{"payouts": app.PayoutKeeper.GetPayoutsByInitiator(paramsContext(), initiator)}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/payout/v1/batch-payout/{id}", "id", func(id string) (interface{}, error) {
+		if id == "" {
+			return nil, fmt.Errorf("batch payout id required")
+		}
+		batch, found := app.PayoutKeeper.GetBatchPayout(paramsContext(), id)
+		if !found {
+			return nil, fmt.Errorf("batch payout %s not found", id)
+		}
+		return map[string]interface{}{"batch_payout": batch}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/payout/v1/batch-payouts", func() (interface{}, error) {
+		return map[string]interface{}{"batch_payouts": app.PayoutKeeper.GetAllBatchPayouts(paramsContext())}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/treasury/v1/params", func() (interface{}, error) {
+		return map[string]interface{}{"params": app.TreasuryKeeper.GetParams(paramsContext())}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/treasury/v1/summary", func() (interface{}, error) {
+		ctx := paramsContext()
+		return map[string]interface{}{
+			"total_accounts":       len(app.TreasuryKeeper.GetAllTreasuryAccounts(ctx)),
+			"total_budgets":        len(app.TreasuryKeeper.GetAllBudgets(ctx)),
+			"total_grants":         len(app.TreasuryKeeper.GetAllGrants(ctx)),
+			"total_spend_requests": len(app.TreasuryKeeper.GetAllSpendRequests(ctx)),
+		}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/treasury/v1/spend/{id}", "id", func(id string) (interface{}, error) {
+		if id == "" {
+			return nil, fmt.Errorf("spend id required")
+		}
+		spend, found := app.TreasuryKeeper.GetSpendRequest(paramsContext(), id)
+		if !found {
+			return nil, fmt.Errorf("spend request %s not found", id)
+		}
+		return map[string]interface{}{"spend_request": spend}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/treasury/v1/spends", func() (interface{}, error) {
+		return map[string]interface{}{"spend_requests": app.TreasuryKeeper.GetAllSpendRequests(paramsContext())}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/treasury/v1/account/{id}", "id", func(id string) (interface{}, error) {
+		if id == "" {
+			return nil, fmt.Errorf("account id required")
+		}
+		account, found := app.TreasuryKeeper.GetTreasuryAccount(paramsContext(), id)
+		if !found {
+			return nil, fmt.Errorf("treasury account %s not found", id)
+		}
+		return map[string]interface{}{"treasury_account": account}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/treasury/v1/accounts", func() (interface{}, error) {
+		return map[string]interface{}{"treasury_accounts": app.TreasuryKeeper.GetAllTreasuryAccounts(paramsContext())}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/treasury/v1/budget/{id}", "id", func(id string) (interface{}, error) {
+		if id == "" {
+			return nil, fmt.Errorf("budget id required")
+		}
+		budget, found := app.TreasuryKeeper.GetBudget(paramsContext(), id)
+		if !found {
+			return nil, fmt.Errorf("budget %s not found", id)
+		}
+		return map[string]interface{}{"budget": budget}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/treasury/v1/budgets", func() (interface{}, error) {
+		return map[string]interface{}{"budgets": app.TreasuryKeeper.GetAllBudgets(paramsContext())}, nil
+	})
+	common.RegisterQueryRouteWithParam(mux, "GET", "/nexarail/treasury/v1/grant/{id}", "id", func(id string) (interface{}, error) {
+		if id == "" {
+			return nil, fmt.Errorf("grant id required")
+		}
+		grant, found := app.TreasuryKeeper.GetGrant(paramsContext(), id)
+		if !found {
+			return nil, fmt.Errorf("grant %s not found", id)
+		}
+		return map[string]interface{}{"grant": grant}, nil
+	})
+	common.RegisterQueryRoute(mux, "GET", "/nexarail/treasury/v1/grants", func() (interface{}, error) {
+		return map[string]interface{}{"grants": app.TreasuryKeeper.GetAllGrants(paramsContext())}, nil
+	})
 }
 
 func (app *NexaRailApp) RegisterTxService(clientCtx client.Context) {
@@ -519,7 +747,7 @@ func (app *NexaRailApp) RegisterNodeService(clientCtx client.Context) {
 }
 
 func (app *NexaRailApp) RegisterGRPCServer(srv gogogrpc.Server) {
-	// Services are already registered via configurator
+	app.BaseApp.RegisterGRPCServer(srv)
 }
 
 func (app *NexaRailApp) CommitMultiStore() storetypes.CommitMultiStore {
@@ -534,6 +762,18 @@ func (app *NexaRailApp) Close() error {
 	return nil
 }
 
+// Phase 8F: registerUpgradeHandlers registers no-op upgrade handlers for testnet use.
+// These prove the upgrade infrastructure works without mutating state.
+// WARNING: Do not register real state-mutating handlers without full audit.
+func (app *NexaRailApp) registerUpgradeHandlers() {
+	// v0.2.0-testnet: future upgrade placeholder — no state mutation
+	app.UpgradeKeeper.SetUpgradeHandler("v0.2.0-testnet", func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+		app.Logger().Info("No-op upgrade handler executed", "plan", plan.Name, "height", plan.Height)
+		// No state mutation — return current version map unchanged
+		return fromVM, nil
+	})
+}
+
 func GetMaccPerms() map[string][]string {
 	return map[string][]string{
 		authtypes.FeeCollectorName:     nil,
@@ -543,6 +783,7 @@ func GetMaccPerms() map[string][]string {
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		crisistypes.ModuleName:         nil,
+		merchanttypes.ModuleName:       nil,
 		NexaRailEscrowModuleAccount:    nil,
 		NexaRailTreasuryModuleAccount:  nil,
 		NexaRailFeeRouterModuleAccount: nil,
@@ -578,22 +819,75 @@ func SetBech32Prefix() {
 }
 
 // paramStore is a minimal in-memory ParamStore for consensus parameters.
-// In production, replace with x/consensus keeper.
+//
+// BaseApp expects Get to return non-nil consensus params during proposal
+// preparation and processing. InitChain calls Set on fresh chains, but after a
+// process restart this in-memory store is rebuilt. Seed it from genesis/defaults
+// so restart paths do not expose nil params to BaseApp.
 type paramStore struct {
 	cp *tmproto.ConsensusParams
 }
 
+func newParamStore(homePath string) *paramStore {
+	cp := defaultConsensusParams(homePath)
+	return &paramStore{cp: cloneConsensusParams(&cp)}
+}
+
+func defaultConsensusParams(homePath string) tmproto.ConsensusParams {
+	if homePath != "" {
+		genFile := filepath.Join(homePath, "config", "genesis.json")
+		if genDoc, err := cmttypes.GenesisDocFromFile(genFile); err == nil && genDoc.ConsensusParams != nil {
+			return genDoc.ConsensusParams.ToProto()
+		}
+	}
+
+	return cmttypes.DefaultConsensusParams().ToProto()
+}
+
 func (ps *paramStore) Get(_ sdk.Context) (*tmproto.ConsensusParams, error) {
 	if ps.cp == nil {
-		return nil, nil
+		cp := defaultConsensusParams("")
+		ps.cp = cloneConsensusParams(&cp)
 	}
-	return ps.cp, nil
+	return cloneConsensusParams(ps.cp), nil
 }
 
 func (ps *paramStore) Has(_ sdk.Context) bool {
-	return ps.cp != nil
+	return true
 }
 
 func (ps *paramStore) Set(_ sdk.Context, cp *tmproto.ConsensusParams) {
-	ps.cp = cp
+	if cp == nil {
+		defaults := defaultConsensusParams("")
+		ps.cp = cloneConsensusParams(&defaults)
+		return
+	}
+	ps.cp = cloneConsensusParams(cp)
+}
+
+func cloneConsensusParams(cp *tmproto.ConsensusParams) *tmproto.ConsensusParams {
+	if cp == nil {
+		defaults := defaultConsensusParams("")
+		cp = &defaults
+	}
+
+	out := &tmproto.ConsensusParams{}
+	if cp.Block != nil {
+		block := *cp.Block
+		out.Block = &block
+	}
+	if cp.Evidence != nil {
+		evidence := *cp.Evidence
+		out.Evidence = &evidence
+	}
+	if cp.Validator != nil {
+		validator := *cp.Validator
+		validator.PubKeyTypes = append([]string(nil), cp.Validator.PubKeyTypes...)
+		out.Validator = &validator
+	}
+	if cp.Version != nil {
+		version := *cp.Version
+		out.Version = &version
+	}
+	return out
 }
