@@ -9,4 +9,8 @@ const (
 	AttributeKeyDescription = "description"
 	AttributeKeyWebsite     = "website"
 	AttributeKeyStatus      = "status"
+	EventTypeUpdateParams   = "merchant_params_updated"
+	AttrAuthority           = "authority"
+	AttrLiveEnabled         = "live_enabled"
 )
+

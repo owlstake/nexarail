@@ -51,8 +51,20 @@ func (m MsgCreateEscrow) ValidateBasic() error {
 	if m.Buyer == m.SellerAddress {
 		return fmt.Errorf("buyer and seller must differ: %w", ErrInvalidBuyer)
 	}
-	if m.Amount.IsZero() || m.Amount.IsNegative() {
+	if m.MerchantId == "" {
+		return fmt.Errorf("merchant_id is required")
+	}
+	if m.EscrowId == "" {
+		return fmt.Errorf("escrow_id is required")
+	}
+	if !m.Amount.IsValid() || m.Amount.IsZero() || m.Amount.IsNegative() {
 		return fmt.Errorf("amount: %w", ErrAmountNotPositive)
+	}
+	if m.AssetDenom == "" {
+		return fmt.Errorf("asset denom is required")
+	}
+	if len(m.PaymentReference) > 120 {
+		return fmt.Errorf("payment reference too long: max 120")
 	}
 	return nil
 }

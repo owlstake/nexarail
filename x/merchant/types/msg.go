@@ -94,6 +94,15 @@ func (msg MsgUpdateMerchant) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(msg.Owner); err != nil {
 		return fmt.Errorf("invalid owner: %w", err)
 	}
+	if len(msg.Name) > 64 {
+		return fmt.Errorf("name too long: max 64")
+	}
+	if len(msg.Description) > 256 {
+		return fmt.Errorf("description too long: max 256")
+	}
+	if len(msg.Website) > 512 {
+		return fmt.Errorf("website too long: max 512")
+	}
 	return nil
 }
 

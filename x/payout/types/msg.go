@@ -231,7 +231,13 @@ func (m MsgUpdateParams) Route() string                { return RouterKey }
 func (m MsgUpdateParams) Type() string                 { return "update_params" }
 func (m MsgUpdateParams) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(m.Authority)
-	return err
+	if err != nil {
+		return fmt.Errorf("invalid authority: %w", err)
+	}
+	if err := m.Params.Validate(); err != nil {
+		return fmt.Errorf("invalid params: %w", err)
+	}
+	return nil
 }
 func (m MsgUpdateParams) GetSigners() []sdk.AccAddress {
 	a, _ := sdk.AccAddressFromBech32(m.Authority)

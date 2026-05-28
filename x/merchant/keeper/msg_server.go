@@ -47,6 +47,12 @@ func (ms MsgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams
 	if err := ms.keeper.UpdateParams(sdkCtx, msg.Authority, msg.Params); err != nil {
 		return nil, err
 	}
+	sdkCtx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeUpdateParams,
+			sdk.NewAttribute("authority", msg.Authority),
+		),
+	)
 	return &types.MsgUpdateParamsResponse{}, nil
 }
 

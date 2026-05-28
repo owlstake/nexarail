@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	grpc "google.golang.org/grpc"
@@ -40,9 +41,17 @@ func (ms MsgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams
 	if err := msg.ValidateBasic(); err != nil {
 		return nil, err
 	}
-	if err := ms.keeper.UpdateParams(sdk.UnwrapSDKContext(ctx), msg.Authority, msg.Params); err != nil {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	if err := ms.keeper.UpdateParams(sdkCtx, msg.Authority, msg.Params); err != nil {
 		return nil, err
 	}
+	sdkCtx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeUpdateParams,
+			sdk.NewAttribute("authority", msg.Authority),
+			sdk.NewAttribute("live_enabled", fmt.Sprintf("%t", msg.Params.LiveEnabled)),
+		),
+	)
 	return &types.MsgUpdateParamsResponse{}, nil
 }
 

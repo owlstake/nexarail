@@ -78,7 +78,19 @@ func (m MsgCreateBudget) Route() string   { return RouterKey }
 func (m MsgCreateBudget) Type() string    { return "create_budget" }
 func (m MsgCreateBudget) ValidateBasic() error {
 	_, e := sdk.AccAddressFromBech32(m.Authority)
-	return e
+	if e != nil {
+		return fmt.Errorf("invalid authority: %w", e)
+	}
+	if m.BudgetId == "" {
+		return fmt.Errorf("budget_id is required")
+	}
+	if m.AccountId == "" {
+		return fmt.Errorf("account_id is required")
+	}
+	if !m.TotalAmount.IsValid() || m.TotalAmount.IsNegative() {
+		return fmt.Errorf("invalid total amount")
+	}
+	return nil
 }
 func (m MsgCreateBudget) GetSigners() []sdk.AccAddress {
 	a, _ := sdk.AccAddressFromBech32(m.Authority)
@@ -142,7 +154,24 @@ func (m MsgCreateGrant) Route() string   { return RouterKey }
 func (m MsgCreateGrant) Type() string    { return "create_grant" }
 func (m MsgCreateGrant) ValidateBasic() error {
 	_, e := sdk.AccAddressFromBech32(m.Authority)
-	return e
+	if e != nil {
+		return fmt.Errorf("invalid authority: %w", e)
+	}
+	if m.GrantId == "" {
+		return fmt.Errorf("grant_id is required")
+	}
+	if m.BudgetId == "" {
+		return fmt.Errorf("budget_id is required")
+	}
+	if m.RecipientAddress != "" {
+		if _, err := sdk.AccAddressFromBech32(m.RecipientAddress); err != nil {
+			return fmt.Errorf("invalid recipient address: %w", err)
+		}
+	}
+	if !m.Amount.IsValid() || m.Amount.IsNegative() {
+		return fmt.Errorf("invalid amount")
+	}
+	return nil
 }
 func (m MsgCreateGrant) GetSigners() []sdk.AccAddress {
 	a, _ := sdk.AccAddressFromBech32(m.Authority)
@@ -205,7 +234,25 @@ func (m MsgCreateSpendRequest) Route() string   { return RouterKey }
 func (m MsgCreateSpendRequest) Type() string    { return "create_spend" }
 func (m MsgCreateSpendRequest) ValidateBasic() error {
 	_, e := sdk.AccAddressFromBech32(m.Requester)
-	return e
+	if e != nil {
+		return fmt.Errorf("invalid requester: %w", e)
+	}
+	if m.SpendId == "" {
+		return fmt.Errorf("spend_id is required")
+	}
+	if m.AccountId == "" {
+		return fmt.Errorf("account_id is required")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.RecipientAddress); err != nil {
+		return fmt.Errorf("invalid recipient address: %w", err)
+	}
+	if !m.Amount.IsValid() || m.Amount.IsNegative() {
+		return fmt.Errorf("invalid amount")
+	}
+	if len(m.Purpose) > 512 {
+		return fmt.Errorf("purpose too long: max 512")
+	}
+	return nil
 }
 func (m MsgCreateSpendRequest) GetSigners() []sdk.AccAddress {
 	a, _ := sdk.AccAddressFromBech32(m.Requester)

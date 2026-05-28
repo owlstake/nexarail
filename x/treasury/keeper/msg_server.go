@@ -75,7 +75,17 @@ func (ms MsgServer) UpdateParams(ctx context.Context, m *types.MsgUpdateParams) 
 	if err := m.ValidateBasic(); err != nil {
 		return nil, err
 	}
-	return &types.MsgUpdateParamsResponse{}, ms.keeper.UpdateParams(sdk.UnwrapSDKContext(ctx), m.Authority, m.Params)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	if err := ms.keeper.UpdateParams(sdkCtx, m.Authority, m.Params); err != nil {
+		return nil, err
+	}
+	sdkCtx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventUpdateParams,
+			sdk.NewAttribute("authority", m.Authority),
+		),
+	)
+	return &types.MsgUpdateParamsResponse{}, nil
 }
 
 func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {

@@ -19,4 +19,6 @@ const (
 	AttributeKeyBurnRouted     = "burn_routed"
 	AttributeKeyMetadata       = "metadata"
 	AttributeKeyAuthority      = "authority"
+	EventTypeUpdateParams       = "settlement_params_updated"
 )
+
