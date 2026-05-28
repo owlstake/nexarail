@@ -1,0 +1,14 @@
+{
+  "bundle": "nexarail-developer-bundle",
+  "timestamp": "20260528T122116Z",
+  "sdk_version": "0.1.0-dev",
+  "compatible_rc": "nexarail-devnet-1",
+  "archive": "nexarail-developer-bundle-20260528T122116Z.tar.gz",
+  "sha256": "b10309740ea473a554b7f53649156162af0561c2a68427dc9e698d13e0c117b3",
+  "size": "204K",
+  "file_count":       99,
+  "included_binaries": false,
+  "included_evidence": false,
+  "publishing_status": "not_published",
+  "notes": "LOCAL DEVNET ONLY — NOT PUBLISHED to npm or PyPI. For internal developer review only."
+}
