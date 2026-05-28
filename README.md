@@ -2,7 +2,16 @@
 
 A sovereign Layer 1 blockchain for controlled testnet evaluation of railway settlement and payments — built with Cosmos SDK v0.47.17 and CometBFT v0.37.18. External validator distribution is not yet live.
 
-**⚠️ Status: Controlled validator registration OPEN. Technical readiness: GO. No mainnet. No token sale. Testnet tokens have zero monetary value.**
+**⚠️ Status: RC1 (v0.1.0-rc1) — Controlled local evaluation. NO mainnet. NO public testnet. No token sale. Testnet tokens have zero monetary value. SDK packages are NOT published to npm or PyPI.**
+
+See [Reviewer Handoff](docs/release/REVIEWER_HANDOFF.md) | [Litepaper](docs/NEXARAIL_LITEPAPER.md) | [Developer Portal](docs/portal/index.html) | [Quickstart](docs/release/RC1_QUICKSTART.md)
+
+```bash
+git clone https://github.com/Bookings-cpu/nexarail.git
+cd nexarail
+git checkout v0.1.0-rc1
+bash scripts/dev/run-nexarail-regression-matrix.sh --fast
+```
 
 ---
 

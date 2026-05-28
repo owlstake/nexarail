@@ -1,0 +1,15 @@
+{
+  "release": "v0.1.0-rc1",
+  "assets": [
+    {
+      "file": "nexaraild-darwin-arm64",
+      "sha256": "56f83f3068bb3d9cfe6854656e1f6b819c35cc138b96a5ebe757769a466bdc6a"
+    },
+    {
+      "file": "nexaraild-linux-amd64",
+      "sha256": "25efa8d47f9d141669f4fcc5a6026ec12102f61ee026a3a52b3c0a44984b8c6f"
+    }
+  ],
+  "safety": "LOCAL DEVNET ONLY \u2014 NOT MAINNET",
+  "publishing_status": "not_published"
+}
