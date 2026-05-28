@@ -177,3 +177,25 @@ func TestMerchantIsClosed(t *testing.T) {
 	m.Status = int32(types.MerchantStatusClosed)
 	require.True(t, m.IsClosed())
 }
+
+// --- Phase 15A: Fuzz tests ---
+
+func FuzzMsgRegisterMerchantValidate(f *testing.F) {
+	validAddr := sdk.AccAddress([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20})
+	f.Add(validAddr.String(), "MyShop", "A description", "https://example.com")
+	f.Add("", "MyShop", "A description", "")
+	f.Add(validAddr.String(), "", "A description", "")
+	f.Add(validAddr.String(), "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz123", "", "")
+
+	f.Fuzz(func(t *testing.T, owner string, name, description, website string) {
+		addr, err := sdk.AccAddressFromBech32(owner)
+		if err != nil {
+			// Invalid address — should be rejected by ValidateBasic
+			msg := types.NewMsgRegisterMerchant(sdk.AccAddress{}, name, description, website)
+			_ = msg.ValidateBasic()
+			return
+		}
+		msg := types.NewMsgRegisterMerchant(addr, name, description, website)
+		_ = msg.ValidateBasic()
+	})
+}

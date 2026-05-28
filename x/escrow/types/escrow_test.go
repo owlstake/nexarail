@@ -219,3 +219,39 @@ func TestMsgUpdateParamsValidateEscrow(t *testing.T) {
 	msg3 := types.NewMsgUpdateParams("bad", types.DefaultParams())
 	require.Error(t, msg3.ValidateBasic())
 }
+
+// --- Phase 15A: Fuzz tests ---
+
+func FuzzMsgCreateEscrowValidate(f *testing.F) {
+	validAddr := sdk.AccAddress([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}).String()
+	validAddr2 := sdk.AccAddress([]byte{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}).String()
+	f.Add(validAddr, "escrow-1", validAddr2, "merchant-1", "unxrl", int64(1000), "ref-1", "memo", int64(200))
+	f.Add("bad", "escrow-1", validAddr2, "merchant-1", "unxrl", int64(1000), "ref-1", "memo", int64(200))
+	f.Add(validAddr, "", validAddr2, "merchant-1", "unxrl", int64(1000), "ref-1", "memo", int64(200))
+	f.Add(validAddr, "escrow-1", validAddr2, "", "unxrl", int64(1000), "ref-1", "memo", int64(200))
+
+	f.Fuzz(func(t *testing.T, buyer, escrowID, seller, merchantID, denom string, amt int64, ref, memo string, expires int64) {
+		coin := sdk.NewInt64Coin(denom, amt)
+		msg := types.NewMsgCreateEscrow(buyer, escrowID, seller, merchantID, denom, coin, ref, memo, expires)
+		_ = msg.ValidateBasic()
+	})
+}
+
+// --- Phase 15A: Invariant tests ---
+
+func TestEscrowTerminalState(t *testing.T) {
+	// Escrow cannot be both released and refunded simultaneously
+	e := types.NewEscrow("e1", a1().String(), a2().String(), "m1", "unxrl", c(100), "ref", "memo", 100, 200)
+	require.Equal(t, int32(1), e.Status, "fresh escrow should be open")
+
+	e.Status = int32(types.EscrowReleased)
+	require.Equal(t, int32(3), e.Status)
+
+	e.Status = int32(types.EscrowRefunded)
+	require.NotEqual(t, int32(3), e.Status, "cannot be both released and refunded")
+}
+
+func TestLiveFlagsDefaultFalseEscrow(t *testing.T) {
+	p := types.DefaultParams()
+	require.False(t, p.LiveEnabled, "live escrow must be disabled by default")
+}

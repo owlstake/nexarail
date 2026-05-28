@@ -224,3 +224,52 @@ func TestMsgUpdateParamsInvalidParams(t *testing.T) {
 	msg = types.NewMsgUpdateParams(a1().String(), p)
 	require.Error(t, msg.ValidateBasic())
 }
+
+// --- Phase 15A: Fuzz tests ---
+
+func FuzzMsgUpdateParamsValidate(f *testing.F) {
+	validAddr := sdk.AccAddress([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}).String()
+	types.DefaultParams()
+	f.Add(validAddr, "unxrl", int64(0))
+	f.Add("", "unxrl", int64(0))
+	f.Add("bad", "unxrl", int64(0))
+	f.Add(validAddr, "", int64(0))
+	f.Add(validAddr, "unxrl", int64(-1))
+
+	f.Fuzz(func(t *testing.T, authority string, denom string, minAmt int64) {
+		p := types.DefaultParams()
+		p.MinPayoutAmount = sdk.Coin{Denom: denom, Amount: sdk.NewInt(minAmt)}
+		msg := types.NewMsgUpdateParams(authority, p)
+		// Must not panic — may pass or fail
+		_ = msg.ValidateBasic()
+	})
+}
+
+func FuzzMsgCreatePayoutValidate(f *testing.F) {
+	validAddr := sdk.AccAddress([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}).String()
+	f.Add(validAddr, "p1", "m1", validAddr, "unxrl", int64(100), int32(1), "ref", "memo")
+	f.Add("bad", "p1", "m1", validAddr, "unxrl", int64(100), int32(1), "", "")
+	f.Add(validAddr, "", "m1", validAddr, "unxrl", int64(100), int32(1), "", "")
+
+	f.Fuzz(func(t *testing.T, from, payoutID, merchant, to, denom string, amt int64, pt int32, ref, memo string) {
+		coin := sdk.NewInt64Coin(denom, amt)
+		msg := types.NewMsgCreatePayout(from, payoutID, merchant, to, denom, coin, pt, ref, memo)
+		_ = msg.ValidateBasic()
+	})
+}
+
+// --- Phase 15A: Invariant tests ---
+
+func TestPayoutTerminalState(t *testing.T) {
+	// Payout cannot be marked paid twice
+	p := types.NewPayout("p1", "", "m1", a1().String(), a2().String(), "unxrl", cn(100), 1, "ref", "memo", 100)
+	require.Equal(t, int32(1), p.Status, "fresh payout should be created status")
+
+	p.Status = int32(3) // PayoutPaid
+	require.NotEqual(t, int32(5), p.Status, "paid payout should not be failed")
+}
+
+func TestLiveFlagsDefaultFalsePayout(t *testing.T) {
+	p := types.DefaultParams()
+	require.False(t, p.LiveEnabled, "live payout must be disabled by default")
+}

@@ -128,3 +128,33 @@ func TestMsgUpdateParamsInvalidAuthority(t *testing.T) {
 	msg := types.NewMsgUpdateParams("bad", types.DefaultParams())
 	require.Error(t, msg.ValidateBasic())
 }
+
+// --- Phase 15A: Fuzz tests ---
+
+func FuzzMsgCreateSettlementValidate(f *testing.F) {
+	validAddr := sdk.AccAddress([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}).String()
+	validAddr2 := sdk.AccAddress([]byte{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}).String()
+	f.Add(validAddr, validAddr2, int64(1000))
+	f.Add("bad", validAddr2, int64(1000))
+	f.Add(validAddr, "bad", int64(1000))
+	f.Add(validAddr, validAddr2, int64(0))
+	f.Add(validAddr, validAddr2, int64(0))
+
+	f.Fuzz(func(t *testing.T, payer, merchant string, amt int64) {
+		coin := sdk.NewInt64Coin("unxrl", amt)
+		msg := types.NewMsgCreateSettlement(payer, merchant, coin, "")
+		_ = msg.ValidateBasic()
+	})
+}
+
+// --- Phase 15A: Invariant tests ---
+
+func TestLiveFlagsDefaultFalseSettlement(t *testing.T) {
+	p := types.DefaultParams()
+	require.False(t, p.LiveEnabled, "live settlement must be disabled by default")
+}
+
+func TestSettlementLiveDisabledInvariant(t *testing.T) {
+	p := types.DefaultParams()
+	require.False(t, p.LiveEnabled, "live settlement must be disabled by default")
+}

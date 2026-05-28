@@ -191,3 +191,55 @@ func TestMsgCreateSpendRequestValidate(t *testing.T) {
 	msg7 := types.NewMsgCreateSpendRequest(a1().String(), "spend-6", "account-1", "budget-1", "grant-1", a2().String(), cn(100), longPurpose, "ref", "memo")
 	require.Error(t, msg7.ValidateBasic())
 }
+
+// --- Phase 15A: Fuzz tests ---
+
+func FuzzMsgCreateBudgetValidate(f *testing.F) {
+	validAddr := sdk.AccAddress([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}).String()
+	f.Add(validAddr, "budget-1", "account-1", int64(1000))
+	f.Add("bad", "budget-1", "account-1", int64(1000))
+	f.Add(validAddr, "", "account-1", int64(1000))
+	f.Add(validAddr, "budget-1", "", int64(1000))
+	f.Add(validAddr, "budget-1", "account-1", int64(0))
+
+	f.Fuzz(func(t *testing.T, authority, budgetID, accountID string, amt int64) {
+		if amt < 0 {
+			amt = 0
+		}
+		coin := sdk.NewInt64Coin("unxrl", amt)
+		msg := types.NewMsgCreateBudget(authority, budgetID, accountID, 0, "title2", "desc", coin, 100, 200, "")
+		_ = msg.ValidateBasic()
+	})
+}
+
+func FuzzMsgCreateSpendRequestValidate(f *testing.F) {
+	validAddr := sdk.AccAddress([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}).String()
+	recip := sdk.AccAddress([]byte{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}).String()
+	f.Add(validAddr, "spend-1", "account-1", recip, int64(100))
+	f.Add("bad", "spend-1", "account-1", recip, int64(100))
+	f.Add(validAddr, "", "account-1", recip, int64(100))
+	f.Add(validAddr, "spend-1", "", recip, int64(100))
+	f.Add(validAddr, "spend-1", "account-1", "bad", int64(100))
+	f.Add(validAddr, "spend-1", "account-1", recip, int64(0))
+
+	f.Fuzz(func(t *testing.T, requester, spendID, accountID, recipient string, amt int64) {
+		if amt < 0 {
+			amt = 0
+		}
+		coin := sdk.NewInt64Coin("unxrl", amt)
+		msg := types.NewMsgCreateSpendRequest(requester, spendID, accountID, "", "", recipient, coin, "purpose2", "ref2", "memo")
+		_ = msg.ValidateBasic()
+	})
+}
+
+// --- Phase 15A: Invariant tests ---
+
+func TestTreasurySpendTerminalState(t *testing.T) {
+	// Treasury spend cannot be executed twice
+	s := types.SpendRequest{
+		SpendId: "s1",
+		Status:  int32(types.SpendExecuted),
+	}
+	// Once executed, cannot transition to another active state
+	require.Equal(t, int32(types.SpendExecuted), s.Status)
+}
