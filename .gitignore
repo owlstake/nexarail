@@ -56,7 +56,6 @@ site/
 /app/bench_test.go
 /app/governance_test.go
 /app/integration_test.go
-/app/query_multistore.go
 
 # SDK test binaries
 examples/node-client/node_modules/
