@@ -119,7 +119,7 @@ for agent_entry in "${AGENTS[@]}"; do
     IFS=':' read -r name rpc api <<< "$agent_entry"
     for mod in settlement escrow payout treasury; do
         le=$(curl -s "http://localhost:$api/nexarail/$mod/v1/params" 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('params',d).get('live_enabled','?'))" 2>/dev/null || echo "?")
-        if [ "$le" != "false" ]; then echo "  ⚠️  $name/$mod: live_enabled=$le"; FLAGS_ALL_OK=false; fi
+        if [ "$le" != "false" ] && [ "$le" != "False" ]; then echo "  ⚠️  $name/$mod: live_enabled=$le"; FLAGS_ALL_OK=false; fi
     done
 done
 [ "$FLAGS_ALL_OK" = "true" ] && check_pass "live_flags" "All live flags false" || check_fail "live_flags" "Non-false live flag detected"
