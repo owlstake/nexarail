@@ -156,7 +156,10 @@ setup_evidence() {
     mkdir -p "$EVIDENCE_DIR"/{preflight,merchant,settlement,escrow,treasury,payout,safety,final-state,gov,diagnostics,logs,txs,queries}
     : > "$RUN_LOG"
     : > "$EVIDENCE_DIR/failure-stage.txt"
-    exec > >(tee -a "$RUN_LOG") 2>&1
+    # Use explicit logging function instead of global exec > >(tee) pipe
+    # (avoid output buffering deadlock under non-interactive orchestration)
+    _log() { echo "$*" | tee -a "$RUN_LOG"; }
+    _log_cmd() { "$@" >> "$RUN_LOG" 2>&1; }
 
     cat > "$EVIDENCE_DIR/env.txt" <<EOF
 Timestamp UTC: $(date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -190,13 +193,13 @@ setup_evidence
 mkdir -p "$EVIDENCE_DIR"/{preflight,merchant,settlement,escrow,treasury,payout,safety,final-state,gov}
 
 pass() {
-    echo "  PASS  $1"
+    _log "  PASS  $1"
     echo "PASS $1" >> "$EVIDENCE_DIR/result-events.log"
     PASS=$((PASS + 1))
 }
 
 fail() {
-    echo "  FAIL   $1"
+    _log "  FAIL   $1"
     echo "FAIL $1" >> "$EVIDENCE_DIR/result-events.log"
     echo "FAIL  What: $1" >> "$EVIDENCE_DIR/result-events-context.log"
     echo "FAIL  Why: see run.log and $EVIDENCE_DIR for diagnostics" >> "$EVIDENCE_DIR/result-events-context.log"
