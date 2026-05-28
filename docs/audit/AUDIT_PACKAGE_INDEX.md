@@ -230,6 +230,11 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `scripts/testnet/product-gov.sh` — Updated with improved error messages
 - `scripts/testnet/run-product-flow-rehearsal.sh` — Updated with improved stage error messages and rerun guidance
 
+### Phase 16C — Local Five-Agent Load Simulation
+- `docs/testnet/PHASE_16C_LOAD_SIMULATION_PLAN.md` — Local bank tx/query load plan, success criteria, metrics, and safety constraints
+- `docs/testnet/PHASE_16C_LOAD_SIMULATION_RESULTS.md` — Smoke, 10-minute, and heavier local load results with evidence paths
+- `scripts/testnet/run-five-agent-load-sim.sh` — Controlled five-agent local load runner with tx/query metrics, health checks, live-flag readback, log scans, and cleanup
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly

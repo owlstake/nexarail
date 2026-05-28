@@ -13,7 +13,7 @@
 #   --full              Full checks: fast + launch devnet + smoke + dashboard + local demo
 #   --with-devnet       Include devnet-dependent checks in full mode
 #   --with-e2e-demo     Include end-to-end demo (requires --full, --with-devnet)
-  --with-dashboard    Serve dashboard during full check
+#   --with-dashboard    Serve dashboard during full check
 #   --skip-build        Skip go build steps
 #   --evidence-dir <p>  Override evidence output directory
 #   -h, --help          Show this help

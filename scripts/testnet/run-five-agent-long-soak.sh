@@ -47,9 +47,11 @@ sample_agents() {
     for agent_entry in "${AGENTS[@]}"; do
         IFS=':' read -r name rpc api <<< "$agent_entry"
         local status=$(curl -s --max-time 3 "http://localhost:$rpc/status" 2>/dev/null || echo "{}")
+        local net_info=$(curl -s --max-time 3 "http://localhost:$rpc/net_info" 2>/dev/null || echo "{}")
         local h=$(echo "$status" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('result',{}).get('sync_info',{}).get('latest_block_height','-'))" 2>/dev/null || echo "-")
-        local peers=$(echo "$status" | python3 -c "import sys,json; d=json.load(sys.stdin); n=d.get('result',{}).get('node_info',{}).get('other',{}); print(n.get('tx_index','?'))" 2>/dev/null || echo "?")
-        echo -e "$elapsed\t$now\t$name\t$h\t$peers" >> "$SAMPLE_FILE"
+        local peers=$(echo "$net_info" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('result',{}).get('n_peers','?'))" 2>/dev/null || echo "?")
+        local catching_up=$(echo "$status" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('result',{}).get('sync_info',{}).get('catching_up','?'))" 2>/dev/null || echo "?")
+        echo -e "$elapsed\t$now\t$name\t$h\t$peers\t$catching_up" >> "$SAMPLE_FILE"
     done
     # Also check REST health for a sample agent
     for agent_entry in "${AGENTS[@]}"; do
@@ -62,10 +64,16 @@ sample_agents() {
 send_tx() {
     local label="$1" elapsed="$2"
     local TX_FILE="$EVIDENCE_DIR/tx/tx-${elapsed}.json"
-    if build/nexaraild tx bank send alpha-key bravo-key "1000unxrl" \
+    local TO_ADDR
+    TO_ADDR=$(build/nexaraild keys show bravo-key -a --keyring-backend test \
+        --home "$PROJECT_DIR/rehearsals/validator-agents/bravo" 2>"$TX_FILE.addr.err") || {
+        check_fail "bank_tx_${elapsed}" "Could not resolve bravo recipient address"
+        return
+    }
+    if build/nexaraild tx send alpha-key "$TO_ADDR" "1000unxrl" \
         --keyring-backend test --home "$PROJECT_DIR/rehearsals/validator-agents/alpha" \
         --chain-id nexarail-agent-testnet-1 --node tcp://localhost:27657 \
-        --fees "500unxrl" --broadcast-mode sync --output json -y > "$TX_FILE" 2>/dev/null; then
+        --fees "500unxrl" --broadcast-mode sync --output json -y > "$TX_FILE" 2>"$TX_FILE.err"; then
         local code=$(python3 -c "import json; d=json.load(open('$TX_FILE')); print(d.get('code',-1))" 2>/dev/null || echo "-1")
         if [ "$code" = "0" ]; then
             check_pass "bank_tx_${elapsed}" "Bank tx sent at ${elapsed}s (code=0)"
@@ -129,7 +137,7 @@ echo "  Log scan..."
 SCAN="$EVIDENCE_DIR/panic-scan.txt"
 > "$SCAN"
 for term in "panic" "fatal" "CheckTx" "descriptor" "gzip invalid" "index out of range" "version does not exist"; do
-    count=$(grep -rli "$term" "$EVIDENCE_DIR" 2>/dev/null | grep -v "panic-scan" | wc -l | tr -d ' ')
+    count=$( (grep -rli "$term" "$EVIDENCE_DIR" 2>/dev/null || true) | { grep -v "panic-scan" || true; } | wc -l | tr -d ' ')
     echo "$term: $count" >> "$SCAN"
 done
 

@@ -1,7 +1,7 @@
 # Agent Testnet Evidence Index
 
-**Date:** 2026-05-27  
-**Scope:** consolidated evidence index for NexaRail Phases 9T, 9U, and 9V  
+**Date:** 2026-05-28
+**Scope:** consolidated evidence index for NexaRail local validator-agent rehearsals through Phase 16C
 **Chain ID:** `nexarail-agent-testnet-1`
 
 ## Phase Evidence Paths
@@ -13,6 +13,10 @@
 | Phase 9U long soak | `rehearsals/validator-agents/long-soak/evidence/20260527T102106Z/` | 60-minute clean-spawn soak, runtime tx, restart failure reference |
 | Phase 9V restart investigation | `rehearsals/validator-agents/restart-investigation/evidence/20260527T133148Z/` | Restart root cause, fix, and matrix |
 | Phase 9V final rebuilt-binary proof | `rehearsals/validator-agents/restart-investigation/evidence/20260527T133148Z/final-code-restart-proof/` | Final 5-agent restart proof after rebuilding |
+| Phase 16B.2 one-hour soak | `rehearsals/validator-agents/long-soak/evidence/phase16b2-20260528T190803Z/` | One-hour local stability soak baseline |
+| Phase 16C smoke load | `rehearsals/validator-agents/load-sim/evidence/phase16c-smoke-20260528T213401Z/` | 120s local bank tx/query load smoke |
+| Phase 16C 10-minute load | `rehearsals/validator-agents/load-sim/evidence/phase16c-10min-stable-20260528T215108Z/` | Canonical 10-minute local throughput profile |
+| Phase 16C heavier load | `rehearsals/validator-agents/load-sim/evidence/phase16c-heavy-20260528T220345Z/` | Optional 20-minute heavier local throughput profile |
 
 ## Key Summaries
 
@@ -27,6 +31,11 @@
 | Phase 9V matrix results | `rehearsals/validator-agents/restart-investigation/evidence/20260527T133148Z/matrix-results.tsv` |
 | Phase 9V final restart block advance | `rehearsals/validator-agents/restart-investigation/evidence/20260527T133148Z/final-code-restart-proof/block-advance.env` |
 | Phase 9V final restart query summary | `rehearsals/validator-agents/restart-investigation/evidence/20260527T133148Z/final-code-restart-proof/query-readback/summary.txt` |
+| Phase 16B.2 results | `docs/testnet/PHASE_16B2_ONE_HOUR_SOAK_RESULTS.md` |
+| Phase 16C load plan | `docs/testnet/PHASE_16C_LOAD_SIMULATION_PLAN.md` |
+| Phase 16C load results | `docs/testnet/PHASE_16C_LOAD_SIMULATION_RESULTS.md` |
+| Phase 16C 10-minute summary | `rehearsals/validator-agents/load-sim/evidence/phase16c-10min-stable-20260528T215108Z/summary.json` |
+| Phase 16C heavier summary | `rehearsals/validator-agents/load-sim/evidence/phase16c-heavy-20260528T220345Z/summary.json` |
 
 ## Genesis Checksums
 
@@ -51,6 +60,8 @@
 |---|---|---|
 | Phase 9U runtime bank send | `9F85BD88F936818D6A910BEE640DDAF3B1D437F993519BE2FACCCF3D0E0E52A5` | inclusion code `0` |
 | Phase 9V all-direct simultaneous post-restart bank send | `9F85BD88F936818D6A910BEE640DDAF3B1D437F993519BE2FACCCF3D0E0E52A5` | inclusion code `0` |
+| Phase 16C 10-minute bank load | 220 attempted / 220 included | all inclusion code `0` |
+| Phase 16C heavier bank load | 876 attempted / 876 included | all inclusion code `0` |
 
 ## Governance Proposal IDs
 
@@ -120,6 +131,7 @@ Relevant files:
 | Phase 9T | `rehearsals/validator-agents/clean-spawn-governance/evidence/20260527T095523Z/safety-wording-audit/` |
 | Phase 9U | `rehearsals/validator-agents/long-soak/evidence/20260527T102106Z/safety-wording-audit/` |
 | Phase 9V | `rehearsals/validator-agents/restart-investigation/evidence/20260527T133148Z/safety-wording-audit/` |
+| Phase 16C | `rehearsals/validator-agents/load-sim/evidence/phase16c-safety-audit-20260528T222937Z/` |
 
 ## Boundary
 

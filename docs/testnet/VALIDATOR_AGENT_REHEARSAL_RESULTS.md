@@ -1,5 +1,36 @@
 # Validator Agent Rehearsal Results — nexarail-agent-testnet-1
 
+## Phase 16C Update - 2026-05-28
+
+**Status:** Controlled local five-agent load simulation passed.
+
+Canonical Phase 16C evidence:
+
+```text
+rehearsals/validator-agents/load-sim/evidence/phase16c-10min-stable-20260528T215108Z/
+rehearsals/validator-agents/load-sim/evidence/phase16c-heavy-20260528T220345Z/
+```
+
+Result summary:
+
+| Metric | 10-minute | Heavier |
+|---|---:|---:|
+| Duration | 600s | 1200s |
+| Height delta | 113 | 226 |
+| Average block time | 5.44s | 5.44s |
+| Peer count range | 4-4 | 4-4 |
+| Validator set range | 5-5 | 5-5 |
+| Tx inclusion | 220 / 220 | 876 / 876 |
+| Query success | 2330 / 2330 | 9020 / 9020 |
+| Tx p50 / p95 inclusion latency | 5390ms / 6052ms | 5319ms / 6153ms |
+| Query p50 / p95 latency | 1ms / 10ms | 1ms / 12ms |
+| Panic / CheckTx / descriptor scans | 0 / 0 / 0 | 0 / 0 / 0 |
+| Final live flags | false | false |
+
+Conclusion: the local five-agent devnet sustained conservative bank tx and REST/RPC query load without validator loss, peer-count drift, validator-set drift, unrecovered CheckTx failures, panics, descriptor/unknownproto/gzip errors, or live-flag changes. This is local rehearsal evidence only; it is not public testnet, mainnet, or external validator evidence.
+
+---
+
 ## Phase 9V Update - 2026-05-27
 
 **Status:** Persistence-safe restart fixed for the tested local agent rehearsal paths.

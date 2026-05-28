@@ -33,6 +33,13 @@
 - Burn supply delta: -2000 unxrl verified
 - Event evidence: Collected and indexed
 
+## Local Agent Load Evidence
+- Five-agent 120s smoke: 45 / 45 tx included, 208 / 208 queries passed
+- Five-agent 10-minute profile: 220 / 220 tx included, 2330 / 2330 queries passed
+- Five-agent heavier profile: 876 / 876 tx included, 9020 / 9020 queries passed
+- Peer count stable at 4 per node; validator set stable at 5
+- Final live flags remained false; no panic, unrecovered CheckTx, descriptor, unknownproto, or gzip errors observed
+
 ## Developer Tooling
 - Node.js SDK: 18 functions (8 read, 10 command builders)
 - Python SDK: 18 functions (8 read, 10 command builders)
@@ -49,6 +56,7 @@
 - Local demo script check: 36/36 pass
 - Predeployment code gates: 23/23 pass
 - RC1 verification: 37/37 pass
+- Phase 16C local load simulation: pass
 
 ## Remaining NO-GO Items
 - Public testnet launch

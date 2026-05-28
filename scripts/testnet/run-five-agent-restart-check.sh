@@ -137,7 +137,13 @@ for port in 1417 1418 1419 1420 1421; do
         [ "$le" != "false" ] && [ "$le" != "False" ] && [ "$le" != "false" ] && FLAGS_OK=false
     done
 done
-[ "$FLAGS_OK" = "true" ] && echo -e "${PASS_MARK} live_flags" "All false" && PASS=$((PASS+1)) || echo -e "${FAIL_MARK} live_flags" "Non-false detected" && FAIL=$((FAIL+1))
+if [ "$FLAGS_OK" = "true" ]; then
+    echo -e "${PASS_MARK} live_flags" "All false"
+    PASS=$((PASS+1))
+else
+    echo -e "${FAIL_MARK} live_flags" "Non-false detected"
+    FAIL=$((FAIL+1))
+fi
 
 # Summary
 echo ""
