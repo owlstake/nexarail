@@ -44,7 +44,7 @@ git checkout v0.1.0-rc1
 ```
 
 ## How to Download RC1 Binaries
-Download from the [GitHub Release page](https://github.com/Bookings-cpu/nexarail/releases/tag/v0.1.0-rc1):
+Download from the [GitHub Release page](https://github.com/Bookings-cpu/nexarail/releases/tag/v0.1.0-rc1) ✅ [Verified](https://github.com/Bookings-cpu/nexarail/blob/main/docs/release/GITHUB_RELEASE_V0.1.0_RC1_VERIFICATION.md):
 - `nexaraild-linux-amd64`
 - `nexaraild-darwin-arm64`
 - `SHA256SUMS`

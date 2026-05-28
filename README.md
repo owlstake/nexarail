@@ -4,7 +4,7 @@ A sovereign Layer 1 blockchain for controlled testnet evaluation of railway sett
 
 **⚠️ Status: RC1 (v0.1.0-rc1) — Controlled local evaluation. NO mainnet. NO public testnet. No token sale. Testnet tokens have zero monetary value. SDK packages are NOT published to npm or PyPI.**
 
-See [Reviewer Handoff](docs/release/REVIEWER_HANDOFF.md) | [Litepaper](docs/NEXARAIL_LITEPAPER.md) | [Developer Portal](docs/portal/index.html) | [Quickstart](docs/release/RC1_QUICKSTART.md)
+See [Reviewer Handoff](docs/release/REVIEWER_HANDOFF.md) | [Litepaper](docs/NEXARAIL_LITEPAPER.md) | [Developer Portal](docs/portal/index.html) | [Quickstart](docs/release/RC1_QUICKSTART.md) | [Release Verification](docs/release/GITHUB_RELEASE_V0.1.0_RC1_VERIFICATION.md)
 
 ```bash
 git clone https://github.com/Bookings-cpu/nexarail.git
