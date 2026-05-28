@@ -43,7 +43,7 @@ func setupKeeper(t *testing.T) (keeper.Keeper, sdk.Context) {
 		sa().String(): {Owner: sa().String(), Name: "TestMerchant", Status: 0, RebateTier: 0},
 	}}
 	bk := &mockBankKeeper{balances: make(map[string]sdk.Coins)}
-	k := keeper.NewKeeper(key, "nxr1authority", mk, bk)
+	k := keeper.NewKeeper(key, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), mk, bk)
 	return k, ctx
 }
 

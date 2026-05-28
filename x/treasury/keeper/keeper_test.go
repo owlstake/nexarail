@@ -31,7 +31,7 @@ func setup(t *testing.T) (keeper.Keeper, sdk.Context) {
 	require.NoError(t, ms.LoadLatestVersion())
 	ctx := sdk.NewContext(ms, tmproto.Header{}, false, log.NewNopLogger())
 	bk := &mockBankKeeper{}
-	return keeper.NewKeeper(key, "nxr1authority", bk), ctx
+	return keeper.NewKeeper(key, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), bk), ctx
 }
 
 type mockBankKeeper struct{}

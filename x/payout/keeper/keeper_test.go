@@ -48,7 +48,7 @@ func setupKeeperWithBank(t *testing.T) (keeper.Keeper, sdk.Context, *mockBank) {
 		ra().String(): {Owner: ra().String(), Name: "M2", Status: 0},
 	}}
 	bk := newMockBank()
-	return keeper.NewKeeper(key, "nxr1authority", mk, bk), ctx, bk
+	return keeper.NewKeeper(key, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), mk, bk), ctx, bk
 }
 
 type mockMK struct {
@@ -161,7 +161,7 @@ func TestMarkPaid(t *testing.T) {
 	k, ctx := setupKeeper(t)
 	k.CreatePayout(ctx, msgCreate("mp1"))
 	k.ApprovePayout(ctx, types.NewMsgApprovePayout(ba().String(), "mp1"))
-	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "mp1", "ext", "")))
+	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "mp1", "ext", "")))
 	p, _ := k.GetPayout(ctx, "mp1")
 	require.Equal(t, int32(types.PayoutPaid), p.Status)
 }
@@ -185,14 +185,14 @@ func TestCancelAfterPaid(t *testing.T) {
 	k, ctx := setupKeeper(t)
 	k.CreatePayout(ctx, msgCreate("cp2"))
 	k.ApprovePayout(ctx, types.NewMsgApprovePayout(ba().String(), "cp2"))
-	k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "cp2", "", ""))
+	k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "cp2", "", ""))
 	require.ErrorIs(t, k.CancelPayout(ctx, types.NewMsgCancelPayout(ba().String(), "cp2", "")), types.ErrInvalidTransition)
 }
 
 func TestFailPayout(t *testing.T) {
 	k, ctx := setupKeeper(t)
 	k.CreatePayout(ctx, msgCreate("fp1"))
-	require.NoError(t, k.FailPayout(ctx, types.NewMsgFailPayout(k.GetAuthority(), "fp1", "reason")))
+	require.NoError(t, k.FailPayout(ctx, types.NewMsgFailPayout(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "fp1", "reason")))
 	p, _ := k.GetPayout(ctx, "fp1")
 	require.Equal(t, int32(types.PayoutFailed), p.Status)
 }
@@ -240,7 +240,7 @@ func TestUpdateParamsAuthorised(t *testing.T) {
 	k, ctx := setupKeeper(t)
 	p := types.DefaultParams()
 	p.PayoutsEnabled = false
-	require.NoError(t, k.UpdateParams(ctx, k.GetAuthority(), p))
+	require.NoError(t, k.UpdateParams(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), p))
 	require.False(t, k.GetParams(ctx).PayoutsEnabled)
 }
 func TestUpdateParamsUnauthorised(t *testing.T) {
@@ -341,7 +341,7 @@ func TestApproveNonCreated(t *testing.T) {
 func TestMarkPaidNonApproved(t *testing.T) {
 	k, ctx := setupKeeper(t)
 	k.CreatePayout(ctx, msgCreate("mpna1"))
-	require.ErrorIs(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "mpna1", "", "")), types.ErrInvalidTransition)
+	require.ErrorIs(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "mpna1", "", "")), types.ErrInvalidTransition)
 }
 
 func TestCancelByStranger(t *testing.T) {
@@ -354,8 +354,8 @@ func TestFailPaidRejected(t *testing.T) {
 	k, ctx := setupKeeper(t)
 	k.CreatePayout(ctx, msgCreate("fpr1"))
 	k.ApprovePayout(ctx, types.NewMsgApprovePayout(ba().String(), "fpr1"))
-	k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "fpr1", "", ""))
-	require.ErrorIs(t, k.FailPayout(ctx, types.NewMsgFailPayout(k.GetAuthority(), "fpr1", "")), types.ErrInvalidTransition)
+	k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "fpr1", "", ""))
+	require.ErrorIs(t, k.FailPayout(ctx, types.NewMsgFailPayout(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "fpr1", "")), types.ErrInvalidTransition)
 }
 
 func TestQueryBatch(t *testing.T) {
@@ -395,7 +395,7 @@ func TestMetadataMarkPaidNoBankCall(t *testing.T) {
 	k, ctx, bank := setupKeeperWithBank(t)
 	bank.fund(types.TreasuryModuleAccount, cn(1000))
 	approvedPayout(t, k, ctx, "md1")
-	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "md1", "ext", "")))
+	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "md1", "ext", "")))
 	p, _ := k.GetPayout(ctx, "md1")
 	require.Equal(t, int32(types.PayoutPaid), p.Status)
 	require.False(t, p.FundsPaid)
@@ -410,7 +410,7 @@ func TestLiveMarkPaidSuccess(t *testing.T) {
 	enableLive(t, k, ctx)
 	bank.fund(types.TreasuryModuleAccount, cn(1000))
 	approvedPayout(t, k, ctx, "lv1")
-	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "lv1", "ext", "")))
+	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "lv1", "ext", "")))
 
 	p, _ := k.GetPayout(ctx, "lv1")
 	require.Equal(t, int32(types.PayoutPaid), p.Status)
@@ -425,7 +425,7 @@ func TestLiveInsufficientTreasuryBalance(t *testing.T) {
 	enableLive(t, k, ctx)
 	bank.fund(types.TreasuryModuleAccount, cn(50)) // less than 100 payout
 	approvedPayout(t, k, ctx, "lv2")
-	err := k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "lv2", "", ""))
+	err := k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "lv2", "", ""))
 	require.ErrorIs(t, err, types.ErrLiveTransferFailed)
 
 	// State unchanged after failed send.
@@ -441,9 +441,9 @@ func TestLiveDoubleMarkPaidRejected(t *testing.T) {
 	enableLive(t, k, ctx)
 	bank.fund(types.TreasuryModuleAccount, cn(1000))
 	approvedPayout(t, k, ctx, "lv3")
-	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "lv3", "", "")))
+	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "lv3", "", "")))
 	// Second attempt must fail and must not move funds again.
-	require.Error(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "lv3", "", "")))
+	require.Error(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "lv3", "", "")))
 	require.Equal(t, int64(900), bank.bal[types.TreasuryModuleAccount].AmountOf("unxrl").Int64())
 }
 
@@ -453,7 +453,7 @@ func TestLiveCancelledCannotBePaid(t *testing.T) {
 	bank.fund(types.TreasuryModuleAccount, cn(1000))
 	require.NoError(t, k.CreatePayout(ctx, msgCreate("lv4")))
 	require.NoError(t, k.CancelPayout(ctx, types.NewMsgCancelPayout(ba().String(), "lv4", "")))
-	require.ErrorIs(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "lv4", "", "")), types.ErrInvalidTransition)
+	require.ErrorIs(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "lv4", "", "")), types.ErrInvalidTransition)
 	require.Equal(t, int64(1000), bank.bal[types.TreasuryModuleAccount].AmountOf("unxrl").Int64())
 }
 
@@ -462,8 +462,8 @@ func TestLiveFailedCannotBePaid(t *testing.T) {
 	enableLive(t, k, ctx)
 	bank.fund(types.TreasuryModuleAccount, cn(1000))
 	require.NoError(t, k.CreatePayout(ctx, msgCreate("lv5")))
-	require.NoError(t, k.FailPayout(ctx, types.NewMsgFailPayout(k.GetAuthority(), "lv5", "reason")))
-	require.ErrorIs(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "lv5", "", "")), types.ErrInvalidTransition)
+	require.NoError(t, k.FailPayout(ctx, types.NewMsgFailPayout(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "lv5", "reason")))
+	require.ErrorIs(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "lv5", "", "")), types.ErrInvalidTransition)
 	require.Equal(t, int64(1000), bank.bal[types.TreasuryModuleAccount].AmountOf("unxrl").Int64())
 }
 
@@ -472,7 +472,7 @@ func TestLiveNonApprovedCannotBePaid(t *testing.T) {
 	enableLive(t, k, ctx)
 	bank.fund(types.TreasuryModuleAccount, cn(1000))
 	require.NoError(t, k.CreatePayout(ctx, msgCreate("lv6"))) // status created, not approved
-	require.ErrorIs(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "lv6", "", "")), types.ErrInvalidTransition)
+	require.ErrorIs(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "lv6", "", "")), types.ErrInvalidTransition)
 	require.Equal(t, int64(1000), bank.bal[types.TreasuryModuleAccount].AmountOf("unxrl").Int64())
 }
 
@@ -491,7 +491,7 @@ func TestActivePaidPayoutTotals(t *testing.T) {
 	enableLive(t, k, ctx)
 	bank.fund(types.TreasuryModuleAccount, cn(1000))
 	approvedPayout(t, k, ctx, "tot1")
-	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(k.GetAuthority(), "tot1", "", "")))
+	require.NoError(t, k.MarkPayoutPaid(ctx, types.NewMsgMarkPayoutPaid(sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), "tot1", "", "")))
 	// A metadata payout (not funded) should not contribute to the total.
 	approvedPayout(t, k, ctx, "tot2")
 	totals := k.ActivePaidPayoutTotals(ctx)
@@ -548,4 +548,44 @@ func TestFailure_SetParamsRejectsNil(t *testing.T) {
 	require.NotNil(t, params)
 	require.NotNil(t, k)
 	_ = ctx
+}
+
+// --- Phase 14D: Params-update event emission ---
+
+func TestUpdateParamsEmitsEvent(t *testing.T) {
+	k, ctx := setupKeeper(t)
+	ms := keeper.NewMsgServerImpl(k)
+	authority := sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String()
+	params := types.DefaultParams()
+
+	msg := types.NewMsgUpdateParams(authority, params)
+	_, err := ms.UpdateParams(ctx, msg)
+	require.NoError(t, err)
+
+	events := ctx.EventManager().Events()
+	var found bool
+	for _, ev := range events {
+		if ev.Type == types.EventUpdateParams {
+			found = true
+			for _, attr := range ev.Attributes {
+				if string(attr.Key) == "authority" && string(attr.Value) == authority {
+					return
+				}
+			}
+		}
+	}
+	require.True(t, found, "must emit payout_params_updated event with authority")
+}
+
+func TestUpdateParamsNoEventOnInvalidAuthority(t *testing.T) {
+	k, ctx := setupKeeper(t)
+	ms := keeper.NewMsgServerImpl(k)
+	msg := types.NewMsgUpdateParams("garbage", types.DefaultParams())
+	_, err := ms.UpdateParams(ctx, msg)
+	require.Error(t, err)
+
+	events := ctx.EventManager().Events()
+	for _, ev := range events {
+		require.NotEqual(t, types.EventUpdateParams, ev.Type, "must not emit event on failed update")
+	}
 }

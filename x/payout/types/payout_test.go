@@ -188,3 +188,39 @@ func TestMsgs(t *testing.T) {
 	require.NoError(t, types.NewMsgFailPayout(a1().String(), "p1", "reason").ValidateBasic())
 	require.NoError(t, types.NewMsgUpdateParams(a1().String(), types.DefaultParams()).ValidateBasic())
 }
+
+// --- Phase 14C ValidateBasic regression tests ---
+
+func TestMsgUpdateParamsValidates(t *testing.T) {
+	// Valid params must pass
+	msg := types.NewMsgUpdateParams(a1().String(), types.DefaultParams())
+	require.NoError(t, msg.ValidateBasic())
+
+	// Empty authority must fail
+	msgEmpty := types.NewMsgUpdateParams("", types.DefaultParams())
+	require.Error(t, msgEmpty.ValidateBasic())
+
+	// Invalid authority must fail
+	msgBad := types.NewMsgUpdateParams("invalid", types.DefaultParams())
+	require.Error(t, msgBad.ValidateBasic())
+}
+
+func TestMsgUpdateParamsInvalidParams(t *testing.T) {
+	// Zero max reference length should fail Params.Validate()
+	p := types.DefaultParams()
+	p.MaxReferenceLength = 0
+	msg := types.NewMsgUpdateParams(a1().String(), p)
+	require.Error(t, msg.ValidateBasic())
+
+	// Zero max batch size should fail
+	p = types.DefaultParams()
+	p.MaxBatchSize = 0
+	msg = types.NewMsgUpdateParams(a1().String(), p)
+	require.Error(t, msg.ValidateBasic())
+
+	// Negative min payout should fail
+	p = types.DefaultParams()
+	p.MinPayoutAmount = sdk.Coin{Denom: "unxrl", Amount: sdk.NewInt(-1)}
+	msg = types.NewMsgUpdateParams(a1().String(), p)
+	require.Error(t, msg.ValidateBasic())
+}

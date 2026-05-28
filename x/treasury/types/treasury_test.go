@@ -107,3 +107,87 @@ func TestMsgs(t *testing.T) {
 	require.NoError(t, types.NewMsgMarkSpendExecuted(a1().String(), "s1", "", "").ValidateBasic())
 	require.NoError(t, types.NewMsgCancelSpendRequest(a1().String(), "s1", "").ValidateBasic())
 }
+
+// --- Phase 14C ValidateBasic regression tests ---
+
+func TestMsgCreateBudgetValidate(t *testing.T) {
+	// Valid budget passes
+	msg := types.NewMsgCreateBudget(a1().String(), "budget-1", "account-1", 0, "Test", "test budget", cn(1000), 100, 200, "")
+	require.NoError(t, msg.ValidateBasic())
+
+	// Empty budget_id fails
+	msg2 := types.NewMsgCreateBudget(a1().String(), "", "account-1", 0, "Test", "budget", cn(1000), 100, 200, "")
+	require.Error(t, msg2.ValidateBasic())
+
+	// Empty account_id fails
+	msg3 := types.NewMsgCreateBudget(a1().String(), "budget-2", "", 0, "Test", "budget", cn(1000), 100, 200, "")
+	require.Error(t, msg3.ValidateBasic())
+
+	// Invalid authority fails
+	msg4 := types.NewMsgCreateBudget("bad", "budget-3", "account-1", 0, "Test", "budget", cn(1000), 100, 200, "")
+	require.Error(t, msg4.ValidateBasic())
+
+	// Negative amount fails
+	msg5 := types.NewMsgCreateBudget(a1().String(), "budget-4", "account-1", 0, "Test", "budget", sdk.Coin{Denom: "unxrl", Amount: sdk.NewInt(-1)}, 100, 200, "")
+	require.Error(t, msg5.ValidateBasic())
+}
+
+func TestMsgCreateGrantValidate(t *testing.T) {
+	// Valid grant passes
+	msg := types.NewMsgCreateGrant(a1().String(), "grant-1", "budget-1", a2().String(), "Test", "grant", cn(500), 1, "")
+	require.NoError(t, msg.ValidateBasic())
+
+	// Empty grant_id fails
+	msg2 := types.NewMsgCreateGrant(a1().String(), "", "budget-1", a2().String(), "Test", "grant", cn(500), 1, "")
+	require.Error(t, msg2.ValidateBasic())
+
+	// Empty budget_id fails
+	msg3 := types.NewMsgCreateGrant(a1().String(), "grant-2", "", a2().String(), "Test", "grant", cn(500), 1, "")
+	require.Error(t, msg3.ValidateBasic())
+
+	// Invalid authority fails
+	msg4 := types.NewMsgCreateGrant("bad", "grant-3", "budget-1", a2().String(), "Test", "grant", cn(500), 1, "")
+	require.Error(t, msg4.ValidateBasic())
+
+	// Invalid recipient address fails
+	msg5 := types.NewMsgCreateGrant(a1().String(), "grant-4", "budget-1", "not-an-address", "Test", "grant", cn(500), 1, "")
+	require.Error(t, msg5.ValidateBasic())
+
+	// Negative amount fails
+	msg6 := types.NewMsgCreateGrant(a1().String(), "grant-5", "budget-1", a2().String(), "Test", "grant", sdk.Coin{Denom: "unxrl", Amount: sdk.NewInt(-1)}, 1, "")
+	require.Error(t, msg6.ValidateBasic())
+}
+
+func TestMsgCreateSpendRequestValidate(t *testing.T) {
+	// Valid spend request passes
+	msg := types.NewMsgCreateSpendRequest(a1().String(), "spend-1", "account-1", "budget-1", "grant-1", a2().String(), cn(100), "test purpose", "ref", "memo")
+	require.NoError(t, msg.ValidateBasic())
+
+	// Empty spend_id fails
+	msg2 := types.NewMsgCreateSpendRequest(a1().String(), "", "account-1", "budget-1", "grant-1", a2().String(), cn(100), "purpose", "ref", "memo")
+	require.Error(t, msg2.ValidateBasic())
+
+	// Empty account_id fails
+	msg3 := types.NewMsgCreateSpendRequest(a1().String(), "spend-2", "", "budget-1", "grant-1", a2().String(), cn(100), "purpose", "ref", "memo")
+	require.Error(t, msg3.ValidateBasic())
+
+	// Invalid requester fails
+	msg4 := types.NewMsgCreateSpendRequest("bad", "spend-3", "account-1", "budget-1", "grant-1", a2().String(), cn(100), "purpose", "ref", "memo")
+	require.Error(t, msg4.ValidateBasic())
+
+	// Invalid recipient fails
+	msg5 := types.NewMsgCreateSpendRequest(a1().String(), "spend-4", "account-1", "budget-1", "grant-1", "bad", cn(100), "purpose", "ref", "memo")
+	require.Error(t, msg5.ValidateBasic())
+
+	// Negative amount fails
+	msg6 := types.NewMsgCreateSpendRequest(a1().String(), "spend-5", "account-1", "budget-1", "grant-1", a2().String(), sdk.Coin{Denom: "unxrl", Amount: sdk.NewInt(-1)}, "purpose", "ref", "memo")
+	require.Error(t, msg6.ValidateBasic())
+
+	// Overlong purpose fails
+	longPurpose := ""
+	for i := 0; i < 600; i++ {
+		longPurpose += "x"
+	}
+	msg7 := types.NewMsgCreateSpendRequest(a1().String(), "spend-6", "account-1", "budget-1", "grant-1", a2().String(), cn(100), longPurpose, "ref", "memo")
+	require.Error(t, msg7.ValidateBasic())
+}

@@ -157,3 +157,65 @@ func TestMsgs(t *testing.T) {
 	require.Error(t, types.NewMsgResolveDispute(a1().String(), "e1", 1, "note").ValidateBasic())
 	require.NoError(t, types.NewMsgResolveDispute(a1().String(), "e1", 3, "note").ValidateBasic())
 }
+
+// --- Phase 14C ValidateBasic regression tests ---
+
+func TestMsgCreateEscrowValidateAll(t *testing.T) {
+	// Valid create passes (no merchant_id, escrow_id, or denom checks on existing tests)
+	valid := types.NewMsgCreateEscrow(a1().String(), "escrow-1", a2().String(), "merchant-1", "unxrl", c(1000), "ref-1", "memo", 200)
+	require.NoError(t, valid.ValidateBasic())
+
+	// Missing merchant_id fails
+	noMid := types.NewMsgCreateEscrow(a1().String(), "escrow-1", a2().String(), "", "unxrl", c(1000), "ref-1", "memo", 200)
+	require.Error(t, noMid.ValidateBasic())
+
+	// Missing escrow_id fails
+	noEid := types.NewMsgCreateEscrow(a1().String(), "", a2().String(), "merchant-1", "unxrl", c(1000), "ref-1", "memo", 200)
+	require.Error(t, noEid.ValidateBasic())
+
+	// Missing denom fails
+	noDenom := types.NewMsgCreateEscrow(a1().String(), "escrow-1", a2().String(), "merchant-1", "", c(1000), "ref-1", "memo", 200)
+	require.Error(t, noDenom.ValidateBasic())
+
+	// Invalid buyer fails
+	badBuyer := types.NewMsgCreateEscrow("bad-buyer", "escrow-1", a2().String(), "merchant-1", "unxrl", c(1000), "ref-1", "memo", 200)
+	require.Error(t, badBuyer.ValidateBasic())
+
+	// Invalid seller fails
+	badSeller := types.NewMsgCreateEscrow(a1().String(), "escrow-1", "bad-seller", "merchant-1", "unxrl", c(1000), "ref-1", "memo", 200)
+	require.Error(t, badSeller.ValidateBasic())
+
+	// Zero amount fails
+	zeroAmt := types.NewMsgCreateEscrow(a1().String(), "escrow-1", a2().String(), "merchant-1", "unxrl", sdk.Coin{Denom: "unxrl", Amount: sdk.NewInt(0)}, "ref-1", "memo", 200)
+	require.Error(t, zeroAmt.ValidateBasic())
+
+	// Negative amount fails
+	negAmt := types.NewMsgCreateEscrow(a1().String(), "escrow-1", a2().String(), "merchant-1", "unxrl", sdk.Coin{Denom: "unxrl", Amount: sdk.NewInt(-1)}, "ref-1", "memo", 200)
+	require.Error(t, negAmt.ValidateBasic())
+
+	// Invalid denom fails
+	invDenom := types.NewMsgCreateEscrow(a1().String(), "escrow-1", a2().String(), "merchant-1", "", c(1000), "ref-1", "memo", 200)
+	require.Error(t, invDenom.ValidateBasic())
+
+	// Overlong reference fails (max 120)
+	longRef := ""
+	for i := 0; i < 200; i++ {
+		longRef += "x"
+	}
+	longRefMsg := types.NewMsgCreateEscrow(a1().String(), "escrow-1", a2().String(), "merchant-1", "unxrl", c(1000), longRef, "memo", 200)
+	require.Error(t, longRefMsg.ValidateBasic())
+}
+
+func TestMsgUpdateParamsValidateEscrow(t *testing.T) {
+	// Valid params pass
+	msg := types.NewMsgUpdateParams(a1().String(), types.DefaultParams())
+	require.NoError(t, msg.ValidateBasic())
+
+	// Empty authority fails
+	msg2 := types.NewMsgUpdateParams("", types.DefaultParams())
+	require.Error(t, msg2.ValidateBasic())
+
+	// Invalid authority fails
+	msg3 := types.NewMsgUpdateParams("bad", types.DefaultParams())
+	require.Error(t, msg3.ValidateBasic())
+}

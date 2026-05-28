@@ -45,7 +45,7 @@ func setupKeeper(t *testing.T) (keeper.Keeper, sdk.Context, *mockBankKeeper) {
 		},
 	}
 
-	k := keeper.NewKeeper(key, "nxr1authority", mk, fk, bk)
+	k := keeper.NewKeeper(key, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), mk, fk, bk)
 
 	activeAddr := sdk.AccAddress([]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20})
 	mk.merchants[activeAddr.String()] = &merchanttypes.Merchant{
@@ -174,7 +174,7 @@ func TestUpdateParams(t *testing.T) {
 	k, ctx, _ := setupKeeper(t)
 	p := types.DefaultParams()
 	p.Enabled = false
-	require.NoError(t, k.UpdateParams(ctx, k.GetAuthority(), p))
+	require.NoError(t, k.UpdateParams(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), p))
 	require.False(t, k.GetParams(ctx).Enabled)
 }
 
@@ -226,7 +226,7 @@ func TestCreateSettlementMerchantNotActive(t *testing.T) {
 		inactiveAddr.String(): {Owner: inactiveAddr.String(), Name: "Inactive", Status: 1},
 	}}
 	bk := &mockBankKeeper{balances: map[string]sdk.Coins{}}
-	k2 := keeper.NewKeeper(key, "nxr1authority", mk, &mockFeesKeeper{}, bk)
+	k2 := keeper.NewKeeper(key, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), mk, &mockFeesKeeper{}, bk)
 	msg := types.NewMsgCreateSettlement(payerAddr().String(), inactiveAddr.String(), sdk.NewInt64Coin("unxrl", 100), "")
 	_, err := k2.CreateSettlement(ctx, msg)
 	require.ErrorIs(t, err, types.ErrMerchantNotActive)
@@ -313,7 +313,7 @@ func TestUpdateSettlementStatus(t *testing.T) {
 	k, ctx, _ := setupKeeper(t)
 	msg := types.NewMsgCreateSettlement(payerAddr().String(), activeMerchantAddr().String(), sdk.NewInt64Coin("unxrl", 100), "")
 	s, _ := k.CreateSettlement(ctx, msg)
-	require.NoError(t, k.UpdateSettlementStatus(ctx, k.GetAuthority(), s.Id, int32(types.SettlementRefunded)))
+	require.NoError(t, k.UpdateSettlementStatus(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), s.Id, int32(types.SettlementRefunded)))
 	updated, _ := k.GetSettlement(ctx, s.Id)
 	require.Equal(t, int32(types.SettlementRefunded), updated.Status)
 }
@@ -329,8 +329,8 @@ func TestTerminalStatusCannotTransition(t *testing.T) {
 	k, ctx, _ := setupKeeper(t)
 	msg := types.NewMsgCreateSettlement(payerAddr().String(), activeMerchantAddr().String(), sdk.NewInt64Coin("unxrl", 100), "")
 	s, _ := k.CreateSettlement(ctx, msg)
-	require.NoError(t, k.UpdateSettlementStatus(ctx, k.GetAuthority(), s.Id, int32(types.SettlementCancelled)))
-	require.ErrorIs(t, k.UpdateSettlementStatus(ctx, k.GetAuthority(), s.Id, int32(types.SettlementCompleted)), types.ErrInvalidStatusTransition)
+	require.NoError(t, k.UpdateSettlementStatus(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), s.Id, int32(types.SettlementCancelled)))
+	require.ErrorIs(t, k.UpdateSettlementStatus(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), s.Id, int32(types.SettlementCompleted)), types.ErrInvalidStatusTransition)
 }
 
 func TestCompletedCannotGoToPending(t *testing.T) {
@@ -338,7 +338,7 @@ func TestCompletedCannotGoToPending(t *testing.T) {
 	msg := types.NewMsgCreateSettlement(payerAddr().String(), activeMerchantAddr().String(), sdk.NewInt64Coin("unxrl", 100), "")
 	s, _ := k.CreateSettlement(ctx, msg)
 	require.Equal(t, int32(types.SettlementCompleted), s.Status)
-	require.ErrorIs(t, k.UpdateSettlementStatus(ctx, k.GetAuthority(), s.Id, int32(types.SettlementPending)), types.ErrInvalidStatusTransition)
+	require.ErrorIs(t, k.UpdateSettlementStatus(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), s.Id, int32(types.SettlementPending)), types.ErrInvalidStatusTransition)
 }
 
 func TestInitGenesis(t *testing.T) {
@@ -549,7 +549,7 @@ func TestLiveSettlementInactiveMerchant(t *testing.T) {
 		inactiveAddr.String(): {Owner: inactiveAddr.String(), Name: "Inactive", Status: 1},
 	}}
 	bk := &mockBankKeeper{balances: map[string]sdk.Coins{}}
-	k2 := keeper.NewKeeper(key, "nxr1authority", mk, &mockFeesKeeper{}, bk)
+	k2 := keeper.NewKeeper(key, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), mk, &mockFeesKeeper{}, bk)
 	p := k2.GetParams(ctx)
 	p.LiveEnabled = true
 	require.NoError(t, k2.SetParams(ctx, p))
@@ -634,7 +634,7 @@ func TestLiveSettlementStatusChangeBlocked(t *testing.T) {
 	require.NoError(t, err)
 	require.True(t, s.FundsSettled)
 
-	err = k.UpdateSettlementStatus(ctx, k.GetAuthority(), s.Id, int32(types.SettlementRefunded))
+	err = k.UpdateSettlementStatus(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), s.Id, int32(types.SettlementRefunded))
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "funds_settled=true")
 }
@@ -648,7 +648,7 @@ func TestLiveSettlementStatusChangeToFailedBlocked(t *testing.T) {
 	require.NoError(t, err)
 	require.True(t, s.FundsSettled)
 
-	err = k.UpdateSettlementStatus(ctx, k.GetAuthority(), s.Id, int32(types.SettlementFailed))
+	err = k.UpdateSettlementStatus(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), s.Id, int32(types.SettlementFailed))
 	require.Error(t, err)
 }
 
@@ -661,7 +661,7 @@ func TestLiveSettlementCannotTransitionToCancelled(t *testing.T) {
 	require.NoError(t, err)
 	require.True(t, s.FundsSettled)
 
-	err = k.UpdateSettlementStatus(ctx, k.GetAuthority(), s.Id, int32(types.SettlementCancelled))
+	err = k.UpdateSettlementStatus(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), s.Id, int32(types.SettlementCancelled))
 	require.Error(t, err)
 }
 
@@ -673,7 +673,7 @@ func TestMetadataSettlementStatusChangeAllowed(t *testing.T) {
 	require.NoError(t, err)
 	require.False(t, s.FundsSettled)
 
-	err = k.UpdateSettlementStatus(ctx, k.GetAuthority(), s.Id, int32(types.SettlementRefunded))
+	err = k.UpdateSettlementStatus(ctx, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), s.Id, int32(types.SettlementRefunded))
 	require.NoError(t, err)
 	updated, _ := k.GetSettlement(ctx, s.Id)
 	require.Equal(t, int32(types.SettlementRefunded), updated.Status)
@@ -1017,7 +1017,7 @@ func TestTreasuryRoutingInactiveMerchant(t *testing.T) {
 		balances:       map[string]sdk.Coins{},
 		moduleBalances: map[string]sdk.Coins{"nexarail_treasury": sdk.NewCoins()},
 	}
-	k2 := keeper.NewKeeper(key, "nxr1authority", mk, &mockFeesKeeper{}, bk)
+	k2 := keeper.NewKeeper(key, sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String(), mk, &mockFeesKeeper{}, bk)
 	p := k2.GetParams(ctx)
 	p.LiveEnabled = true
 	p.TreasuryRoutingEnabled = true
@@ -1433,4 +1433,43 @@ func TestFailure_LiveEnabledFalsePreventsTransfers(t *testing.T) {
 	// Verify that all routing flags are independently false
 	// Each must be individually enabled for its routing to activate
 	require.NotEqual(t, params.LiveEnabled, true)
+}
+
+// --- Phase 14D: Params-update event emission ---
+
+func TestUpdateParamsEmitsEvent(t *testing.T) {
+	k, ctx, _ := setupKeeper(t)
+	ms := keeper.NewMsgServerImpl(k)
+	authority := sdk.AccAddress([]byte{8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8}).String()
+	params := types.DefaultParams()
+
+	msg := types.NewMsgUpdateParams(authority, params)
+	_, err := ms.UpdateParams(ctx, msg)
+	require.NoError(t, err)
+
+	events := ctx.EventManager().Events()
+	var found bool
+	for _, ev := range events {
+		if ev.Type == types.EventTypeUpdateParams {
+			found = true
+			for _, attr := range ev.Attributes {
+				if string(attr.Key) == "authority" && string(attr.Value) == authority {
+					return
+				}
+			}
+		}
+	}
+	require.True(t, found, "must emit settlement_params_updated event with authority")
+}
+
+
+func TestUpdateParamsNoEventOnInvalidAuthority(t *testing.T) {
+	k, ctx, _ := setupKeeper(t)
+	err := k.UpdateParams(ctx, "wrong-authority", types.DefaultParams())
+	require.Error(t, err)
+
+	events := ctx.EventManager().Events()
+	for _, ev := range events {
+		require.NotEqual(t, types.EventTypeUpdateParams, ev.Type, "must not emit event on failed update")
+	}
 }
