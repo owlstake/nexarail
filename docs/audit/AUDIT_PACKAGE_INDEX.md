@@ -263,6 +263,15 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `scripts/testnet/run-controlled-testnet-dry-run.sh` — Local five-validator launch-path rehearsal
 - `scripts/testnet/validate-validator-intake.sh` — Intake registry, gentx hash, field, and gentx verifier workflow
 
+### Phase 18A — Internal Coordinator Testnet Candidate And Public Join Readiness
+- `docs/testnet/PHASE_18A_INTERNAL_COORDINATOR_TESTNET_CANDIDATE.md` — Internal coordinator candidate purpose, process, gates, and safety boundary
+- `docs/testnet/PUBLIC_JOIN_READINESS_CHECKLIST.md` — Source build, CLI, gentx, intake, verifier, genesis, peer, runbook, support, and pending final-launch checklist
+- `docs/testnet/CONTROLLED_TESTNET_LAUNCH_WINDOW_TEMPLATE.md` — Planned UTC window, checksum, peers, seed nodes, first-block, first-100-block, first-hour, rollback, and channel placeholders
+- `docs/testnet/CONTROLLED_TESTNET_STATUS_UPDATE_DRAFT.md` — Public-safe status wording draft for preparation-only updates
+- `coordination/validators/endpoint-inventory.csv` — Header-only endpoint inventory template
+- `scripts/testnet/prepare-coordinator-genesis-candidate.sh` — Internal coordinator-only genesis candidate generator
+- `scripts/testnet/monitor-controlled-testnet-readiness.sh` — RPC/API launch-readiness monitor for future controlled launch windows
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly

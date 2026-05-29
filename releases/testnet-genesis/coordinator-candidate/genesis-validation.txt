@@ -1,0 +1,1 @@
+File at /var/folders/j2/xv7vkdh93gbc1t1w4fsc6sgm0000gn/T/tmp.x0cnbaTzAN/config/genesis.json is a valid genesis file

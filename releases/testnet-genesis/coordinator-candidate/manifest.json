@@ -1,0 +1,14 @@
+{
+  "network": "nexarail-testnet-1",
+  "status": "INTERNAL COORDINATOR CANDIDATE — NOT FINAL PUBLIC GENESIS",
+  "generated_utc": "2026-05-29T16:30:54Z",
+  "source_ref": "v0.1.0-rc1-cli-hotfix-2-g9fcd517-dirty",
+  "gentx_count": 5,
+  "genesis_sha256": "b02d00bf63386e44cd46b6ac83f26f072da3f389b50838f7c62c72f2639d9648",
+  "denom": "unxrl",
+  "account_amount": "1000000000000unxrl",
+  "final_public_genesis": false,
+  "gov_voting_period": "300s",
+  "product_live_flags": "false",
+  "safety": "internal coordinator candidate only; not mainnet; not a public launch; no token sale; no monetary value"
+}

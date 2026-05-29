@@ -3,6 +3,21 @@
 **Network:** `nexarail-testnet-1`
 **Status:** launch candidate preparation
 
+## Phase 18A Internal Coordinator Candidate
+
+- [x] Create internal coordinator candidate plan.
+- [x] Keep external-validator intake open while coordinator readiness work continues.
+- [x] Generate coordinator-only local gentxs.
+- [x] Assemble internal coordinator candidate under `releases/testnet-genesis/coordinator-candidate/`.
+- [x] Mark the artifact `INTERNAL COORDINATOR CANDIDATE — NOT FINAL PUBLIC GENESIS`.
+- [x] Validate genesis and compute SHA256.
+- [x] Confirm product live flags remain false.
+- [x] Run local dry-run from the generated candidate to height 20.
+- [x] Confirm validator count matches the five internal coordinator validators.
+- [x] Confirm node ID helper commands work.
+- [x] Confirm no panic/fatal log markers in the dry-run evidence.
+- [x] Confirm this candidate is not treated as final public genesis.
+
 ## Intake
 
 - [ ] Publish validator intake template.
@@ -12,6 +27,23 @@
 - [ ] Confirm each validator acknowledged testnet-only and no monetary-value terms.
 - [ ] Confirm no validator sent secrets or node data.
 - [ ] Run `scripts/testnet/validate-validator-intake.sh`.
+
+## Public Join Readiness
+
+- [x] Source-build path documented.
+- [x] CLI node ID commands documented and verified from source.
+- [x] Gentx command documented.
+- [x] Intake form exists.
+- [x] Gentx verifier exists.
+- [x] Genesis assembler exists.
+- [x] Persistent peers generator exists.
+- [x] Runbook exists.
+- [x] Status document exists.
+- [x] Endpoint inventory template exists.
+- [x] Monitoring script exists.
+- [ ] Support channel placeholder replaced with the final launch-window channel.
+- [ ] Final public genesis reviewed after verified external gentxs exist.
+- [ ] Launch time confirmed.
 
 ## Gentx Validation
 

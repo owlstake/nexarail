@@ -17,6 +17,9 @@ PEERS_OUT="$EVIDENCE_DIR/peers"
 PIDS_DIR="$RUN_DIR/pids"
 LOGS_DIR="$EVIDENCE_DIR/logs"
 MIN_HEIGHT="${MIN_HEIGHT:-20}"
+SOURCE_GENESIS="${DRY_RUN_GENESIS:-${COORDINATOR_CANDIDATE_GENESIS:-}}"
+SOURCE_HOMES_DIR="${DRY_RUN_SOURCE_HOMES:-${COORDINATOR_CANDIDATE_HOMES_DIR:-}}"
+KEEP_RUNNING="${DRY_RUN_KEEP_RUNNING:-0}"
 
 AGENTS=(
     "alpha:nxrl-controlled-alpha:31657:31656:1517:9290"
@@ -60,6 +63,10 @@ PY
 }
 
 stop_runtime() {
+    if [ "$KEEP_RUNNING" = "1" ]; then
+        echo "Runtime left running; stop PIDs listed in $PIDS_DIR when finished."
+        return
+    fi
     if [ -d "$PIDS_DIR" ]; then
         for pid_file in "$PIDS_DIR"/*.pid; do
             [ -f "$pid_file" ] || continue
@@ -193,18 +200,63 @@ node_file() {
     printf '%s/%s-node-id.txt' "$EVIDENCE_DIR" "$1"
 }
 
-for agent in "${AGENTS[@]}"; do
-    IFS=':' read -r name moniker rpc p2p api grpc <<< "$agent"
-    home="$HOMES_DIR/$name"
-    mkdir -p "$home"
-    "$BINARY" init "$moniker" --chain-id "$CHAIN_ID" --home "$home" --overwrite > "$EVIDENCE_DIR/${name}-init.log" 2>&1
-    "$BINARY" keys add "${name}-key" --keyring-backend test --home "$home" > "$EVIDENCE_DIR/${name}-keys-add.log" 2>&1
-    "$BINARY" keys show "${name}-key" -a --keyring-backend test --home "$home" > "$(account_file "$name")"
-    "$BINARY" tendermint show-node-id --home "$home" > "$(node_file "$name")"
-done
-pass "five validator homes initialised"
+if [ -n "$SOURCE_GENESIS" ] || [ -n "$SOURCE_HOMES_DIR" ]; then
+    if [ -z "$SOURCE_GENESIS" ] || [ ! -f "$SOURCE_GENESIS" ]; then
+        fail "source genesis not found"
+        exit 1
+    fi
+    if [ -z "$SOURCE_HOMES_DIR" ] || [ ! -d "$SOURCE_HOMES_DIR" ]; then
+        fail "source homes directory not found"
+        exit 1
+    fi
+    echo "Using source genesis: $SOURCE_GENESIS"
+    echo "Using source homes: $SOURCE_HOMES_DIR"
+    for agent in "${AGENTS[@]}"; do
+        IFS=':' read -r name _moniker _rpc _p2p _api _grpc <<< "$agent"
+        src_home="$SOURCE_HOMES_DIR/$name"
+        home="$HOMES_DIR/$name"
+        if [ ! -d "$src_home" ]; then
+            fail "source home missing for $name"
+            exit 1
+        fi
+        rm -rf "$home"
+        cp -R "$src_home" "$home"
+        "$BINARY" keys show "${name}-key" -a --keyring-backend test --home "$home" > "$(account_file "$name")"
+        "$BINARY" tendermint show-node-id --home "$home" > "$(node_file "$name")"
+        if compgen -G "$home/config/gentx/*.json" >/dev/null; then
+            cp "$home/config/gentx/"*.json "$GENTX_DIR/"
+        fi
+    done
+    pass "five validator homes loaded from source"
+    mkdir -p "$GENESIS_OUT"
+    cp "$SOURCE_GENESIS" "$GENESIS_OUT/genesis.json"
+    GENESIS_SHA="$(sha256_file "$GENESIS_OUT/genesis.json")"
+    printf '%s  genesis.json\n' "$GENESIS_SHA" > "$GENESIS_OUT/SHA256SUMS"
+    cat > "$GENESIS_OUT/manifest.json" <<EOF
+{
+  "network": "$CHAIN_ID",
+  "status": "internal-coordinator-candidate-dry-run",
+  "genesis_sha256": "$GENESIS_SHA",
+  "source_genesis": "$SOURCE_GENESIS",
+  "safety": "internal coordinator candidate only; not final public genesis"
+}
+EOF
+    cp "$GENESIS_OUT/genesis.json" "$BASE_HOME/config/genesis.json"
+    "$BINARY" validate-genesis --home "$BASE_HOME" >/dev/null
+    pass "source genesis validates"
+else
+    for agent in "${AGENTS[@]}"; do
+        IFS=':' read -r name moniker rpc p2p api grpc <<< "$agent"
+        home="$HOMES_DIR/$name"
+        mkdir -p "$home"
+        "$BINARY" init "$moniker" --chain-id "$CHAIN_ID" --home "$home" --overwrite > "$EVIDENCE_DIR/${name}-init.log" 2>&1
+        "$BINARY" keys add "${name}-key" --keyring-backend test --home "$home" > "$EVIDENCE_DIR/${name}-keys-add.log" 2>&1
+        "$BINARY" keys show "${name}-key" -a --keyring-backend test --home "$home" > "$(account_file "$name")"
+        "$BINARY" tendermint show-node-id --home "$home" > "$(node_file "$name")"
+    done
+    pass "five validator homes initialised"
 
-python3 - "$BASE_HOME/config/genesis.json" "$CHAIN_ID" "$DENOM" <<'PY'
+    python3 - "$BASE_HOME/config/genesis.json" "$CHAIN_ID" "$DENOM" <<'PY'
 import json
 import sys
 path, chain_id, denom = sys.argv[1:4]
@@ -230,45 +282,46 @@ with open(path, "w") as f:
     f.write("\n")
 PY
 
-for agent in "${AGENTS[@]}"; do
-    IFS=':' read -r name _moniker _rpc _p2p _api _grpc <<< "$agent"
-    "$BINARY" add-genesis-account "$(cat "$(account_file "$name")")" "1000000000000$DENOM" --home "$BASE_HOME" >> "$EVIDENCE_DIR/add-genesis-accounts.log" 2>&1
-done
-pass "genesis accounts added"
+    for agent in "${AGENTS[@]}"; do
+        IFS=':' read -r name _moniker _rpc _p2p _api _grpc <<< "$agent"
+        "$BINARY" add-genesis-account "$(cat "$(account_file "$name")")" "1000000000000$DENOM" --home "$BASE_HOME" >> "$EVIDENCE_DIR/add-genesis-accounts.log" 2>&1
+    done
+    pass "genesis accounts added"
 
-for agent in "${AGENTS[@]}"; do
-    IFS=':' read -r name moniker _rpc _p2p _api _grpc <<< "$agent"
-    home="$HOMES_DIR/$name"
-    if [ "$home" != "$BASE_HOME" ]; then
-        cp "$BASE_HOME/config/genesis.json" "$home/config/genesis.json"
-    fi
-    "$BINARY" gentx "${name}-key" "500000000$DENOM" \
-        --chain-id "$CHAIN_ID" \
-        --moniker "$moniker" \
-        --commission-rate 0.05 \
-        --commission-max-rate 0.20 \
-        --commission-max-change-rate 0.01 \
-        --min-self-delegation 1 \
-        --keyring-backend test \
-        --home "$home" > "$EVIDENCE_DIR/${name}-gentx.log" 2>&1
-    cp "$home/config/gentx/"*.json "$GENTX_DIR/"
-done
-pass "five gentxs generated"
+    for agent in "${AGENTS[@]}"; do
+        IFS=':' read -r name moniker _rpc _p2p _api _grpc <<< "$agent"
+        home="$HOMES_DIR/$name"
+        if [ "$home" != "$BASE_HOME" ]; then
+            cp "$BASE_HOME/config/genesis.json" "$home/config/genesis.json"
+        fi
+        "$BINARY" gentx "${name}-key" "500000000$DENOM" \
+            --chain-id "$CHAIN_ID" \
+            --moniker "$moniker" \
+            --commission-rate 0.05 \
+            --commission-max-rate 0.20 \
+            --commission-max-change-rate 0.01 \
+            --min-self-delegation 1 \
+            --keyring-backend test \
+            --home "$home" > "$EVIDENCE_DIR/${name}-gentx.log" 2>&1
+        cp "$home/config/gentx/"*.json "$GENTX_DIR/"
+    done
+    pass "five gentxs generated"
 
-for gentx in "$GENTX_DIR"/*.json; do
-    scripts/testnet/verify-controlled-testnet-gentx.sh "$gentx" --binary "$BINARY" \
-        > "$EVIDENCE_DIR/verify-$(basename "$gentx").log"
-done
-pass "gentx verification passed"
+    for gentx in "$GENTX_DIR"/*.json; do
+        scripts/testnet/verify-controlled-testnet-gentx.sh "$gentx" --binary "$BINARY" \
+            > "$EVIDENCE_DIR/verify-$(basename "$gentx").log"
+    done
+    pass "gentx verification passed"
 
-scripts/testnet/assemble-controlled-testnet-genesis.sh \
-    --gentx-dir "$GENTX_DIR" \
-    --output-dir "$GENESIS_OUT" \
-    --binary "$BINARY" \
-    > "$EVIDENCE_DIR/assemble-genesis.log"
-pass "controlled genesis assembled"
+    scripts/testnet/assemble-controlled-testnet-genesis.sh \
+        --gentx-dir "$GENTX_DIR" \
+        --output-dir "$GENESIS_OUT" \
+        --binary "$BINARY" \
+        > "$EVIDENCE_DIR/assemble-genesis.log"
+    pass "controlled genesis assembled"
 
-GENESIS_SHA="$(awk '{print $1}' "$GENESIS_OUT/SHA256SUMS")"
+    GENESIS_SHA="$(awk '{print $1}' "$GENESIS_OUT/SHA256SUMS")"
+fi
 
 INTAKE="$EVIDENCE_DIR/validator-intake.csv"
 cat > "$INTAKE" <<EOF
@@ -319,17 +372,24 @@ for agent in "${AGENTS[@]}"; do
     IFS=':' read -r name _moniker rpc p2p api grpc <<< "$agent"
     home="$HOMES_DIR/$name"
     log="$LOGS_DIR/${name}.log"
-    "$BINARY" start --home "$home" --minimum-gas-prices "0$DENOM" \
-        --api.enable --api.address "tcp://127.0.0.1:${api}" \
-        --grpc.enable --grpc.address "127.0.0.1:${grpc}" \
-        --rpc.laddr "tcp://127.0.0.1:${rpc}" \
-        --p2p.laddr "tcp://0.0.0.0:${p2p}" \
-        --p2p.persistent_peers "$(python3 - "$PEER_STRING" "$(cat "$(node_file "$name")")@127.0.0.1:${p2p}" <<'PY'
+    peer_arg="$(python3 - "$PEER_STRING" "$(cat "$(node_file "$name")")@127.0.0.1:${p2p}" <<'PY'
 import sys
 print(",".join([p for p in sys.argv[1].split(",") if p and p != sys.argv[2]]))
 PY
-)" \
-        > "$log" 2>&1 &
+)"
+    start_cmd=(
+        "$BINARY" start --home "$home" --minimum-gas-prices "0$DENOM"
+        --api.enable --api.address "tcp://127.0.0.1:${api}"
+        --grpc.enable --grpc.address "127.0.0.1:${grpc}"
+        --rpc.laddr "tcp://127.0.0.1:${rpc}"
+        --p2p.laddr "tcp://0.0.0.0:${p2p}"
+        --p2p.persistent_peers "$peer_arg"
+    )
+    if [ "$KEEP_RUNNING" = "1" ]; then
+        nohup "${start_cmd[@]}" > "$log" 2>&1 &
+    else
+        "${start_cmd[@]}" > "$log" 2>&1 &
+    fi
     echo "$!" > "$PIDS_DIR/${name}.pid"
     sleep 2
 done
@@ -403,6 +463,12 @@ for item in \
 done
 pass "product live flags false"
 
+if grep -Eiq 'panic|fatal|unrecoverable|segmentation fault' "$LOGS_DIR"/*.log 2>/dev/null; then
+    fail "panic/fatal log marker scan"
+    exit 1
+fi
+pass "no panic/fatal log markers"
+
 cat > "$EVIDENCE_DIR/summary.json" <<EOF
 {
   "timestamp_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
@@ -410,6 +476,7 @@ cat > "$EVIDENCE_DIR/summary.json" <<EOF
   "validator_count": 5,
   "height_verified": $HEIGHT,
   "genesis_sha256": "$GENESIS_SHA",
+  "source_genesis": "${SOURCE_GENESIS:-}",
   "pass": $PASS,
   "fail": $FAIL,
   "status": "PASS"
@@ -424,8 +491,10 @@ cat > "$EVIDENCE_DIR/summary.md" <<EOF
 - Height verified: $HEIGHT
 - Validator set count: 5
 - Genesis SHA256: $GENESIS_SHA
+- Source genesis: ${SOURCE_GENESIS:-generated during dry-run}
 - Product live flags: false
 - Tendermint/comet node ID helpers: pass
+- Panic/fatal log scan: pass
 - Result: PASS
 
 Evidence path: $EVIDENCE_DIR

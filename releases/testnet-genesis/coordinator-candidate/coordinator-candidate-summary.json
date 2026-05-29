@@ -1,0 +1,10 @@
+{
+  "network": "nexarail-testnet-1",
+  "status": "INTERNAL COORDINATOR CANDIDATE — NOT FINAL PUBLIC GENESIS",
+  "generated_utc": "2026-05-29T16:30:55Z",
+  "validator_count": 5,
+  "genesis_sha256": "b02d00bf63386e44cd46b6ac83f26f072da3f389b50838f7c62c72f2639d9648",
+  "output_dir": "releases/testnet-genesis/coordinator-candidate",
+  "private_work_dir": "rehearsals/coordinator-candidate/runs/20260529T163048Z",
+  "product_live_flags": "false"
+}

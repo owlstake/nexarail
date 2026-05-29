@@ -16,6 +16,9 @@ Thumbs.db
 rehearsals/testnet-1/docker/validator-notes/
 rehearsals/testnet-1/validator-notes/
 rehearsals/testnet-1/genesis/
+rehearsals/coordinator-candidate/
+rehearsals/controlled-testnet/
+rehearsals/validator-agents/
 
 # Temp
 /tmp/

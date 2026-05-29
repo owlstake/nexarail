@@ -33,6 +33,9 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 - Controlled external-validator testnet launch: NOT LAUNCHED
 - Phase 17A local dry-run passed with five local validators through height 20
 - Phase 17B intake workflow is ready, but no external validator records or gentxs are submitted yet
+- Phase 18A internal coordinator candidate is rehearsal-only and is not final public genesis
+- Endpoint inventory is a header-only template until real endpoints are provided
+- Launch-window template is prepared, but launch date/time remains pending
 - Requires: accepted validator intake, external gentxs, final genesis, persistent peers, launch window, monitoring, and coordinator evidence
 
 ## Mainnet Limitations

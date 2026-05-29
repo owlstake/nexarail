@@ -3,6 +3,22 @@
 **Network:** `nexarail-testnet-1`
 **Status:** launch candidate preparation
 
+## 0. Current Boundary
+
+The controlled external-validator testnet is not launched. External validator intake remains open, external gentxs are pending, and final public genesis is not published.
+
+Phase 18A adds an internal coordinator candidate for rehearsal only:
+
+```bash
+scripts/testnet/prepare-coordinator-genesis-candidate.sh
+set -a
+. releases/testnet-genesis/coordinator-candidate/dry-run.env
+set +a
+scripts/testnet/run-controlled-testnet-dry-run.sh
+```
+
+The generated candidate must remain marked `INTERNAL COORDINATOR CANDIDATE — NOT FINAL PUBLIC GENESIS`.
+
 ## 1. Build From Source
 
 ```bash
@@ -154,6 +170,19 @@ curl -s http://127.0.0.1:26657/status | jq .
 curl -s http://127.0.0.1:26657/net_info | jq '.result.n_peers'
 curl -s http://127.0.0.1:26657/validators | jq '.result.validators | length'
 ```
+
+For coordinator launch-window monitoring, prepare an endpoint inventory and run:
+
+```bash
+scripts/testnet/monitor-controlled-testnet-readiness.sh \
+  --rpc-file coordination/validators/endpoint-inventory.csv \
+  --expected-chain-id nexarail-testnet-1 \
+  --expected-validator-count <count> \
+  --sample-duration 300 \
+  --sample-interval 10
+```
+
+The monitor can also take comma-separated RPC endpoints with `--rpc-endpoints`. Add REST/API endpoints with `--api-endpoints` or `--api-file` when available.
 
 ## 13. Check Validator Signing
 

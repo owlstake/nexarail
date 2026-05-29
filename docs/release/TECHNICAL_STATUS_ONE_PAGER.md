@@ -8,6 +8,7 @@
 - Controlled external-validator testnet is preparing and not launched
 - Mainnet remains NO-GO
 - External validators remain pending
+- Phase 18A internal coordinator candidate and public join-readiness package are prepared
 
 ## Architecture
 - Cosmos SDK v0.47.x
@@ -44,6 +45,7 @@
 - Phase 16F validator CLI hotfix exposes `tendermint`, `comet`, and `cometbft` helper command groups
 - Phase 17A local controlled-testnet dry-run passed with five local validators through height 20
 - Phase 17B validator intake workflow is ready; external submissions are pending
+- Phase 18A internal coordinator candidate rehearses genesis, peers, monitoring, and launch artifacts while external gentxs remain pending
 
 ## Product-Flow Evidence
 - Full product-flow suite: 487 pass / 0 fail
@@ -81,10 +83,12 @@
 - Phase 16C local load simulation: pass
 - Phase 17A controlled-testnet dry-run: pass
 - Phase 17B intake validation: waiting for external submissions
+- Phase 18A coordinator candidate dry-run: pass, five internal coordinator validators, height 20, live flags false
 - RC2 readiness: under evaluation; expected recommendation is defer until canonical soak and targeted governance replay gates are complete
 
 ## Remaining NO-GO Items
 - Controlled external-validator testnet launch remains pending external intake, verified gentxs, final genesis, and launch evidence
+- Final public genesis and launch time remain pending
 - Mainnet launch
 - External validator activation
 - SDK publishing (npm/PyPI)

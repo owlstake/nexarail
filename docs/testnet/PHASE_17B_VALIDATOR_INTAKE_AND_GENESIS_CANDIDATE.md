@@ -19,6 +19,7 @@ Move from launch-candidate preparation to real external-validator coordination b
 | Genesis candidate | Not assembled; waiting for verified gentxs |
 | Persistent peers | Waiting for complete intake records |
 | Launch status | NOT LAUNCHED |
+| Phase 18A coordinator candidate | Prepared for internal rehearsal only |
 
 ## Coordination Workspace
 
@@ -51,6 +52,22 @@ scripts/testnet/assemble-controlled-testnet-genesis.sh \
 ```
 
 Do not assemble or publish a final genesis candidate while verified gentx count is zero.
+
+## Phase 18A Continuation
+
+Phase 18A proceeds with an internal coordinator-controlled candidate while Phase 17B external validator intake remains open.
+
+This continuation does not change the final public genesis rule: verified external gentxs are still required before final public genesis, public peers, launch time, or external validator launch evidence can be published.
+
+Phase 18A artifacts:
+
+- `docs/testnet/PHASE_18A_INTERNAL_COORDINATOR_TESTNET_CANDIDATE.md`;
+- `docs/testnet/PUBLIC_JOIN_READINESS_CHECKLIST.md`;
+- `scripts/testnet/prepare-coordinator-genesis-candidate.sh`;
+- `scripts/testnet/monitor-controlled-testnet-readiness.sh`;
+- `coordination/validators/endpoint-inventory.csv`;
+- `docs/testnet/CONTROLLED_TESTNET_LAUNCH_WINDOW_TEMPLATE.md`;
+- `docs/testnet/CONTROLLED_TESTNET_STATUS_UPDATE_DRAFT.md`.
 
 ## Missing Items
 
