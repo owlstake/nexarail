@@ -2,10 +2,12 @@
 
 ## Release Candidate Status
 - RC1 is public for controlled local evaluation.
+- `v0.1.0-rc1-cli-hotfix` is the current public source tag for validator CLI helper commands.
 - RC2 is under evaluation and should not be tagged until the canonical one-hour soak rerun and targeted post-fix governance/product-flow replay are complete.
 
 ## Devnet Limitations
-- RC1 binaries (`v0.1.0-rc1`) shipped without the `tendermint`/`comet`/`cometbft` helper command group, so `tendermint show-node-id` and related helpers return `unknown command`. Patched binary set is GitHub pre-release `v0.1.0-rc1-cli-hotfix`; see `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md`. Source builds need that tag or later.
+- RC1 binaries (`v0.1.0-rc1`) shipped without the `tendermint`/`comet`/`cometbft` helper command group, so `tendermint show-node-id` and related helpers return `unknown command`. Source builds need `v0.1.0-rc1-cli-hotfix` or later; see `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md`.
+- Prebuilt hotfix binary upload remains blocked by GitHub release-token permissions; external-validator onboarding uses source builds until assets and checksums are published.
 - RC1 binaries are single-node oriented; post-RC1 `main` includes local five-agent validator-agent evidence
 - Five-agent evidence is local single-machine evidence only
 - Voting period shortened to 30 seconds (not realistic for mainnet)
@@ -28,8 +30,9 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 - Python SDK requires Python 3.9+ and stdlib only
 
 ## Public Testnet Limitations
-- Public testnet launch: NO-GO
-- Requires: security review, node operator runbooks, monitoring, coordinator
+- Controlled external-validator testnet launch: NOT LAUNCHED
+- Phase 17A local dry-run passed with five local validators through height 20
+- Requires: accepted validator intake, external gentxs, final genesis, persistent peers, launch window, monitoring, and coordinator evidence
 
 ## Mainnet Limitations
 - Mainnet: NO-GO
@@ -39,6 +42,7 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 - External validators: PENDING
 - ValConsensus-based validator set supported but untested with external nodes
 - No external validator has been configured or run against this chain
+- External decentralisation is not claimed until accepted external validators are running and evidenced
 
 ## Governance Limitations
 - On-chain governance exists but has not been tested with external proposers

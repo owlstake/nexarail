@@ -4,6 +4,7 @@
 - URL: `https://github.com/Bookings-cpu/nexarail`
 - Branch: `main`
 - Public release tag: `v0.1.0-rc1`
+- Public CLI hotfix source tag: `v0.1.0-rc1-cli-hotfix`
 - Post-RC1 main baseline before Phase 16E rollup: `fb859d9b13188838ddda6f783a073b6e5d25a71d`
 
 ## What NexaRail Is
@@ -11,9 +12,11 @@ NexaRail is a Cosmos SDK-based application chain with built-in business logic mo
 
 ## Current Status
 - **RC1**: Released for controlled local evaluation
+- **RC1 CLI hotfix**: Source tag available for validator CLI helper commands
+- **Controlled external-validator testnet**: Preparing; not launched
 - **RC2**: Under evaluation; preparation recommended, tag/release deferred
 - **Mainnet**: NO-GO
-- **Public testnet**: NO-GO
+- **Public testnet**: NOT LAUNCHED
 - **External validators**: PENDING
 - **Token sale**: NO
 - **SDK publishing (npm/PyPI)**: NOT PUBLISHED
@@ -31,6 +34,8 @@ NexaRail is a Cosmos SDK-based application chain with built-in business logic mo
 - SDK package checks: 24 pass
 - Portal checks: 6 pass
 - Post-RC1 validation, invariant, fuzz, restart, load, and trend evidence is documented in `docs/release/POST_RC1_HARDENING_EVIDENCE_ROLLUP.md`
+- Validator CLI hotfix exposes `tendermint show-node-id`, `comet show-node-id`, and `cometbft show-node-id`
+- Phase 17A controlled-testnet local dry-run passed with five local validators through height 20; see `docs/testnet/PHASE_17A_CONTROLLED_TESTNET_DRY_RUN_RESULTS.md`
 
 ## What Is Not Proven
 - External validator participation
@@ -44,7 +49,7 @@ NexaRail is a Cosmos SDK-based application chain with built-in business logic mo
 ```bash
 git clone https://github.com/Bookings-cpu/nexarail.git
 cd nexarail
-git checkout v0.1.0-rc1
+git checkout v0.1.0-rc1-cli-hotfix
 ```
 
 ## How to Download RC1 Binaries
@@ -54,6 +59,8 @@ Download from the [GitHub Release page](https://github.com/Bookings-cpu/nexarail
 - `SHA256SUMS`
 
 Place binaries at `releases/testnet-rc1/binaries/` before running scripts.
+
+For external-validator onboarding, the current primary path is source-build from `v0.1.0-rc1-cli-hotfix`. Prebuilt hotfix binary upload was blocked by release-token permissions, so validators should not rely on RC1 binaries for node-ID helper commands.
 
 ## How to Verify Checksums
 ```bash
@@ -101,6 +108,8 @@ bash scripts/dev/check-developer-portal.sh
 | Developer bundle | `releases/developer-bundles/` |
 | Post-RC1 rollup | `docs/release/POST_RC1_HARDENING_EVIDENCE_ROLLUP.md` |
 | RC2 decision | `docs/release/RC2_RECOMMENDATION.md` |
+| Phase 17A launch plan | `docs/testnet/PHASE_17A_CONTROLLED_TESTNET_LAUNCH_PLAN.md` |
+| Phase 17A local dry-run | `docs/testnet/PHASE_17A_CONTROLLED_TESTNET_DRY_RUN_RESULTS.md` |
 
 ## Known Limitations
 See [Known Limitations Index](KNOWN_LIMITATIONS_INDEX.md) for full list.
@@ -112,6 +121,7 @@ Key limitations:
 - REST gateway is read-only
 - Governance UX is script-heavy
 - RC2 tag is deferred until canonical one-hour soak and targeted governance replay evidence are complete
+- Public controlled external-validator testnet is preparing, but final external gentxs, final genesis, and launch evidence remain pending
 
 ## Safety Disclaimer
 ```

@@ -2,9 +2,10 @@
 
 ## Release Status
 - RC1 is public at tag `v0.1.0-rc1`
+- Validator CLI hotfix source tag is public at `v0.1.0-rc1-cli-hotfix`
 - Post-RC1 hardening is complete enough for RC2 preparation
 - RC2 is under evaluation; tag/release is deferred pending canonical soak and targeted governance replay evidence
-- Public testnet remains NO-GO
+- Controlled external-validator testnet is preparing and not launched
 - Mainnet remains NO-GO
 - External validators remain pending
 
@@ -40,6 +41,8 @@
 - Phase 15A bounded fuzz tests and runtime invariant framework added
 - Phase 16A five-agent local runtime validation completed
 - Phase 16A.7 governance vote reliability hardened with per-agent RPC voting and retry/sequence refresh
+- Phase 16F validator CLI hotfix exposes `tendermint`, `comet`, and `cometbft` helper command groups
+- Phase 17A local controlled-testnet dry-run passed with five local validators through height 20
 
 ## Product-Flow Evidence
 - Full product-flow suite: 487 pass / 0 fail
@@ -75,10 +78,11 @@
 - Predeployment code gates: 23/23 pass
 - RC1 verification: 37/37 pass
 - Phase 16C local load simulation: pass
+- Phase 17A controlled-testnet dry-run: pass
 - RC2 readiness: under evaluation; expected recommendation is defer until canonical soak and targeted governance replay gates are complete
 
 ## Remaining NO-GO Items
-- Public testnet launch
+- Controlled external-validator testnet launch remains pending final external gentxs, final genesis, and launch evidence
 - Mainnet launch
 - External validator activation
 - SDK publishing (npm/PyPI)

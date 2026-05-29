@@ -63,9 +63,11 @@ go test ./cmd/nexaraild/cmd/... -run 'TestRootHasValidatorCommands|TestProductMo
 
 Expected: 5 passed.
 
-## Patched Binaries
+## Local Patched Binary Artifacts
 
-Location: `releases/github/v0.1.0-rc1-hotfix-cli/`
+Local build output location: `releases/github/v0.1.0-rc1-hotfix-cli/`
+
+These artifacts were built and checksummed locally. GitHub Release asset upload is currently blocked by token permissions, so the public validator path is source-build from `v0.1.0-rc1-cli-hotfix` until release assets and checksums are published through the verified release channel.
 
 | File | SHA256 |
 |---|---|
@@ -74,7 +76,7 @@ Location: `releases/github/v0.1.0-rc1-hotfix-cli/`
 
 Source base: `74f63c6c69a8397f7f9c0a9abc0fb68fc76e1dcd` plus the validator CLI hotfix commit.
 Source fix commit: `3eb6d90e0069078ae5acf6a5a524832d7d4b3b7a`.
-GitHub pre-release tag: `v0.1.0-rc1-cli-hotfix`.
+GitHub source tag: `v0.1.0-rc1-cli-hotfix`.
 Build flag: `-ldflags "-X main.Version=0.1.0-rc1-cli-hotfix"`.
 
 Verify locally:
@@ -87,37 +89,29 @@ shasum -a 256 -c SHA256SUMS
 ## Validator Instructions
 
 ```bash
-cd releases/github/v0.1.0-rc1-hotfix-cli
-shasum -a 256 -c SHA256SUMS
-
-# Initialise a fresh node home (replace <moniker> and <home>).
-./nexaraild-darwin-arm64 init <moniker> --chain-id nexarail-devnet-1 --home <home>
-
-# Read node ID.
-./nexaraild-darwin-arm64 tendermint show-node-id --home <home>
-
-# Either alias works:
-./nexaraild-darwin-arm64 comet show-node-id --home <home>
-./nexaraild-darwin-arm64 cometbft show-node-id --home <home>
-```
-
-Linux validators: use `nexaraild-linux-amd64` with the same flags.
-
-Source-build alternative (Go 1.22+):
-
-```bash
 git clone https://github.com/Bookings-cpu/nexarail.git
 cd nexarail
 git checkout v0.1.0-rc1-cli-hotfix
 make build
-./build/nexaraild tendermint show-node-id
+
+NXR_HOME="$HOME/.nexarail-testnet"
+./build/nexaraild init <moniker> --chain-id nexarail-testnet-1 --home "$NXR_HOME"
+./build/nexaraild tendermint show-node-id --home "$NXR_HOME"
+./build/nexaraild comet show-node-id --home "$NXR_HOME"
+./build/nexaraild cometbft show-node-id --home "$NXR_HOME"
+```
+
+If prebuilt binaries are later published through the verified release channel, validators should verify `SHA256SUMS` before use:
+
+```bash
+shasum -a 256 -c SHA256SUMS
 ```
 
 ## Troubleshooting
 
 | Symptom | Cause | Resolution |
 |---|---|---|
-| `Error: unknown command "tendermint" for "nexaraild"` | RC1 (`v0.1.0-rc1`) binary | Use the hotfix binary or rebuild from the validator CLI hotfix commit/tag or later. |
+| `Error: unknown command "tendermint" for "nexaraild"` | RC1 (`v0.1.0-rc1`) binary | Build from `v0.1.0-rc1-cli-hotfix` or later. |
 | `Error: open <home>/config/node_key.json: no such file or directory` | Node home not initialised | Run `nexaraild init <moniker> --chain-id nexarail-devnet-1 --home <home>` first. |
 | `comet` and `tendermint` print different output | Different binaries or stale home | They are aliases of the same command in this build; if output differs the wrong binary is on PATH. |
 
@@ -129,11 +123,11 @@ make build
 - Live flags - all `live_enabled` defaults remain `false`.
 - Validator set, staking, or governance parameters.
 - npm or PyPI publishing status - neither package is published.
-- Network state - there is no mainnet, no live testnet, and no external validator cohort.
+- Network state - there is no mainnet launch, the controlled external-validator testnet is not launched, and no external validator cohort is running yet.
 
 ## Safety Disclaimers
 
-- This binary is for controlled local evaluation only. There is no live public mainnet or external testnet.
+- Current external-validator onboarding is source-build only. The controlled external-validator testnet is not launched.
 - NXRL remains an evaluation denomination only. There is no public distribution, market, exchange venue, or financial offer.
 - Participation in evaluation is infrastructure testing only.
 - This hotfix does not alter validator distribution status. Accepted external operators remain pending until a coordinated launch is authorised.
@@ -141,6 +135,6 @@ make build
 
 ## Release Route Decision
 
-Route: **A - publish as `v0.1.0-rc1-cli-hotfix` GitHub pre-release** so blocked validator onboarding unblocks immediately. RC2 should still land separately once the canonical one-hour soak rerun and post-fix governance/product-flow replay are complete (see `docs/release/KNOWN_LIMITATIONS_INDEX.md`).
+Route: **source-build from `v0.1.0-rc1-cli-hotfix` until release asset permissions are fixed or the fix is rolled into RC2**. RC2 should still land separately once the canonical one-hour soak rerun and post-fix governance/product-flow replay are complete (see `docs/release/KNOWN_LIMITATIONS_INDEX.md`).
 
-If RC2 is imminent (within the next 24h), roll the same `tendermintCommand()` wiring forward into RC2 and skip the pre-release tag, but only after verifying the RC2 candidate binary itself exposes `tendermint show-node-id`.
+If RC2 is imminent, roll the same `tendermintCommand()` wiring forward into RC2 and publish verified release assets only after the candidate binary itself exposes `tendermint show-node-id`.

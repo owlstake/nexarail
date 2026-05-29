@@ -51,7 +51,7 @@ Recommended:
 - Restricted RPC/API exposure.
 - Backup operator contact.
 
-## Build Instructions
+## Build Instructions - Source Build Primary
 
 ```bash
 sudo apt update
@@ -59,44 +59,48 @@ sudo apt install -y build-essential git curl jq make gcc
 
 git clone https://github.com/Bookings-cpu/nexarail.git
 cd nexarail
-git checkout <release-tag-or-commit>
+git checkout v0.1.0-rc1-cli-hotfix
 make build
 
 ./build/nexaraild version
 go test ./...
 ```
 
-If a release binary is provided, verify its checksum before use.
+Source build is the primary validator path until prebuilt hotfix assets are available through a verified release upload. If a release binary is provided later, verify its checksum before use.
 
 ## Key Generation
 
 Initialise your node:
 
 ```bash
-./build/nexaraild init <your-moniker> --chain-id nexarail-testnet-1
+export NXR_HOME="$HOME/.nexarail-testnet"
+export NXR_CHAIN_ID="nexarail-testnet-1"
+
+./build/nexaraild init <your-moniker> --chain-id "$NXR_CHAIN_ID" --home "$NXR_HOME"
 ```
 
 Record your node ID:
 
 ```bash
-./build/nexaraild tendermint show-node-id
+./build/nexaraild tendermint show-node-id --home "$NXR_HOME"
+./build/nexaraild comet show-node-id --home "$NXR_HOME"
 ```
 
-Aliases: `comet show-node-id` and `cometbft show-node-id` resolve to the same command.
+The two commands should return the same 40-character node ID. `cometbft show-node-id` also resolves to the same helper group.
 
-If the binary returns `unknown command "tendermint"`, you are running the pre-hotfix RC1 release (`v0.1.0-rc1`). Use the CLI hotfix binary set from GitHub pre-release `v0.1.0-rc1-cli-hotfix`, or rebuild from that tag or later. See `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md` for full details, checksums, and the RC1 to hotfix mapping.
+If the binary returns `unknown command "tendermint"`, you are running the pre-hotfix RC1 release (`v0.1.0-rc1`). Build from source tag `v0.1.0-rc1-cli-hotfix` or later. Use prebuilt hotfix binaries only after release assets and checksums are published through the verified release channel.
 
 Record your validator consensus pubkey:
 
 ```bash
-./build/nexaraild tendermint show-validator
+./build/nexaraild tendermint show-validator --home "$NXR_HOME"
 ```
 
 Create your validator account key:
 
 ```bash
-./build/nexaraild keys add <key-name> --keyring-backend file
-./build/nexaraild keys show <key-name> -a --keyring-backend file
+./build/nexaraild keys add <key-name> --keyring-backend file --home "$NXR_HOME"
+./build/nexaraild keys show <key-name> -a --keyring-backend file --home "$NXR_HOME"
 ```
 
 Back up the mnemonic offline. Never share it with the coordinator.
@@ -107,18 +111,20 @@ After the coordinator provides the genesis template and confirms your account fu
 
 ```bash
 ./build/nexaraild gentx <key-name> 500000000unxrl \
-  --chain-id nexarail-testnet-1 \
+  --chain-id "$NXR_CHAIN_ID" \
   --commission-rate 0.05 \
   --commission-max-rate 0.20 \
   --commission-max-change-rate 0.01 \
   --min-self-delegation 1 \
-  --keyring-backend file
+  --keyring-backend file \
+  --home "$NXR_HOME"
 ```
 
 Verify the gentx exists:
 
 ```bash
-ls ~/.nexarail/config/gentx/gentx-*.json
+ls "$NXR_HOME/config/gentx/gentx-"*.json
+shasum -a 256 "$NXR_HOME/config/gentx/gentx-"*.json
 ```
 
 ## Gentx Submission
@@ -126,8 +132,10 @@ ls ~/.nexarail/config/gentx/gentx-*.json
 Submit only:
 
 ```text
-~/.nexarail/config/gentx/gentx-*.json
+$NXR_HOME/config/gentx/gentx-*.json
 ```
+
+Send it through the coordinator-approved support channel or repository process once announced. Until that channel is announced, keep the gentx local and complete `docs/testnet/VALIDATOR_INTAKE_TEMPLATE.md`.
 
 Never submit:
 
@@ -138,7 +146,7 @@ Never submit:
 - keyring directory;
 - SSH keys.
 
-The coordinator will validate gentxs, assemble the final genesis candidate, and publish the checksum.
+The coordinator will validate gentxs with `scripts/testnet/verify-controlled-testnet-gentx.sh`, assemble the final genesis candidate, and publish the checksum.
 
 ## Configuration
 
@@ -161,7 +169,37 @@ minimum-gas-prices = "0.025unxrl"
 Start command at launch:
 
 ```bash
-./build/nexaraild start --minimum-gas-prices 0.025unxrl
+./build/nexaraild start --home "$NXR_HOME" --minimum-gas-prices 0.025unxrl
+```
+
+Firewall baseline:
+
+```bash
+sudo ufw allow 26656/tcp
+sudo ufw deny 26657/tcp
+sudo ufw deny 1317/tcp
+```
+
+Expose RPC/API only to trusted IPs if the coordinator explicitly asks for it.
+
+Optional systemd unit, after replacing paths and user:
+
+```ini
+[Unit]
+Description=NexaRail controlled testnet validator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=nexarail
+WorkingDirectory=/opt/nexarail
+ExecStart=/opt/nexarail/build/nexaraild start --home /var/lib/nexarail --minimum-gas-prices 0.025unxrl
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 Optional setup helper:
@@ -187,6 +225,16 @@ Use the channel for:
 - incidents and restarts.
 
 Do not share private keys or mnemonics in the support channel.
+
+## Troubleshooting
+
+| Symptom | Likely cause | Action |
+|---|---|---|
+| `unknown command "tendermint"` | Pre-hotfix binary | Build from `v0.1.0-rc1-cli-hotfix` or later. |
+| `node_key.json: no such file or directory` | Node home not initialised | Run `init` with the same `--home`. |
+| Genesis checksum mismatch | Wrong file or stale candidate | Stop and ask coordinator for the current checksum. |
+| No peers | Wrong node ID, host, port, or firewall | Confirm `persistent_peers`, public P2P reachability, and `26656/tcp`. |
+| Gentx rejected | Chain ID, denom, moniker, or address issue | Regenerate after applying coordinator feedback. |
 
 ## Timeline
 

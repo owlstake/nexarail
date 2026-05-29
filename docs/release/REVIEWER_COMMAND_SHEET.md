@@ -4,7 +4,7 @@
 ```bash
 git clone https://github.com/Bookings-cpu/nexarail.git
 cd nexarail
-git checkout v0.1.0-rc1
+git checkout v0.1.0-rc1-cli-hotfix
 ```
 
 ## Download Binaries
@@ -18,17 +18,16 @@ shasum -a 256 -c checksums/SHA256SUMS
 ```
 
 ## Validator CLI Node ID Check
-Pre-hotfix RC1 binaries are missing the `tendermint`/`comet` helper group required for validator onboarding. Use the patched binary set under `releases/github/v0.1.0-rc1-hotfix-cli/` (`v0.1.0-rc1-cli-hotfix`):
+Pre-hotfix RC1 binaries are missing the `tendermint`/`comet` helper group required for validator onboarding. The current external-validator path is source build from `v0.1.0-rc1-cli-hotfix`:
 ```bash
-cd releases/github/v0.1.0-rc1-hotfix-cli
-shasum -a 256 -c SHA256SUMS
-./nexaraild-darwin-arm64 tendermint --help            # expect: show-node-id listed
+make build
+./build/nexaraild tendermint --help                   # expect: show-node-id listed
 HOTFIX_HOME="$(mktemp -d)"
-./nexaraild-darwin-arm64 init reviewer --chain-id nexarail-devnet-1 --home "$HOTFIX_HOME"
-./nexaraild-darwin-arm64 tendermint show-node-id --home "$HOTFIX_HOME"
-./nexaraild-darwin-arm64 comet show-node-id --home "$HOTFIX_HOME"
+./build/nexaraild init reviewer --chain-id nexarail-devnet-1 --home "$HOTFIX_HOME"
+./build/nexaraild tendermint show-node-id --home "$HOTFIX_HOME"
+./build/nexaraild comet show-node-id --home "$HOTFIX_HOME"
 ```
-Expected: both commands print the same 40-char hex node ID. See `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md`.
+Expected: both commands print the same 40-char hex node ID. Prebuilt hotfix binary upload is blocked until release-token permissions are fixed; do not direct external validators to RC1 binaries for node-ID helper commands.
 
 ## Verify RC1 Package
 ```bash

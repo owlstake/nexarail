@@ -1,16 +1,16 @@
 # NexaRail Network
 
 [![CI](https://github.com/Bookings-cpu/nexarail/actions/workflows/nexarail-regression.yml/badge.svg)](https://github.com/Bookings-cpu/nexarail/actions/workflows/nexarail-regression.yml)
-A sovereign Layer 1 blockchain for controlled testnet evaluation of railway settlement and payments — built with Cosmos SDK v0.47.17 and CometBFT v0.37.18. External validator distribution is not yet live.
+A sovereign Layer 1 blockchain for controlled testnet evaluation of railway settlement and payments — built with Cosmos SDK v0.47.17 and CometBFT v0.37.18. External validator distribution is in controlled testnet preparation and is not yet live.
 
-**⚠️ Status: RC1 (v0.1.0-rc1) — Controlled local evaluation. NO mainnet. NO public testnet. No token sale. Testnet tokens have zero monetary value. SDK packages are NOT published to npm or PyPI.**
+**Status: RC1 CLI hotfix source tag (`v0.1.0-rc1-cli-hotfix`) — controlled external-validator testnet preparation. NOT launched. NO mainnet. No token sale. Testnet tokens have zero monetary value. SDK packages are NOT published to npm or PyPI.**
 
 See [Reviewer Handoff](docs/release/REVIEWER_HANDOFF.md) | [Litepaper](docs/NEXARAIL_LITEPAPER.md) | [Developer Portal](docs/portal/index.html) | [Quickstart](docs/release/RC1_QUICKSTART.md) | [Release Verification](docs/release/GITHUB_RELEASE_V0.1.0_RC1_VERIFICATION.md)
 
 ```bash
 git clone https://github.com/Bookings-cpu/nexarail.git
 cd nexarail
-git checkout v0.1.0-rc1
+git checkout v0.1.0-rc1-cli-hotfix
 bash scripts/dev/run-nexarail-regression-matrix.sh --fast
 ```
 
@@ -42,13 +42,15 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 |---|---|
 | Packaging | **Complete** — RC1 release assets packaged and verified |
 | Local devnet | **Ready** — single-node and 5-agent modes available |
-| Public launch | **NO** — This is NOT a public launch |
+| Controlled external-validator launch | **Preparing** — source-build path, intake, gentx, genesis, and peer tooling are ready |
+| Public launch | **NOT LAUNCHED** — final genesis and external validator evidence are pending |
 | Mainnet | **NO** — This is NOT mainnet |
-| Validator onboarding | Pending — gentx collection and genesis assembly remain open |
+| Validator onboarding | Pending — external intake and gentx collection remain open |
 | Live flags | **Disabled by default** — all 6 live flags are `false` in genesis |
 | Product-flow suite | **487 pass / 0 fail** — full coverage validated |
 | REST parity | **36/36 (100%)** — REST readback parity confirmed |
-| Launch status | `NOT_LIVE` — controlled testnet preparation only |
+| Phase 17A dry-run | **PASS** — local five-validator launch path reached height 20 |
+| Launch status | `NOT_LAUNCHED` — controlled external testnet preparation only |
 
 ### Quick Links
 
@@ -65,6 +67,9 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | [REST API Docs](docs/api/REST_READBACK_ROUTES.md) | All REST readback endpoints |
 | [Evidence Manifest](docs/release/TESTNET_RC1_EVIDENCE_MANIFEST.md) | Evidence index |
 | [Known Limitations](docs/release/TESTNET_RC1_KNOWN_LIMITATIONS.md) | Current limitations |
+| [Controlled Testnet Launch Plan](docs/testnet/PHASE_17A_CONTROLLED_TESTNET_LAUNCH_PLAN.md) | Phase 17A external-validator launch candidate plan |
+| [Validator Action Pack](docs/testnet/EXTERNAL_VALIDATOR_ACTION_PACK.md) | Source-build onboarding commands for accepted validators |
+| [Controlled Testnet Status](docs/testnet/CONTROLLED_TESTNET_STATUS.md) | Current launch status and guardrails |
 
 ---
 
@@ -146,7 +151,7 @@ scripts/dev/run-nexarail-regression-matrix.sh --full --with-devnet
 
 ---
 
-**Runtime note:** Local 5-agent runtime readiness is proven; external validator onboarding and multi-machine/Linux rehearsal remain open/pending; public testnet launch is not yet live.
+**Runtime note:** Local 5-agent runtime readiness and the Phase 17A controlled-testnet dry-run are proven. External validator onboarding, final gentx collection, final genesis publication, and live external validator evidence remain pending.
 
 **🔗 [Apply to run a validator →](docs/testnet/VALIDATOR_APPLICATION_FORM.md)**
 

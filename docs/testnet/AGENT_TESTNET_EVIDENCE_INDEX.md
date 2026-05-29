@@ -1,8 +1,9 @@
 # Agent Testnet Evidence Index
 
 **Date:** 2026-05-29
-**Scope:** consolidated evidence index for NexaRail local validator-agent rehearsals through Phase 16E rollup
-**Chain ID:** `nexarail-agent-testnet-1`
+**Scope:** consolidated evidence index for NexaRail local validator-agent rehearsals through Phase 17A controlled-testnet dry-run
+**Agent chain ID:** `nexarail-agent-testnet-1`
+**Controlled testnet dry-run chain ID:** `nexarail-testnet-1`
 
 ## Phase Evidence Paths
 
@@ -20,6 +21,7 @@
 | Phase 16D L1/L2 trend | `rehearsals/validator-agents/load-trends/evidence/phase16d-L1L2-20260528T225534Z/` | Local trend/resource profile for L1 and L2 |
 | Phase 16D L3 trend | `rehearsals/validator-agents/load-trends/evidence/phase16d-L3L4-20260528T231938Z/L3/` | Local trend/resource profile for completed L3 |
 | Phase 16D partial L4 | `rehearsals/validator-agents/load-trends/evidence/phase16d-L3L4-20260528T231938Z/L4/` | Interrupted during Phase 16E handoff; non-canonical |
+| Phase 17A controlled-testnet dry-run | `rehearsals/controlled-testnet/dry-run/evidence/20260529T132046Z/` | Local five-validator rehearsal of intake, gentx, genesis assembly, persistent peers, launch, and height-20 validation |
 
 ## Key Summaries
 
@@ -43,6 +45,8 @@
 | Phase 16D L3 level summary | `rehearsals/validator-agents/load-trends/evidence/phase16d-L3L4-20260528T231938Z/L3/summary.json` |
 | Post-RC1 rollup | `docs/release/POST_RC1_HARDENING_EVIDENCE_ROLLUP.md` |
 | RC2 recommendation | `docs/release/RC2_RECOMMENDATION.md` |
+| Phase 17A dry-run results | `docs/testnet/PHASE_17A_CONTROLLED_TESTNET_DRY_RUN_RESULTS.md` |
+| Phase 17A dry-run summary | `rehearsals/controlled-testnet/dry-run/evidence/20260529T132046Z/summary.md` |
 
 ## Genesis Checksums
 
@@ -60,6 +64,7 @@
 | Phase 9V H all-direct sequential | `5399d53c0f134edd8d4b5c5f7f2b9355e2aee6c1dd4ccbcba3abdae8f310c4e6` |
 | Phase 9V standard direct | `5b2ec7f27c6a8ec61db1790ab3f5eb054017c02ee3aa7b664f204fe42740d6c8` |
 | Phase 9V final rebuilt-binary proof | `23d40e8a7c301c8d0d1b5bbdfa27c54648e8a44a19264c5a966d9501ed0ac9b4` |
+| Phase 17A controlled-testnet dry-run | `5fc2ad8a76cfee850e33ddf8f94f403b101657f27de6f0c8885021e8b2c74d90` |
 
 ## Runtime Transaction Hashes
 
@@ -145,4 +150,4 @@ Relevant files:
 
 ## Boundary
 
-This evidence index covers the local agent testnet only. It does not index external validator launch evidence because external validators and external gentxs remain pending.
+This evidence index covers local agent and controlled-testnet dry-run evidence only. It does not index live external-validator launch evidence because external validators and external gentxs remain pending.

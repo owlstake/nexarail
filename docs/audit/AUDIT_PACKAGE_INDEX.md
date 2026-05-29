@@ -247,6 +247,18 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `docs/release/RC1_TO_RC2_COMPARISON.md` — RC1-to-RC2 comparison
 - `scripts/release/check-rc2-readiness.sh` — Local RC2 readiness checker
 
+### Phase 17A — Controlled External-Validator Testnet Launch Candidate
+- `docs/testnet/PHASE_17A_CONTROLLED_TESTNET_LAUNCH_PLAN.md` — Launch objective, chain ID, source-build path, gentx collection, genesis assembly, persistent peers, timeline, coordinator/validator duties, rollback, and safety boundary
+- `docs/testnet/VALIDATOR_INTAKE_TEMPLATE.md` — Validator intake fields and testnet-only acknowledgement
+- `docs/testnet/CONTROLLED_TESTNET_COORDINATOR_CHECKLIST.md` — Intake, gentx validation, genesis, peer, launch-window, rollback, and evidence checklist
+- `docs/testnet/CONTROLLED_TESTNET_RUNBOOK.md` — Validator build, init, genesis, peers, start, status, signing, and safe-log runbook
+- `docs/testnet/CONTROLLED_TESTNET_STATUS.md` — Current status: not launched, genesis pending, gentxs pending, live flags false by design
+- `docs/testnet/PHASE_17A_CONTROLLED_TESTNET_DRY_RUN_RESULTS.md` — Local five-validator dry-run result and checksum
+- `scripts/testnet/verify-controlled-testnet-gentx.sh` — Controlled gentx verifier
+- `scripts/testnet/assemble-controlled-testnet-genesis.sh` — Controlled genesis assembly and checksum/manifest writer
+- `scripts/testnet/generate-persistent-peers.sh` — Validator intake to persistent-peers generator
+- `scripts/testnet/run-controlled-testnet-dry-run.sh` — Local five-validator launch-path rehearsal
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly
