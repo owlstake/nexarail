@@ -53,7 +53,7 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | Phase 18A readiness | **Prepared** — internal coordinator candidate and public join package only |
 | Phase 18B intake | **Open** — awaiting real validator submissions; freeze decision `FREEZE_DEFER` |
 | Phase 18C operations | **Prepared** — launch rehearsal, incident response, support, and evidence pack |
-| First external metadata | **Received** — NodeSync P2P metadata recorded; gentx JSON pending local receipt and verification |
+| First external gentx | **Accepted** — NodeSync gentx verified; peer host confirmation pending |
 | Launch status | `NOT_LAUNCHED` — controlled external testnet preparation only |
 
 ### Quick Links
@@ -79,7 +79,7 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | [Public Join Readiness Checklist](docs/testnet/PUBLIC_JOIN_READINESS_CHECKLIST.md) | Join-readiness gates while external gentxs remain pending |
 | [Phase 18B Intake Execution](docs/testnet/PHASE_18B_EXTERNAL_VALIDATOR_INTAKE_EXECUTION.md) | External validator intake, gentx review, endpoint collection, and freeze gate |
 | [Final Genesis Freeze Decision](docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md) | Current freeze decision and next required action |
-| [Phase 17C First External Gentx Verification](docs/testnet/PHASE_17C_FIRST_EXTERNAL_GENTX_VERIFICATION.md) | NodeSync metadata receipt, gentx file blocker, docs fix, and next action |
+| [Phase 17C First External Gentx Verification](docs/testnet/PHASE_17C_FIRST_EXTERNAL_GENTX_VERIFICATION.md) | NodeSync SHA256 match, gentx verifier pass, peer-host discrepancy, and next action |
 | [Launch Operations Dashboard](docs/testnet/CONTROLLED_TESTNET_LAUNCH_READINESS_DASHBOARD.md) | Coordinator readiness table for launch operations |
 | [Incident Response Runbook](docs/testnet/CONTROLLED_TESTNET_INCIDENT_RESPONSE.md) | Halt, rollback, support, and incident response process |
 
@@ -163,7 +163,7 @@ scripts/dev/run-nexarail-regression-matrix.sh --full --with-devnet
 
 ---
 
-**Runtime note:** Local 5-agent runtime readiness, the Phase 17A dry-run, and the Phase 18A internal coordinator-candidate dry-run are proven. Phase 18B intake execution remains open, Phase 18C coordinator launch operations are prepared, and NodeSync public P2P metadata is recorded, but the NodeSync gentx JSON file, final gentx verification, final genesis publication, and external validator launch evidence remain pending.
+**Runtime note:** Local 5-agent runtime readiness, the Phase 17A dry-run, and the Phase 18A internal coordinator-candidate dry-run are proven. Phase 18B intake execution remains open, Phase 18C coordinator launch operations are prepared, and the NodeSync gentx is verified, but peer host confirmation, final genesis publication, and external validator launch evidence remain pending.
 
 **🔗 [Apply to run a validator →](docs/testnet/VALIDATOR_APPLICATION_FORM.md)**
 

@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-29
 **Network:** `nexarail-testnet-1`
-**Status:** blocked pending NodeSync gentx JSON file content
+**Status:** NodeSync gentx accepted; peer host pending confirmation
 
 ## NodeSync Submission Summary
 
@@ -15,6 +15,7 @@
 | account address | `nxr182fzt70uwg5sglwm6upagfr4gvp3sjay33wx28` |
 | node ID | `2bb62d82b4dbf820fdafd843816f1e72a84ffa8f` |
 | public host | `nexarail-testnet-peer.nodesync.top` |
+| gentx memo host | `178.104.162.88` |
 | P2P port | `26656` |
 | OS/arch | `Ubuntu 24.04.4 LTS` |
 | build tag | `v0.1.0-rc1-cli-hotfix` |
@@ -23,35 +24,58 @@
 
 ## SHA256 Result
 
-SHA256 was not verified because the gentx JSON file content is not present in the local workspace.
-
-Expected local path:
+The canonical gentx copy is saved at:
 
 ```text
 coordination/validators/gentxs/gentx-2bb62d82b4dbf820fdafd843816f1e72a84ffa8f.json
 ```
 
+Saved-file SHA256:
+
+```text
+fbf829ef28330323d6850f89b7219f2d43a47e98ecce91ba16e46aef94566601
+```
+
+Result: **MATCH**.
+
 ## Gentx Verification Result
 
-Gentx verification was not run because the gentx JSON file is missing locally. The coordinator must not recreate, infer, or edit the validator gentx.
+`scripts/testnet/verify-controlled-testnet-gentx.sh` passed:
+
+- valid JSON;
+- moniker `NODESYNC`;
+- self-delegation `500000000unxrl`;
+- operator address present;
+- delegator address present;
+- consensus pubkey present and ed25519;
+- no private key material patterns;
+- no product live-flag changes.
+
+The verifier emitted one warning: chain ID is not embedded in the gentx JSON, so `collect-gentxs` validates the signature against the genesis chain ID.
 
 ## Acceptance Result
 
 ```text
-PENDING_GENTX_FILE
+ACCEPTED_PEER_HOST_PENDING_CONFIRMATION
 ```
 
-NodeSync metadata and P2P endpoint are recorded in the tracker and endpoint inventory. The validator intake registry is not updated with an accepted row until the gentx file content is received and its SHA256 matches the submitted hash.
+NodeSync has been added to `coordination/validators/validator-intake.csv`. The verified gentx is copied to `coordination/validators/verified/`.
 
 ## Persistent Peer Entry
 
-The reported P2P endpoint is:
+Generated peer entry using the earlier DNS endpoint:
 
 ```text
 2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656
 ```
 
-Final persistent peers are still not generated from accepted intake records because the gentx has not been verified.
+Peer host status is `PENDING_CONFIRMATION` because the gentx memo contains:
+
+```text
+2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@178.104.162.88:26656
+```
+
+Ask NodeSync whether final persistent peers should use DNS `nexarail-testnet-peer.nodesync.top` or IP `178.104.162.88`.
 
 ## Documentation Bug Fixed
 
@@ -67,9 +91,9 @@ This is local preparation only. Final coordinator genesis is assembled separatel
 
 ## Genesis Candidate Status
 
-No preliminary external genesis candidate was assembled. The first external gentx cannot be verified until the original gentx JSON file content is available.
+No preliminary or final public genesis candidate was assembled in this step. One external gentx is now verified, but final public genesis remains deferred pending peer-host confirmation and coordinator launch criteria.
 
-Final public genesis remains not assembled and the freeze decision remains `FREEZE_DEFER`.
+Freeze decision remains `FREEZE_DEFER`.
 
 ## Launch Status
 
@@ -77,16 +101,8 @@ Controlled external-validator testnet remains **NOT LAUNCHED**. Mainnet remains 
 
 ## Next Action
 
-Request that NodeSync resend or upload the exact gentx JSON file:
+Ask NodeSync to confirm the final peer host:
 
 ```text
-gentx-2bb62d82b4dbf820fdafd843816f1e72a84ffa8f.json
-```
-
-After receipt, verify:
-
-```bash
-shasum -a 256 coordination/validators/gentxs/gentx-2bb62d82b4dbf820fdafd843816f1e72a84ffa8f.json
-scripts/testnet/validate-validator-intake.sh
-scripts/testnet/verify-controlled-testnet-gentx.sh coordination/validators/gentxs/gentx-2bb62d82b4dbf820fdafd843816f1e72a84ffa8f.json
+Should the final persistent peer use nexarail-testnet-peer.nodesync.top:26656 or 178.104.162.88:26656?
 ```

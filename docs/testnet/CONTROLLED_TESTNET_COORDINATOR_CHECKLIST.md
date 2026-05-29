@@ -51,14 +51,14 @@
 - [x] Create submission tracker.
 - [x] Create validator intake message pack.
 - [x] Validate current intake state.
-- [x] Confirm no external validator submissions are present.
-- [x] Confirm registry remains empty until real submissions arrive.
+- [x] Confirm no external validator submissions were present before NodeSync.
+- [x] Confirm registry remained empty until real submissions arrived.
 - [x] Generate waiting-state persistent peer outputs.
 - [x] Create final genesis freeze decision.
-- [x] Defer final public genesis because verified gentx count is zero.
-- [ ] Add real public validator records after receipt.
-- [ ] Verify submitted gentxs.
-- [ ] Generate final public persistent peers from complete records.
+- [x] Defer final public genesis while launch criteria remain unmet.
+- [x] Add real public validator records after receipt.
+- [x] Verify submitted gentxs.
+- [x] Generate external persistent peers from complete records.
 - [ ] Freeze final public genesis after accepted external gentxs exist.
 
 ## Phase 18C Launch Operations
@@ -78,27 +78,28 @@
 
 - [x] Record NodeSync public metadata in the submission tracker.
 - [x] Record NodeSync P2P-only endpoint in the endpoint inventory.
-- [x] Confirm the gentx JSON file content is not present in the coordinator workspace.
-- [x] Keep the accepted intake registry unchanged until the gentx file is received and verified.
+- [x] Confirm the gentx JSON file content was initially not present in the coordinator workspace.
+- [x] Keep the accepted intake registry unchanged until the gentx file was received and verified.
 - [x] Fix validator docs to require `add-genesis-account` before `gentx`.
-- [ ] Receive the original NodeSync gentx JSON file.
-- [ ] Verify the NodeSync gentx SHA256.
-- [ ] Run the direct controlled gentx verifier for NodeSync.
-- [ ] Copy NodeSync gentx to `coordination/validators/verified/` only if verification passes.
-- [ ] Generate persistent peers from accepted records after verification.
-- [ ] Re-run final genesis freeze gate after at least one gentx is verified.
+- [x] Receive the original NodeSync gentx JSON file.
+- [x] Verify the NodeSync gentx SHA256.
+- [x] Run the direct controlled gentx verifier for NodeSync.
+- [x] Copy NodeSync gentx to `coordination/validators/verified/` only after verification passes.
+- [x] Generate persistent peers from accepted records after verification.
+- [ ] Confirm whether NodeSync final peer host should use DNS or IP.
+- [ ] Re-run final genesis freeze gate after peer host confirmation.
 
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.
-- [ ] Store pending gentxs in `coordination/validators/gentxs/`.
-- [ ] Run `scripts/testnet/verify-controlled-testnet-gentx.sh` for every gentx.
-- [ ] Copy verified gentxs to `coordination/validators/verified/`.
+- [x] Store pending gentxs in `coordination/validators/gentxs/`.
+- [x] Run `scripts/testnet/verify-controlled-testnet-gentx.sh` for every received gentx.
+- [x] Copy verified gentxs to `coordination/validators/verified/`.
 - [ ] Copy rejected gentxs to `coordination/validators/rejected/` with reason files.
 - [ ] Confirm gentxs are collected into a `nexarail-testnet-1` genesis and `collect-gentxs` signature validation passes.
-- [ ] Confirm self-delegation denom is `unxrl`.
-- [ ] Confirm moniker and operator address are present.
-- [ ] Confirm no private material or live-flag edits appear in gentx files.
+- [x] Confirm self-delegation denom is `unxrl`.
+- [x] Confirm moniker and operator address are present.
+- [x] Confirm no private material or live-flag edits appear in gentx files.
 - [ ] Return failed gentxs with exact failure reasons before freeze.
 - [ ] Freeze accepted gentx set.
 
@@ -115,9 +116,10 @@
 
 ## Peers
 
-- [ ] Run `scripts/testnet/generate-persistent-peers.sh`.
-- [ ] Write peer output to `coordination/validators/peer-info/`.
-- [ ] Review warnings for missing node IDs, hosts, or ports.
+- [x] Run `scripts/testnet/generate-persistent-peers.sh`.
+- [x] Write peer output to `coordination/validators/peer-info/`.
+- [x] Review warnings for missing node IDs, hosts, or ports.
+- [ ] Resolve NodeSync DNS/IP peer host confirmation.
 - [ ] Publish persistent peers string.
 - [ ] Publish per-validator peer snippets.
 - [ ] Publish seed or bootnode information if available.

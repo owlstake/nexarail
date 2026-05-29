@@ -11,7 +11,7 @@
 - Phase 18A internal coordinator candidate and public join-readiness package are prepared
 - Phase 18B intake execution is open; final public genesis freeze decision is `FREEZE_DEFER`
 - Phase 18C coordinator launch operations and incident response pack are prepared
-- Phase 17C NodeSync metadata is received; gentx JSON file content is pending local receipt and verification
+- Phase 17C NodeSync gentx is verified and accepted; peer host confirmation is pending because DNS and memo IP differ
 
 ## Architecture
 - Cosmos SDK v0.47.x
@@ -51,7 +51,7 @@
 - Phase 18A internal coordinator candidate rehearses genesis, peers, monitoring, and launch artifacts while external gentxs remain pending
 - Phase 18B tracker, message pack, intake execution doc, and freeze decision are prepared with zero submitted external gentxs
 - Phase 18C adds launch-day commands, first-hour evidence capture, incident response, support triage, genesis publication checklist, and readiness dashboard
-- Phase 17C records the first external validator metadata from NodeSync, fixes the required local `add-genesis-account` gentx-preparation step in validator docs, and keeps gentx acceptance pending until the original gentx JSON file is available
+- Phase 17C records and accepts the first external validator gentx from NodeSync, fixes the required local `add-genesis-account` gentx-preparation step in validator docs, and keeps final peer publication pending DNS/IP confirmation
 
 ## Product-Flow Evidence
 - Full product-flow suite: 487 pass / 0 fail
@@ -90,12 +90,12 @@
 - Phase 17A controlled-testnet dry-run: pass
 - Phase 17B intake validation: waiting for external submissions
 - Phase 18A coordinator candidate dry-run: pass, five internal coordinator validators, height 20, live flags false
-- Phase 18B/17C intake validation: NodeSync metadata received, zero accepted intake records, zero verified gentxs
+- Phase 18B/17C intake validation: NodeSync accepted, one verified gentx, peer host confirmation pending
 - Phase 18C launch-hour evidence dry-run: waiting-state capture passes with empty endpoint inventory
 - RC2 readiness: under evaluation; expected recommendation is defer until canonical soak and targeted governance replay gates are complete
 
 ## Remaining NO-GO Items
-- Controlled external-validator testnet launch remains pending verified gentxs, final genesis, and launch evidence
+- Controlled external-validator testnet launch remains pending peer confirmation, final genesis, launch criteria, and launch evidence
 - Final public genesis and launch time remain pending
 - Final genesis freeze gate remains deferred until verified external gentxs exist
 - Mainnet launch

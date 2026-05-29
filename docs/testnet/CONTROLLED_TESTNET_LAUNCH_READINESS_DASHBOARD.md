@@ -6,11 +6,11 @@
 
 | Area | Status | Notes |
 |---|---|---|
-| Intake status | PARTIAL | NodeSync metadata received; accepted intake records: 0 |
-| Gentx status | WAITING | Accepted: 0; rejected: 0 |
+| Intake status | PARTIAL | NodeSync accepted; additional validators pending |
+| Gentx status | PARTIAL | Accepted: 1; rejected: 0 |
 | Genesis status | DEFERRED | Final public genesis not frozen or assembled |
-| Peers status | WAITING | Persistent peers require complete external records |
-| Endpoint status | PARTIAL | NodeSync P2P-only metadata received; RPC/API/gRPC pending |
+| Peers status | PARTIAL | NodeSync peer generated; DNS/IP host confirmation pending |
+| Endpoint status | PARTIAL | NodeSync P2P-only metadata received; DNS/IP confirmation pending; RPC/API/gRPC pending |
 | Launch window status | PENDING | No UTC launch time set |
 | Monitor script status | READY | `scripts/testnet/monitor-controlled-testnet-readiness.sh` exists and handles empty inventory |
 | Launch-hour evidence status | READY | `scripts/testnet/collect-launch-hour-evidence.sh` exists and handles empty inventory |
@@ -21,12 +21,10 @@
 
 ## Current Blockers
 
-- NodeSync gentx JSON file content is not present locally.
-- No external gentxs verified.
+- NodeSync DNS/IP peer host confirmation pending.
 - NodeSync RPC/API/gRPC endpoints remain pending.
-- Persistent peers cannot be generated.
 - Final public genesis freeze decision remains `FREEZE_DEFER`.
 
 ## Next Coordinator Action
 
-Continue validator-facing intake using `docs/testnet/VALIDATOR_INTAKE_MESSAGE_PACK.md`. Do not publish final public genesis or claim a public launch until verified external validators are ready and evidence exists.
+Confirm NodeSync final peer host, continue validator-facing intake using `docs/testnet/VALIDATOR_INTAKE_MESSAGE_PACK.md`, and do not publish final public genesis or claim a public launch until launch criteria and evidence exist.

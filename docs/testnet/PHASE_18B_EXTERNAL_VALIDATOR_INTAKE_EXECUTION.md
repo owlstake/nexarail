@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-29
 **Network:** `nexarail-testnet-1`
-**Status:** intake execution open; NodeSync metadata received; gentx file pending
+**Status:** intake execution open; NodeSync gentx accepted; peer host pending confirmation
 
 ## Objective
 
@@ -15,16 +15,16 @@ Phase 18B does not fabricate validators and does not wait idly. If no validator 
 - Validator registry: `coordination/validators/validator-intake.csv`
 - Endpoint inventory: `coordination/validators/endpoint-inventory.csv`
 - Submitted validator metadata records: 1 (`NODESYNC`)
-- Accepted validator intake records: 0
-- Submitted external gentx files present locally: 0
-- Verified gentxs: 0
+- Accepted validator intake records: 1
+- Submitted external gentx files present locally: 1
+- Verified gentxs: 1
 - Rejected gentxs: 0
-- Persistent peers: waiting for complete records
+- Persistent peers: generated for NodeSync; DNS/IP host confirmation pending
 - Final public genesis: not assembled
 - Controlled external-validator testnet: not launched
 - Mainnet: NO-GO
 
-NodeSync has provided public metadata and a P2P endpoint, but the original gentx JSON file content is not present in the coordinator workspace. The record must remain pending until the file is received, its SHA256 matches the submitted hash, and gentx verification passes.
+NodeSync has provided public metadata and the original gentx JSON. SHA256 matches and the controlled gentx verifier passes. Peer host is pending confirmation because the earlier DNS endpoint differs from the gentx memo IP.
 
 ## Required Validator Fields
 

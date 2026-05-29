@@ -1,1 +1,2 @@
-# Waiting for complete validator intake records.
+# NODESYNC
+persistent_peers = ""
