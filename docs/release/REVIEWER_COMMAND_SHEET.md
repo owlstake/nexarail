@@ -17,6 +17,19 @@ cd releases/testnet-rc1
 shasum -a 256 -c checksums/SHA256SUMS
 ```
 
+## Validator CLI Node ID Check
+Pre-hotfix RC1 binaries are missing the `tendermint`/`comet` helper group required for validator onboarding. Use the patched binary set under `releases/github/v0.1.0-rc1-hotfix-cli/` (`v0.1.0-rc1-cli-hotfix`):
+```bash
+cd releases/github/v0.1.0-rc1-hotfix-cli
+shasum -a 256 -c SHA256SUMS
+./nexaraild-darwin-arm64 tendermint --help            # expect: show-node-id listed
+HOTFIX_HOME="$(mktemp -d)"
+./nexaraild-darwin-arm64 init reviewer --chain-id nexarail-devnet-1 --home "$HOTFIX_HOME"
+./nexaraild-darwin-arm64 tendermint show-node-id --home "$HOTFIX_HOME"
+./nexaraild-darwin-arm64 comet show-node-id --home "$HOTFIX_HOME"
+```
+Expected: both commands print the same 40-char hex node ID. See `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md`.
+
 ## Verify RC1 Package
 ```bash
 bash scripts/release/verify-testnet-rc1.sh

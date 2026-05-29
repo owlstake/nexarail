@@ -122,6 +122,8 @@ Validators should verify their own node ID:
 ./build/nexaraild tendermint show-node-id
 ```
 
+If the binary returns `unknown command "tendermint"`, the build is the pre-hotfix RC1 release. Use the CLI hotfix binary or build from the validator CLI hotfix commit/tag or later. See `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md`. The same group is also reachable via `comet show-node-id` or `cometbft show-node-id`.
+
 ## Seed Node Option
 
 A seed node is optional for the rehearsal. If used:

@@ -78,3 +78,4 @@ rehearsals/validator-agents/product-flows/gov-toggles/
 
 # GitHub Release asset binaries (uploaded via Releases UI, not committed to git)
 releases/github/v0.1.0-rc1/nexaraild-*
+releases/github/v0.1.0-rc1-hotfix-cli/nexaraild-*

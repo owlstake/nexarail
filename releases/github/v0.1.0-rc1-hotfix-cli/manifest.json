@@ -1,0 +1,36 @@
+{
+  "release": "v0.1.0-rc1-cli-hotfix",
+  "based_on": "v0.1.0-rc1",
+  "source_base_commit": "74f63c6c69a8397f7f9c0a9abc0fb68fc76e1dcd",
+  "source_ref": "validator CLI hotfix commit/tag",
+  "build_date_utc": "2026-05-29",
+  "ldflags_version": "0.1.0-rc1-cli-hotfix",
+  "scope": "validator CLI usability - exposes CometBFT/Tendermint helper subcommand group on `nexaraild`",
+  "assets": [
+    {
+      "file": "nexaraild-darwin-arm64",
+      "sha256": "a4bb92a437a07f9b9266792f32b3e282993834bdcc537775bf429e2e64be12ff"
+    },
+    {
+      "file": "nexaraild-linux-amd64",
+      "sha256": "0ffe09b1523a0ee8a860bbd19a402fb08809fa9eac99e9db5b51d8c00e3965a0"
+    }
+  ],
+  "commands_added": [
+    "nexaraild tendermint show-node-id",
+    "nexaraild tendermint show-validator",
+    "nexaraild tendermint show-address",
+    "nexaraild tendermint version",
+    "nexaraild tendermint unsafe-reset-all",
+    "nexaraild tendermint reset-state",
+    "nexaraild tendermint bootstrap-state",
+    "nexaraild comet show-node-id",
+    "nexaraild cometbft show-node-id"
+  ],
+  "protocol_changes": "none",
+  "economics_changes": "none",
+  "genesis_changes": "none",
+  "live_flag_changes": "none",
+  "safety": "CONTROLLED TESTNET ONLY - NOT MAINNET. Validator distribution remains pending. NXRL is a non-market evaluation denomination.",
+  "publishing_status": "not_published"
+}

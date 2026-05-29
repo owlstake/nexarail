@@ -106,6 +106,7 @@ with capabilities for merchant settlement, fee splitting, escrow, and treasury m
 		server.StartCmd(newAppCreator(), app.DefaultNodeHome),
 		server.ExportCmd(exportAppStateAndValidators, app.DefaultNodeHome),
 		server.VersionCmd(),
+		tendermintCommand(),
 		DebugP2PConfigCmd(),
 		DebugLiveFlagsCmd(),
 		DebugModuleSummaryCmd(),
