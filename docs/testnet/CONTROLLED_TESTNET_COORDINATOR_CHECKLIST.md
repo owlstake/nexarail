@@ -86,8 +86,8 @@
 - [x] Run the direct controlled gentx verifier for NodeSync.
 - [x] Copy NodeSync gentx to `coordination/validators/verified/` only after verification passes.
 - [x] Generate persistent peers from accepted records after verification.
-- [ ] Confirm whether NodeSync final peer host should use DNS or IP.
-- [ ] Re-run final genesis freeze gate after peer host confirmation.
+- [x] Confirm NodeSync final peer host uses DNS.
+- [ ] Re-run final genesis freeze gate after coordinator launch criteria are satisfied.
 
 ## Gentx Validation
 
@@ -119,7 +119,7 @@
 - [x] Run `scripts/testnet/generate-persistent-peers.sh`.
 - [x] Write peer output to `coordination/validators/peer-info/`.
 - [x] Review warnings for missing node IDs, hosts, or ports.
-- [ ] Resolve NodeSync DNS/IP peer host confirmation.
+- [x] Resolve NodeSync DNS/IP peer host confirmation.
 - [ ] Publish persistent peers string.
 - [ ] Publish per-validator peer snippets.
 - [ ] Publish seed or bootnode information if available.

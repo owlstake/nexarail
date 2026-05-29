@@ -1,14 +1,14 @@
 # Validator Submission Tracker
 
 **Network:** `nexarail-testnet-1`
-**Status:** NodeSync gentx accepted; peer host pending confirmation
-**Last updated:** 2026-05-29
+**Status:** NodeSync gentx accepted; DNS peer confirmed
+**Last updated:** 2026-05-30
 
-NodeSync has provided public validator metadata and the original gentx JSON. The canonical gentx copy matches the submitted SHA256 and passes the controlled gentx verifier. The persistent peer host remains pending confirmation because the earlier DNS endpoint differs from the gentx memo IP.
+NodeSync has provided public validator metadata and the original gentx JSON. The canonical gentx copy matches the submitted SHA256 and passes the controlled gentx verifier. The DNS peer endpoint is confirmed for generated persistent peers; the gentx memo IP is retained as a noted difference.
 
 | validator_id | moniker | contact status | node ID received | account/operator addresses received | endpoint received | gentx received | gentx hash verified | gentx accepted/rejected | peer entry generated | notes |
 |---|---|---|---|---|---|---|---|---|---|---|
-| nodesync | NODESYNC | accepted | yes | yes | P2P only; host pending confirmation | yes | yes | accepted | generated; not final until host confirmed | SHA256 `fbf829ef28330323d6850f89b7219f2d43a47e98ecce91ba16e46aef94566601`; DNS `nexarail-testnet-peer.nodesync.top` differs from gentx memo IP `178.104.162.88`. |
+| nodesync | NODESYNC | accepted | yes | yes | P2P DNS confirmed | yes | yes | accepted | generated | SHA256 `fbf829ef28330323d6850f89b7219f2d43a47e98ecce91ba16e46aef94566601`; final peer uses DNS `nexarail-testnet-peer.nodesync.top`; gentx memo IP is `178.104.162.88`. |
 
 ## Rules
 

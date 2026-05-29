@@ -1,7 +1,7 @@
 # Controlled Testnet Status
 
 **Network:** `nexarail-testnet-1`
-**Last updated:** 2026-05-29
+**Last updated:** 2026-05-30
 
 ## Current Status
 
@@ -13,14 +13,14 @@
 | Validator intake registry | OPEN - NodeSync accepted; additional validators pending |
 | Validator gentxs | 1 VERIFIED |
 | Launch time | PENDING |
-| Persistent peers | GENERATED FOR NODESYNC; peer host pending DNS/IP confirmation |
+| Persistent peers | GENERATED FOR NODESYNC; DNS peer confirmed |
 | Seed or bootnode | PENDING |
 | External validator evidence | PENDING |
 | Phase 17B intake workflow | READY |
 | Phase 18A join readiness package | READY |
 | Phase 18B intake execution | OPEN - NodeSync accepted; additional validators pending |
 | Phase 18C launch operations pack | READY |
-| Phase 17C NodeSync submission | ACCEPTED - peer host pending confirmation |
+| Phase 17C NodeSync submission | ACCEPTED - DNS peer confirmed |
 | Final genesis freeze decision | FREEZE_DEFER |
 | Local Phase 17A dry-run | PASS |
 | Internal coordinator candidate dry-run | PASS |
@@ -58,9 +58,9 @@ Current counts:
 - gentxs verified: 1;
 - gentxs rejected: 0;
 - final genesis candidate: not assembled.
-- endpoint inventory: NodeSync P2P-only metadata recorded; peer host pending DNS/IP confirmation; RPC/API/gRPC not provided.
+- endpoint inventory: NodeSync P2P-only DNS endpoint confirmed; RPC/API/gRPC not provided.
 - internal coordinator candidate: assembled from local coordinator validators only.
-- submission tracker: NodeSync gentx accepted; peer host pending confirmation.
+- submission tracker: NodeSync gentx accepted; DNS peer confirmed.
 - final genesis freeze decision: `FREEZE_DEFER`.
 
 ## Phase 18A Coordinator Candidate
@@ -86,7 +86,7 @@ Phase 18B executes real validator intake and the final public genesis freeze gat
 - validator messages: `docs/testnet/VALIDATOR_INTAKE_MESSAGE_PACK.md`;
 - freeze decision: `docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md`.
 
-Current decision: `FREEZE_DEFER` because one external gentx is verified, but the final peer host is pending confirmation and the coordinator has not frozen final public genesis.
+Current decision: `FREEZE_DEFER` because one external gentx is verified, but the coordinator has not frozen final public genesis.
 
 ## Phase 17C First External Submission
 
@@ -96,7 +96,7 @@ NodeSync submitted public validator metadata and a P2P endpoint:
 2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656
 ```
 
-The gentx SHA256 matches and the controlled gentx verifier passes. The generated peer entry currently uses the DNS endpoint, but the gentx memo uses IP `178.104.162.88`; final peer host is `PENDING_CONFIRMATION`.
+The gentx SHA256 matches and the controlled gentx verifier passes. The generated peer entry uses the confirmed DNS endpoint. The gentx memo uses IP `178.104.162.88`, which is retained as a noted difference.
 
 ## Phase 18C Launch Operations
 

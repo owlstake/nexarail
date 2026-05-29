@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-29
 **Network:** `nexarail-testnet-1`
-**Status:** intake execution open; NodeSync gentx accepted; peer host pending confirmation
+**Status:** intake execution open; NodeSync gentx accepted; DNS peer confirmed
 
 ## Objective
 
@@ -19,12 +19,12 @@ Phase 18B does not fabricate validators and does not wait idly. If no validator 
 - Submitted external gentx files present locally: 1
 - Verified gentxs: 1
 - Rejected gentxs: 0
-- Persistent peers: generated for NodeSync; DNS/IP host confirmation pending
+- Persistent peers: generated for NodeSync with confirmed DNS endpoint
 - Final public genesis: not assembled
 - Controlled external-validator testnet: not launched
 - Mainnet: NO-GO
 
-NodeSync has provided public metadata and the original gentx JSON. SHA256 matches and the controlled gentx verifier passes. Peer host is pending confirmation because the earlier DNS endpoint differs from the gentx memo IP.
+NodeSync has provided public metadata and the original gentx JSON. SHA256 matches and the controlled gentx verifier passes. The confirmed persistent peer uses DNS; the gentx memo IP is retained as a noted difference.
 
 ## Required Validator Fields
 

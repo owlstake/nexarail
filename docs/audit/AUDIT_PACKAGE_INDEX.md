@@ -289,9 +289,10 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `scripts/testnet/collect-launch-hour-evidence.sh` — Launch-hour RPC/API, peer, validator, live-flag, and evidence summarizer
 
 ### Phase 17C — First External Gentx Verification
-- `docs/testnet/PHASE_17C_FIRST_EXTERNAL_GENTX_VERIFICATION.md` — NodeSync gentx SHA256 match, verifier result, acceptance status, peer-host discrepancy, genesis decision, launch status, and next action
-- `coordination/validators/submission-tracker.md` — Tracks NodeSync as accepted with peer-host confirmation pending
-- `coordination/validators/endpoint-inventory.csv` — Records NodeSync P2P-only endpoint metadata with DNS/IP confirmation pending
+- `docs/testnet/PHASE_17C_FIRST_EXTERNAL_GENTX_VERIFICATION.md` — NodeSync gentx SHA256 match, verifier result, acceptance status, confirmed DNS peer, genesis decision, launch status, and next action
+- `docs/testnet/PHASE_17C1_NODESYNC_SUBMISSION_RECHECK.md` — Local evidence recheck for repo, downloads, attachment-like files, SHA256, validation, peer generation, and resend decision
+- `coordination/validators/submission-tracker.md` — Tracks NodeSync as accepted with DNS peer confirmed
+- `coordination/validators/endpoint-inventory.csv` — Records NodeSync P2P-only DNS endpoint metadata
 - `coordination/validators/gentxs/gentx-2bb62d82b4dbf820fdafd843816f1e72a84ffa8f.json` — Original NodeSync gentx saved under canonical filename
 - `coordination/validators/verified/gentx-2bb62d82b4dbf820fdafd843816f1e72a84ffa8f.json` — Accepted NodeSync gentx copied after SHA256 and verifier pass
 - `docs/testnet/EXTERNAL_VALIDATOR_ACTION_PACK.md` — Includes required local `add-genesis-account` step before gentx generation

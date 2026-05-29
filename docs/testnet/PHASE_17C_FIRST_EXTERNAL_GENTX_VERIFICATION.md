@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-29
 **Network:** `nexarail-testnet-1`
-**Status:** NodeSync gentx accepted; peer host pending confirmation
+**Status:** NodeSync gentx accepted; DNS peer confirmed
 
 ## NodeSync Submission Summary
 
@@ -38,6 +38,8 @@ fbf829ef28330323d6850f89b7219f2d43a47e98ecce91ba16e46aef94566601
 
 Result: **MATCH**.
 
+See `docs/testnet/PHASE_17C1_NODESYNC_SUBMISSION_RECHECK.md` for the local evidence recheck that found the downloaded attachment copy under a renamed filename and confirmed byte-for-byte equality with the canonical gentx.
+
 ## Gentx Verification Result
 
 `scripts/testnet/verify-controlled-testnet-gentx.sh` passed:
@@ -56,26 +58,26 @@ The verifier emitted one warning: chain ID is not embedded in the gentx JSON, so
 ## Acceptance Result
 
 ```text
-ACCEPTED_PEER_HOST_PENDING_CONFIRMATION
+ACCEPTED
 ```
 
 NodeSync has been added to `coordination/validators/validator-intake.csv`. The verified gentx is copied to `coordination/validators/verified/`.
 
 ## Persistent Peer Entry
 
-Generated peer entry using the earlier DNS endpoint:
+Generated peer entry using the confirmed DNS endpoint:
 
 ```text
 2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656
 ```
 
-Peer host status is `PENDING_CONFIRMATION` because the gentx memo contains:
+The gentx memo contains a direct IP:
 
 ```text
 2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@178.104.162.88:26656
 ```
 
-Ask NodeSync whether final persistent peers should use DNS `nexarail-testnet-peer.nodesync.top` or IP `178.104.162.88`.
+The generated peer uses confirmed DNS `nexarail-testnet-peer.nodesync.top:26656`. The memo IP is retained as a noted difference for operator awareness.
 
 ## Documentation Bug Fixed
 
@@ -91,7 +93,7 @@ This is local preparation only. Final coordinator genesis is assembled separatel
 
 ## Genesis Candidate Status
 
-No preliminary or final public genesis candidate was assembled in this step. One external gentx is now verified, but final public genesis remains deferred pending peer-host confirmation and coordinator launch criteria.
+No preliminary or final public genesis candidate was assembled in this step. One external gentx is now verified, but final public genesis remains deferred pending coordinator launch criteria.
 
 Freeze decision remains `FREEZE_DEFER`.
 
@@ -101,8 +103,8 @@ Controlled external-validator testnet remains **NOT LAUNCHED**. Mainnet remains 
 
 ## Next Action
 
-Ask NodeSync to confirm the final peer host:
+Continue validator intake and re-run the final genesis freeze gate when coordinator launch criteria are satisfied. Current confirmed persistent peer:
 
 ```text
-Should the final persistent peer use nexarail-testnet-peer.nodesync.top:26656 or 178.104.162.88:26656?
+2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656
 ```

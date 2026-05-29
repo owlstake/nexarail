@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-29
 **Network:** `nexarail-testnet-1`
-**Status:** intake execution open; NodeSync accepted; peer host pending confirmation
+**Status:** intake execution open; NodeSync accepted; DNS peer confirmed
 
 This document preserves the Phase 18B freeze-gate status under the legacy phase name. The detailed execution document is `docs/testnet/PHASE_18B_EXTERNAL_VALIDATOR_INTAKE_EXECUTION.md`.
 
@@ -13,8 +13,8 @@ This document preserves the Phase 18B freeze-gate status under the legacy phase 
 | Validator submissions | 1 |
 | Gentxs accepted | 1 |
 | Gentxs rejected | 0 |
-| Endpoint inventory | NodeSync P2P-only; DNS/IP confirmation pending |
-| Persistent peers | Generated for NodeSync; final peer host pending confirmation |
+| Endpoint inventory | NodeSync P2P-only DNS endpoint confirmed |
+| Persistent peers | Generated for NodeSync |
 | Final public genesis | Not assembled |
 | Freeze decision | `FREEZE_DEFER` |
 | Launch status | NOT LAUNCHED |
@@ -23,7 +23,7 @@ This document preserves the Phase 18B freeze-gate status under the legacy phase 
 
 Phase 18C adds coordinator launch rehearsal, first-hour evidence capture, incident response, support triage, rollback documentation, and launch readiness tracking while validator intake remains open.
 
-Phase 18C does not change the Phase 18B freeze decision. Final public genesis remains deferred until peer host confirmation and coordinator launch criteria are satisfied.
+Phase 18C does not change the Phase 18B freeze decision. Final public genesis remains deferred until coordinator launch criteria are satisfied.
 
 ## Safety Boundary
 

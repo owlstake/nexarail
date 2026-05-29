@@ -34,9 +34,9 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 - Phase 17A local dry-run passed with five local validators through height 20
 - Phase 17B intake workflow is ready, but no external validator records or gentxs are submitted yet
 - Phase 18A internal coordinator candidate is rehearsal-only and is not final public genesis
-- NodeSync public metadata and gentx have been received and verified, but final peer host confirmation is pending because DNS and gentx memo IP differ
+- NodeSync public metadata and gentx have been received and verified; DNS peer is confirmed and the gentx memo IP difference is noted
 - Phase 18B final genesis freeze decision is `FREEZE_DEFER` because no external gentxs are verified
-- Endpoint inventory contains NodeSync P2P-only metadata; final DNS/IP peer host confirmation and RPC/API/gRPC endpoints remain pending
+- Endpoint inventory contains NodeSync P2P-only DNS metadata; RPC/API/gRPC endpoints remain pending
 - Launch-window template is prepared, but launch date/time remains pending
 - Requires: accepted validator intake, external gentxs, final genesis, persistent peers, launch window, monitoring, and coordinator evidence
 

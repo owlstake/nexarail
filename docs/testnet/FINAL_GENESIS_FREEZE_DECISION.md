@@ -1,6 +1,6 @@
 # Final Genesis Freeze Decision
 
-**Date:** 2026-05-29
+**Date:** 2026-05-30
 **Network:** `nexarail-testnet-1`
 **Status:** FREEZE_DEFER
 
@@ -13,14 +13,14 @@
 | Gentx files received locally | 1 |
 | Gentxs accepted | 1 |
 | Gentxs rejected | 0 |
-| Endpoint records received | 1 P2P-only record; peer host pending confirmation |
-| Persistent peers | GENERATED - PENDING DNS/IP CONFIRMATION |
+| Endpoint records received | 1 P2P-only DNS record |
+| Persistent peers | GENERATED |
 | Final public genesis candidate | NOT ASSEMBLED |
 | Launch status | NOT LAUNCHED |
 
 ## Persistent Peers Status
 
-Generated persistent peer entry using the earlier DNS endpoint:
+Generated persistent peer entry using the confirmed DNS endpoint:
 
 ```text
 2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656
@@ -32,11 +32,11 @@ The gentx memo uses:
 2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@178.104.162.88:26656
 ```
 
-Final persistent peer publication is pending confirmation from NodeSync on whether to use DNS or IP.
+The confirmed persistent peer uses DNS. The gentx memo IP is retained as a noted difference for operator awareness.
 
 ## Endpoint Status
 
-`coordination/validators/endpoint-inventory.csv` records NodeSync P2P-only metadata. RPC, API, and gRPC endpoints have not been provided. Peer host status is `PENDING_CONFIRMATION`.
+`coordination/validators/endpoint-inventory.csv` records NodeSync P2P-only DNS metadata. RPC, API, and gRPC endpoints have not been provided.
 
 ## Genesis Candidate Status
 
@@ -58,11 +58,11 @@ FREEZE_DEFER
 
 ## Reason
 
-Final public genesis is not frozen because only one external gentx is verified, the final peer host is pending DNS/IP confirmation, and coordinator launch criteria have not been met.
+Final public genesis is not frozen because only one external gentx is verified and coordinator launch criteria have not been met.
 
 ## Next Required Action
 
-Ask NodeSync whether final persistent peers should use `nexarail-testnet-peer.nodesync.top:26656` or `178.104.162.88:26656`, then re-run the freeze gate after peer confirmation and coordinator launch criteria are satisfied.
+Continue validator intake and re-run the freeze gate after coordinator launch criteria are satisfied.
 
 ## Safety Boundary
 

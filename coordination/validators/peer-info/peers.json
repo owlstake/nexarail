@@ -1,5 +1,5 @@
 {
-  "status": "READY_PENDING_CONFIRMATION",
+  "status": "READY",
   "validators": [
     {
       "moniker": "NODESYNC",
@@ -9,7 +9,5 @@
     }
   ],
   "persistent_peers": "2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656",
-  "warnings": [
-    "NODESYNC peer host PENDING_CONFIRMATION: intake DNS nexarail-testnet-peer.nodesync.top differs from gentx memo IP 178.104.162.88; ask NodeSync which host to use for final peers."
-  ]
+  "warnings": []
 }

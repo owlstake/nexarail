@@ -1,1 +1,0 @@
-NODESYNC peer host PENDING_CONFIRMATION: intake DNS nexarail-testnet-peer.nodesync.top differs from gentx memo IP 178.104.162.88; ask NodeSync which host to use for final peers.
