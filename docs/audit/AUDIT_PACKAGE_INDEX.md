@@ -272,6 +272,13 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `scripts/testnet/prepare-coordinator-genesis-candidate.sh` — Internal coordinator-only genesis candidate generator
 - `scripts/testnet/monitor-controlled-testnet-readiness.sh` — RPC/API launch-readiness monitor for future controlled launch windows
 
+### Phase 18B — External Validator Intake Execution And Genesis Freeze Gate
+- `docs/testnet/PHASE_18B_EXTERNAL_VALIDATOR_INTAKE_EXECUTION.md` — Intake execution objective, fields, gentx handling, endpoint process, acceptance/rejection rules, and freeze criteria
+- `docs/testnet/VALIDATOR_INTAKE_MESSAGE_PACK.md` — Copy-paste validator coordination messages with safety wording
+- `docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md` — Current freeze decision, counts, reasons, and next required action
+- `coordination/validators/submission-tracker.md` — Submission tracker; currently awaiting validator submissions
+- `coordination/validators/endpoint-inventory.csv` — Endpoint inventory template; currently header-only
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly

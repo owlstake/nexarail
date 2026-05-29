@@ -51,6 +51,7 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | REST parity | **36/36 (100%)** — REST readback parity confirmed |
 | Phase 17A dry-run | **PASS** — local five-validator launch path reached height 20 |
 | Phase 18A readiness | **Prepared** — internal coordinator candidate and public join package only |
+| Phase 18B intake | **Open** — awaiting real validator submissions; freeze decision `FREEZE_DEFER` |
 | Launch status | `NOT_LAUNCHED` — controlled external testnet preparation only |
 
 ### Quick Links
@@ -74,6 +75,8 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | [Phase 17B Intake Status](docs/testnet/PHASE_17B_VALIDATOR_INTAKE_AND_GENESIS_CANDIDATE.md) | Validator intake, gentx, peers, and genesis candidate status |
 | [Phase 18A Coordinator Candidate](docs/testnet/PHASE_18A_INTERNAL_COORDINATOR_TESTNET_CANDIDATE.md) | Internal coordinator-only candidate plan and safety boundary |
 | [Public Join Readiness Checklist](docs/testnet/PUBLIC_JOIN_READINESS_CHECKLIST.md) | Join-readiness gates while external gentxs remain pending |
+| [Phase 18B Intake Execution](docs/testnet/PHASE_18B_EXTERNAL_VALIDATOR_INTAKE_EXECUTION.md) | External validator intake, gentx review, endpoint collection, and freeze gate |
+| [Final Genesis Freeze Decision](docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md) | Current freeze decision and next required action |
 
 ---
 
@@ -155,7 +158,7 @@ scripts/dev/run-nexarail-regression-matrix.sh --full --with-devnet
 
 ---
 
-**Runtime note:** Local 5-agent runtime readiness, the Phase 17A dry-run, and the Phase 18A internal coordinator-candidate dry-run are proven. External validator onboarding, final gentx collection, final genesis publication, and external validator launch evidence remain pending.
+**Runtime note:** Local 5-agent runtime readiness, the Phase 17A dry-run, and the Phase 18A internal coordinator-candidate dry-run are proven. Phase 18B intake execution is open, but external validator records, final gentx collection, final genesis publication, and external validator launch evidence remain pending.
 
 **🔗 [Apply to run a validator →](docs/testnet/VALIDATOR_APPLICATION_FORM.md)**
 

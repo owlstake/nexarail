@@ -9,6 +9,7 @@
 - Mainnet remains NO-GO
 - External validators remain pending
 - Phase 18A internal coordinator candidate and public join-readiness package are prepared
+- Phase 18B intake execution is open; final public genesis freeze decision is `FREEZE_DEFER`
 
 ## Architecture
 - Cosmos SDK v0.47.x
@@ -46,6 +47,7 @@
 - Phase 17A local controlled-testnet dry-run passed with five local validators through height 20
 - Phase 17B validator intake workflow is ready; external submissions are pending
 - Phase 18A internal coordinator candidate rehearses genesis, peers, monitoring, and launch artifacts while external gentxs remain pending
+- Phase 18B tracker, message pack, intake execution doc, and freeze decision are prepared with zero submitted external gentxs
 
 ## Product-Flow Evidence
 - Full product-flow suite: 487 pass / 0 fail
@@ -84,11 +86,13 @@
 - Phase 17A controlled-testnet dry-run: pass
 - Phase 17B intake validation: waiting for external submissions
 - Phase 18A coordinator candidate dry-run: pass, five internal coordinator validators, height 20, live flags false
+- Phase 18B intake validation: waiting, zero validator records, zero verified gentxs
 - RC2 readiness: under evaluation; expected recommendation is defer until canonical soak and targeted governance replay gates are complete
 
 ## Remaining NO-GO Items
 - Controlled external-validator testnet launch remains pending external intake, verified gentxs, final genesis, and launch evidence
 - Final public genesis and launch time remain pending
+- Final genesis freeze gate remains deferred until verified external gentxs exist
 - Mainnet launch
 - External validator activation
 - SDK publishing (npm/PyPI)

@@ -56,6 +56,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 project, registry, gentx_dir, verified_dir, rejected_dir, binary, chain_id, denom = sys.argv[1:9]
+project_path = Path(project)
 registry = Path(registry)
 gentx_dir = Path(gentx_dir)
 verified_dir = Path(verified_dir)
@@ -139,6 +140,13 @@ def write_outputs(summary):
     print(f"Summary JSON: {json_path}")
     print(f"Summary MD: {md_path}")
 
+def display_path(path):
+    path = Path(path)
+    try:
+        return str(path.resolve().relative_to(project_path.resolve()))
+    except ValueError:
+        return str(path)
+
 if not registry.exists():
     print(f"FAIL registry not found: {registry}", file=sys.stderr)
     sys.exit(1)
@@ -152,8 +160,8 @@ header_missing = [field for field in expected_header if field not in header]
 summary = {
     "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     "chain_id": chain_id,
-    "registry": str(registry),
-    "gentx_dir": str(gentx_dir),
+    "registry": display_path(registry),
+    "gentx_dir": display_path(gentx_dir),
     "status": "WAITING",
     "submitted_count": len(rows),
     "verified_count": 0,

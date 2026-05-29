@@ -15,6 +15,11 @@
 | Runbook exists | READY | `docs/testnet/CONTROLLED_TESTNET_RUNBOOK.md` |
 | Status doc exists | READY | `docs/testnet/CONTROLLED_TESTNET_STATUS.md` |
 | Support process exists | READY - channel placeholder pending launch window | `docs/testnet/CONTROLLED_TESTNET_LAUNCH_WINDOW_TEMPLATE.md` |
+| Intake execution doc exists | READY | `docs/testnet/PHASE_18B_EXTERNAL_VALIDATOR_INTAKE_EXECUTION.md` |
+| Validator message pack exists | READY | `docs/testnet/VALIDATOR_INTAKE_MESSAGE_PACK.md` |
+| Submission tracker exists | WAITING | `coordination/validators/submission-tracker.md` |
+| Endpoint inventory populated | WAITING | `coordination/validators/endpoint-inventory.csv` |
+| Persistent peers from external records | WAITING | `coordination/validators/peer-info/` |
 | Final genesis pending | PENDING | Requires verified external gentxs |
 | Launch time pending | PENDING | Requires final genesis and validator readiness |
 
@@ -23,6 +28,7 @@
 - Controlled external-validator testnet is not launched.
 - Mainnet remains NO-GO.
 - External validator gentxs remain pending.
+- Final public genesis freeze decision is `FREEZE_DEFER` while verified external gentx count is zero.
 - Product live flags remain false by default.
 - No token sale is announced or implied.
 - Testnet denominations have no monetary value.

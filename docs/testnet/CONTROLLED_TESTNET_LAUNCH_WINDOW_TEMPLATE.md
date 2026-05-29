@@ -14,6 +14,19 @@
 | Genesis hash | TBD |
 | Persistent peers | TBD |
 | Seed nodes | TBD |
+| Final genesis freeze decision | `FREEZE_DEFER` until verified external gentxs exist |
+
+## Freeze Gate Before Scheduling
+
+- [ ] Accepted external validator count is greater than zero.
+- [ ] Verified gentx count matches accepted validator count.
+- [ ] Endpoint inventory is complete enough for launch monitoring.
+- [ ] Persistent peers generated from accepted records.
+- [ ] Final public genesis candidate assembled and validated.
+- [ ] Genesis checksum independently verified.
+- [ ] Product live flags remain false.
+- [ ] No secret material in launch artifacts.
+- [ ] Support channel and coordinator contact path confirmed.
 
 ## First-Block Checklist
 

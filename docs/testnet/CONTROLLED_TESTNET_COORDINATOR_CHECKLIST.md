@@ -45,6 +45,22 @@
 - [ ] Final public genesis reviewed after verified external gentxs exist.
 - [ ] Launch time confirmed.
 
+## Phase 18B Intake Execution
+
+- [x] Create external validator intake execution doc.
+- [x] Create submission tracker.
+- [x] Create validator intake message pack.
+- [x] Validate current intake state.
+- [x] Confirm no external validator submissions are present.
+- [x] Confirm registry remains empty until real submissions arrive.
+- [x] Generate waiting-state persistent peer outputs.
+- [x] Create final genesis freeze decision.
+- [x] Defer final public genesis because verified gentx count is zero.
+- [ ] Add real public validator records after receipt.
+- [ ] Verify submitted gentxs.
+- [ ] Generate final public persistent peers from complete records.
+- [ ] Freeze final public genesis after accepted external gentxs exist.
+
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.
