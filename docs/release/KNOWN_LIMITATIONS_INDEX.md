@@ -32,6 +32,7 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 ## Public Testnet Limitations
 - Controlled external-validator testnet launch: NOT LAUNCHED
 - Phase 17A local dry-run passed with five local validators through height 20
+- Phase 17B intake workflow is ready, but no external validator records or gentxs are submitted yet
 - Requires: accepted validator intake, external gentxs, final genesis, persistent peers, launch window, monitoring, and coordinator evidence
 
 ## Mainnet Limitations
@@ -42,6 +43,7 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 - External validators: PENDING
 - ValConsensus-based validator set supported but untested with external nodes
 - No external validator has been configured or run against this chain
+- No external gentx has been verified for the final controlled-testnet genesis candidate
 - External decentralisation is not claimed until accepted external validators are running and evidenced
 
 ## Governance Limitations

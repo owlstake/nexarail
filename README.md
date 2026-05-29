@@ -45,7 +45,7 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | Controlled external-validator launch | **Preparing** — source-build path, intake, gentx, genesis, and peer tooling are ready |
 | Public launch | **NOT LAUNCHED** — final genesis and external validator evidence are pending |
 | Mainnet | **NO** — This is NOT mainnet |
-| Validator onboarding | Pending — external intake and gentx collection remain open |
+| Validator onboarding | Intake open — external records and gentxs are awaiting submission |
 | Live flags | **Disabled by default** — all 6 live flags are `false` in genesis |
 | Product-flow suite | **487 pass / 0 fail** — full coverage validated |
 | REST parity | **36/36 (100%)** — REST readback parity confirmed |
@@ -70,6 +70,7 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | [Controlled Testnet Launch Plan](docs/testnet/PHASE_17A_CONTROLLED_TESTNET_LAUNCH_PLAN.md) | Phase 17A external-validator launch candidate plan |
 | [Validator Action Pack](docs/testnet/EXTERNAL_VALIDATOR_ACTION_PACK.md) | Source-build onboarding commands for accepted validators |
 | [Controlled Testnet Status](docs/testnet/CONTROLLED_TESTNET_STATUS.md) | Current launch status and guardrails |
+| [Phase 17B Intake Status](docs/testnet/PHASE_17B_VALIDATOR_INTAKE_AND_GENESIS_CANDIDATE.md) | Validator intake, gentx, peers, and genesis candidate status |
 
 ---
 

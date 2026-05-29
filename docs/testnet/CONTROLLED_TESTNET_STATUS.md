@@ -8,12 +8,14 @@
 | Item | Status |
 |---|---|
 | Controlled external-validator testnet | NOT LAUNCHED |
-| Genesis | PENDING |
-| Validator gentxs | PENDING |
+| Genesis candidate | PENDING - waiting for verified gentxs |
+| Validator intake registry | OPEN - awaiting submissions |
+| Validator gentxs | WAITING |
 | Launch time | PENDING |
-| Persistent peers | PENDING |
+| Persistent peers | WAITING - no complete external records yet |
 | Seed or bootnode | PENDING |
 | External validator evidence | PENDING |
+| Phase 17B intake workflow | READY |
 | Local Phase 17A dry-run | PASS |
 | Product live flags | FALSE BY DESIGN |
 | Mainnet | NO-GO |
@@ -30,6 +32,23 @@ make build
 ```
 
 Prebuilt hotfix binary upload is not the validator path until release asset permissions are resolved and checksums are published through the GitHub release.
+
+## Phase 17B Intake Status
+
+Current coordination workspace:
+
+- intake registry: `coordination/validators/validator-intake.csv`;
+- pending gentxs: `coordination/validators/gentxs/`;
+- verified gentxs and validation summaries: `coordination/validators/verified/`;
+- rejected gentxs and reason files: `coordination/validators/rejected/`;
+- peer output: `coordination/validators/peer-info/`.
+
+Current counts:
+
+- validator records submitted: 0;
+- gentxs verified: 0;
+- gentxs rejected: 0;
+- final genesis candidate: not assembled.
 
 ## Local Dry-Run Evidence
 

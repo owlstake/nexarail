@@ -10,7 +10,7 @@ usage() {
 Usage: scripts/testnet/generate-persistent-peers.sh --input <intake.csv|intake.json> [--output-dir <dir>]
 
 Expected CSV fields include:
-  moniker,node_id,public_ip_or_dns,p2p_port
+  moniker,node_id,public_host,p2p_port
 
 JSON may be either a list of validator objects or {"validators": [...]}.
 EOF
@@ -19,7 +19,7 @@ EOF
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --input) INPUT="$2"; shift 2 ;;
-        --output-dir) OUTPUT_DIR="$2"; shift 2 ;;
+        --output-dir|--output) OUTPUT_DIR="$2"; shift 2 ;;
         -h|--help) usage; exit 0 ;;
         *) echo "Unknown argument: $1" >&2; usage >&2; exit 2 ;;
     esac
@@ -68,7 +68,7 @@ node_re = re.compile(r"^[0-9a-fA-F]{40}$")
 for idx, record in enumerate(records, 1):
     moniker = get(record, "moniker", "name") or f"validator-{idx}"
     node_id = get(record, "node_id", "nodeID", "nodeid")
-    host = get(record, "public_ip_or_dns", "host", "public_ip", "dns", "ip")
+    host = get(record, "public_host", "public_ip_or_dns", "host", "public_ip", "dns", "ip")
     port = get(record, "p2p_port", "port") or "26656"
     missing = []
     if not node_id:
@@ -85,10 +85,24 @@ for idx, record in enumerate(records, 1):
     valid.append({"moniker": moniker, "node_id": node_id.lower(), "host": host, "port": str(port)})
 
 if not valid:
+    status = "WAITING" if not records else "NO_VALID_PEERS"
     for warning in warnings:
         print(f"WARN {warning}", file=sys.stderr)
-    print("FAIL no valid peers generated", file=sys.stderr)
-    sys.exit(1)
+    print(f"{status} no valid peers generated", file=sys.stderr)
+    if outdir:
+        os.makedirs(outdir, exist_ok=True)
+        for filename in ("persistent-peers.txt", "persistent_peers.txt"):
+            with open(os.path.join(outdir, filename), "w") as f:
+                f.write("")
+        with open(os.path.join(outdir, "per-validator-config.toml"), "w") as f:
+            f.write("# Waiting for complete validator intake records.\n")
+        with open(os.path.join(outdir, "warnings.txt"), "w") as f:
+            for warning in warnings:
+                f.write(warning + "\n")
+        with open(os.path.join(outdir, "peers.json"), "w") as f:
+            json.dump({"status": status, "validators": [], "persistent_peers": "", "warnings": warnings}, f, indent=2)
+            f.write("\n")
+    sys.exit(0)
 
 peer_entries = [f"{v['node_id']}@{v['host']}:{v['port']}" for v in valid]
 peer_string = ",".join(peer_entries)
@@ -104,15 +118,16 @@ for validator in valid:
     snippets.append(f"# {validator['moniker']}\npersistent_peers = \"{','.join(peers)}\"\n")
 
 if outdir:
-    with open(os.path.join(outdir, "persistent_peers.txt"), "w") as f:
-        f.write(peer_string + "\n")
+    for filename in ("persistent-peers.txt", "persistent_peers.txt"):
+        with open(os.path.join(outdir, filename), "w") as f:
+            f.write(peer_string + "\n")
     with open(os.path.join(outdir, "per-validator-config.toml"), "w") as f:
         f.write("\n".join(snippets))
     with open(os.path.join(outdir, "warnings.txt"), "w") as f:
         for warning in warnings:
             f.write(warning + "\n")
     with open(os.path.join(outdir, "peers.json"), "w") as f:
-        json.dump({"validators": valid, "persistent_peers": peer_string, "warnings": warnings}, f, indent=2)
+        json.dump({"status": "READY", "validators": valid, "persistent_peers": peer_string, "warnings": warnings}, f, indent=2)
         f.write("\n")
 
 for warning in warnings:

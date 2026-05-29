@@ -172,3 +172,16 @@ The controlled-testnet launch tooling passed a local five-validator dry-run on 2
 - `tendermint show-node-id` and `comet show-node-id` passed.
 
 Dry-run results are recorded in `docs/testnet/PHASE_17A_CONTROLLED_TESTNET_DRY_RUN_RESULTS.md`. This is rehearsal evidence only; the public controlled testnet remains not launched.
+
+## Phase 17B Handoff
+
+Phase 17B moves this plan into real intake coordination:
+
+- registry: `coordination/validators/validator-intake.csv`;
+- pending gentxs: `coordination/validators/gentxs/`;
+- verified gentxs: `coordination/validators/verified/`;
+- rejected gentxs: `coordination/validators/rejected/`;
+- peer output: `coordination/validators/peer-info/`;
+- status doc: `docs/testnet/PHASE_17B_VALIDATOR_INTAKE_AND_GENESIS_CANDIDATE.md`.
+
+Final genesis remains pending until verified external gentxs exist.

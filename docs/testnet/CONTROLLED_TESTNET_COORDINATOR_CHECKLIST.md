@@ -7,14 +7,19 @@
 
 - [ ] Publish validator intake template.
 - [ ] Confirm accepted validator list.
+- [ ] Populate `coordination/validators/validator-intake.csv` with non-secret intake records only.
 - [ ] Collect moniker, contact, operator address, account address, node ID, host, P2P port, gentx hash, build tag/commit, OS/arch, and sentry layout.
 - [ ] Confirm each validator acknowledged testnet-only and no monetary-value terms.
 - [ ] Confirm no validator sent secrets or node data.
+- [ ] Run `scripts/testnet/validate-validator-intake.sh`.
 
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.
+- [ ] Store pending gentxs in `coordination/validators/gentxs/`.
 - [ ] Run `scripts/testnet/verify-controlled-testnet-gentx.sh` for every gentx.
+- [ ] Copy verified gentxs to `coordination/validators/verified/`.
+- [ ] Copy rejected gentxs to `coordination/validators/rejected/` with reason files.
 - [ ] Confirm gentxs are collected into a `nexarail-testnet-1` genesis and `collect-gentxs` signature validation passes.
 - [ ] Confirm self-delegation denom is `unxrl`.
 - [ ] Confirm moniker and operator address are present.
@@ -25,6 +30,7 @@
 ## Genesis Assembly
 
 - [ ] Run `scripts/testnet/assemble-controlled-testnet-genesis.sh`.
+- [ ] Do not assemble final genesis until verified gentx count is greater than zero.
 - [ ] Confirm `validate-genesis` passes.
 - [ ] Confirm all product live flags remain false.
 - [ ] Write final genesis to `releases/testnet-genesis/nexarail-testnet-1/genesis.json`.
@@ -35,6 +41,7 @@
 ## Peers
 
 - [ ] Run `scripts/testnet/generate-persistent-peers.sh`.
+- [ ] Write peer output to `coordination/validators/peer-info/`.
 - [ ] Review warnings for missing node IDs, hosts, or ports.
 - [ ] Publish persistent peers string.
 - [ ] Publish per-validator peer snippets.

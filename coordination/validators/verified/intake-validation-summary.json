@@ -1,0 +1,13 @@
+{
+  "generated_utc": "2026-05-29T14:27:41Z",
+  "chain_id": "nexarail-testnet-1",
+  "registry": "/Users/bradleyjohnston/workspace/nexarail/coordination/validators/validator-intake.csv",
+  "gentx_dir": "/Users/bradleyjohnston/workspace/nexarail/coordination/validators/gentxs",
+  "status": "WAITING",
+  "submitted_count": 0,
+  "verified_count": 0,
+  "rejected_count": 0,
+  "waiting_count": 0,
+  "header_missing": [],
+  "validators": []
+}

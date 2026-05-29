@@ -43,6 +43,7 @@
 - Phase 16A.7 governance vote reliability hardened with per-agent RPC voting and retry/sequence refresh
 - Phase 16F validator CLI hotfix exposes `tendermint`, `comet`, and `cometbft` helper command groups
 - Phase 17A local controlled-testnet dry-run passed with five local validators through height 20
+- Phase 17B validator intake workflow is ready; external submissions are pending
 
 ## Product-Flow Evidence
 - Full product-flow suite: 487 pass / 0 fail
@@ -79,10 +80,11 @@
 - RC1 verification: 37/37 pass
 - Phase 16C local load simulation: pass
 - Phase 17A controlled-testnet dry-run: pass
+- Phase 17B intake validation: waiting for external submissions
 - RC2 readiness: under evaluation; expected recommendation is defer until canonical soak and targeted governance replay gates are complete
 
 ## Remaining NO-GO Items
-- Controlled external-validator testnet launch remains pending final external gentxs, final genesis, and launch evidence
+- Controlled external-validator testnet launch remains pending external intake, verified gentxs, final genesis, and launch evidence
 - Mainnet launch
 - External validator activation
 - SDK publishing (npm/PyPI)

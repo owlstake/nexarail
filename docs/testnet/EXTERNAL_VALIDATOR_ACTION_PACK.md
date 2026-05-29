@@ -99,8 +99,9 @@ Record your validator consensus pubkey:
 Create your validator account key:
 
 ```bash
-./build/nexaraild keys add <key-name> --keyring-backend file --home "$NXR_HOME"
-./build/nexaraild keys show <key-name> -a --keyring-backend file --home "$NXR_HOME"
+./build/nexaraild keys add <key-name> --home "$NXR_HOME" --keyring-backend test
+./build/nexaraild keys show <key-name> -a --home "$NXR_HOME" --keyring-backend test
+./build/nexaraild keys show <key-name> --bech val -a --home "$NXR_HOME" --keyring-backend test
 ```
 
 Back up the mnemonic offline. Never share it with the coordinator.
@@ -111,12 +112,13 @@ After the coordinator provides the genesis template and confirms your account fu
 
 ```bash
 ./build/nexaraild gentx <key-name> 500000000unxrl \
+  --moniker <your-moniker> \
   --chain-id "$NXR_CHAIN_ID" \
   --commission-rate 0.05 \
   --commission-max-rate 0.20 \
   --commission-max-change-rate 0.01 \
   --min-self-delegation 1 \
-  --keyring-backend file \
+  --keyring-backend test \
   --home "$NXR_HOME"
 ```
 
@@ -143,10 +145,35 @@ Never submit:
 - account private key;
 - `priv_validator_key.json`;
 - `node_key.json`;
-- keyring directory;
-- SSH keys.
+- keyring files or directories;
+- SSH keys;
+- data directory.
 
 The coordinator will validate gentxs with `scripts/testnet/verify-controlled-testnet-gentx.sh`, assemble the final genesis candidate, and publish the checksum.
+
+## Intake Registry Fields
+
+Send the coordinator these non-secret values:
+
+```text
+validator_id:
+moniker:
+contact:
+operator_address:
+account_address:
+node_id:
+public_host:
+p2p_port:
+gentx_filename:
+gentx_sha256:
+build_tag: v0.1.0-rc1-cli-hotfix
+build_commit:
+os_arch:
+status: submitted
+notes:
+```
+
+Coordinator registry path: `coordination/validators/validator-intake.csv`.
 
 ## Configuration
 

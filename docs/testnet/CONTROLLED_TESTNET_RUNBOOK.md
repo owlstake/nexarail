@@ -25,8 +25,9 @@ export NXR_CHAIN_ID="nexarail-testnet-1"
 ## 3. Create Or Recover Validator Account
 
 ```bash
-./build/nexaraild keys add <key-name> --keyring-backend file --home "$NXR_HOME"
-./build/nexaraild keys show <key-name> -a --keyring-backend file --home "$NXR_HOME"
+./build/nexaraild keys add <key-name> --home "$NXR_HOME" --keyring-backend test
+./build/nexaraild keys show <key-name> -a --home "$NXR_HOME" --keyring-backend test
+./build/nexaraild keys show <key-name> --bech val -a --home "$NXR_HOME" --keyring-backend test
 ```
 
 Back up the mnemonic offline. Do not send it to the coordinator.
@@ -47,13 +48,20 @@ Create gentx only after the coordinator confirms the chain ID, build tag, and ge
 
 ```bash
 ./build/nexaraild gentx <key-name> 500000000unxrl \
+  --moniker <moniker> \
   --chain-id "$NXR_CHAIN_ID" \
   --commission-rate 0.05 \
   --commission-max-rate 0.20 \
   --commission-max-change-rate 0.01 \
   --min-self-delegation 1 \
-  --keyring-backend file \
+  --keyring-backend test \
   --home "$NXR_HOME"
+```
+
+Record the gentx hash:
+
+```bash
+shasum -a 256 "$NXR_HOME/config/gentx/gentx-"*.json
 ```
 
 Submit only:
@@ -63,6 +71,8 @@ $NXR_HOME/config/gentx/gentx-*.json
 ```
 
 Never submit account mnemonics, private keys, node keys, validator signing keys, keyrings, SSH keys, or node data directories.
+
+Coordinator intake registry path: `coordination/validators/validator-intake.csv`.
 
 ## 6. Install Final Genesis
 

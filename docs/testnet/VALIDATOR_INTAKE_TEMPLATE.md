@@ -35,10 +35,10 @@ Submit one completed record per validator. Do not include secrets, key files, no
 
 ## CSV Header
 
-Use this header if submitting intake as CSV:
+Use this header if submitting intake as CSV for the coordinator registry:
 
 ```csv
-moniker,contact_handle,operator_address,account_address,node_id,public_ip_or_dns,p2p_port,gentx_filename,gentx_sha256,build_commit_or_tag,os_arch,sentry_layout,ack_testnet_only
+validator_id,moniker,contact,operator_address,account_address,node_id,public_host,p2p_port,gentx_filename,gentx_sha256,build_tag,build_commit,os_arch,status,notes
 ```
 
 ## Field Requirements
@@ -46,15 +46,49 @@ moniker,contact_handle,operator_address,account_address,node_id,public_ip_or_dns
 | Field | Required | Notes |
 |---|---|---|
 | `moniker` | yes | Must match the gentx validator description. |
-| `contact_handle` | yes | Support-channel handle or direct contact approved by the coordinator. |
+| `validator_id` | yes | Coordinator-assigned short ID, for example `validator-01`. |
+| `contact` | yes | Support-channel handle or direct contact approved by the coordinator. |
 | `operator_address` | yes | `nxrvaloper...` address from the gentx. |
 | `account_address` | yes | `nxr...` account used to create the gentx. |
 | `node_id` | yes | Output of `nexaraild tendermint show-node-id`. |
-| `public_ip_or_dns` | yes | Public host peers can dial. |
+| `public_host` | yes | Public IP or DNS peers can dial. |
 | `p2p_port` | yes | Default `26656` unless coordinated otherwise. |
 | `gentx_filename` | yes | File name only, not a path containing local secrets. |
 | `gentx_sha256` | yes | SHA256 of the submitted gentx file. |
-| `build_commit_or_tag` | yes | Use `v0.1.0-rc1-cli-hotfix` or a later approved commit/tag. |
+| `build_tag` | yes | Use `v0.1.0-rc1-cli-hotfix` unless the coordinator approves another tag. |
+| `build_commit` | yes | Commit hash used for the build. |
 | `os_arch` | yes | Example: `ubuntu-22.04/amd64`. |
-| `sentry_layout` | yes | `yes` or `no`; include public sentry host if applicable. |
-| `ack_testnet_only` | yes | Must be `yes`. |
+| `status` | yes | `submitted`, `verified`, `rejected`, or `waiting`. |
+| `notes` | no | Keep non-secret; do not include private contact notes. |
+
+## Field Collection Commands
+
+```bash
+git clone https://github.com/Bookings-cpu/nexarail.git
+cd nexarail
+git checkout v0.1.0-rc1-cli-hotfix
+make build
+
+export NXR_HOME="$HOME/.nexarail-testnet"
+export NXR_CHAIN_ID="nexarail-testnet-1"
+
+./build/nexaraild init <moniker> --chain-id "$NXR_CHAIN_ID" --home "$NXR_HOME"
+./build/nexaraild tendermint show-node-id --home "$NXR_HOME"
+./build/nexaraild keys add <key-name> --home "$NXR_HOME" --keyring-backend test
+./build/nexaraild keys show <key-name> -a --home "$NXR_HOME" --keyring-backend test
+./build/nexaraild keys show <key-name> --bech val -a --home "$NXR_HOME" --keyring-backend test
+./build/nexaraild gentx <key-name> 500000000unxrl \
+  --moniker <moniker> \
+  --chain-id "$NXR_CHAIN_ID" \
+  --commission-rate 0.05 \
+  --commission-max-rate 0.20 \
+  --commission-max-change-rate 0.01 \
+  --min-self-delegation 1 \
+  --keyring-backend test \
+  --home "$NXR_HOME"
+
+shasum -a 256 "$NXR_HOME/config/gentx/gentx-"*.json
+git rev-parse HEAD
+```
+
+Submit only the `gentx-*.json` file plus the non-secret intake fields. Do not send mnemonics, private keys, node keys, validator signing keys, keyring files, SSH keys, or node data.
