@@ -288,6 +288,13 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `docs/testnet/CONTROLLED_TESTNET_LAUNCH_READINESS_DASHBOARD.md` — Manual readiness dashboard for intake, genesis, peers, endpoints, monitor, rollback, support, and safety status
 - `scripts/testnet/collect-launch-hour-evidence.sh` — Launch-hour RPC/API, peer, validator, live-flag, and evidence summarizer
 
+### Phase 17C — First External Gentx Verification
+- `docs/testnet/PHASE_17C_FIRST_EXTERNAL_GENTX_VERIFICATION.md` — NodeSync metadata receipt, missing gentx file blocker, claimed SHA256, peer endpoint, docs fix, genesis decision, launch status, and next action
+- `coordination/validators/submission-tracker.md` — Tracks NodeSync as metadata received with gentx file content pending
+- `coordination/validators/endpoint-inventory.csv` — Records NodeSync P2P-only endpoint metadata
+- `docs/testnet/EXTERNAL_VALIDATOR_ACTION_PACK.md` — Includes required local `add-genesis-account` step before gentx generation
+- `docs/testnet/VALIDATOR_SUBMISSION_CHECKLIST.md` — Includes required local `add-genesis-account` check before gentx submission
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly

@@ -27,6 +27,10 @@ This is controlled testnet preparation only. It is not mainnet. No token sale is
 Please generate and send your gentx for nexarail-testnet-1 after confirming your build tag or commit.
 
 Command:
+./build/nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl \
+  --home "$NXR_HOME" \
+  --keyring-backend test
+
 ./build/nexaraild gentx <key-name> 500000000unxrl \
   --moniker <moniker> \
   --chain-id nexarail-testnet-1 \
@@ -36,6 +40,8 @@ Command:
   --min-self-delegation 1 \
   --keyring-backend test \
   --home "$NXR_HOME"
+
+The `add-genesis-account` command is a local gentx preparation step only. The coordinator assembles final genesis separately from accepted gentxs.
 
 Then send:
 - the gentx JSON file only;

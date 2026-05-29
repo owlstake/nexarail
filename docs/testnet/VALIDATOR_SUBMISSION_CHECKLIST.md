@@ -18,10 +18,14 @@ Submit this checklist with your non-secret validator intake record and `gentx-*.
 
 - [ ] Recorded account address from `keys show <key-name> -a`.
 - [ ] Recorded operator address from `keys show <key-name> --bech val -a`.
+- [ ] Added the account to the local gentx-preparation genesis:
+  `./build/nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl --home "$NXR_HOME" --keyring-backend test`.
 - [ ] Created gentx with amount `500000000unxrl`.
 - [ ] Included moniker, chain ID, commission rate, commission max rate, commission max change rate, min self delegation, keyring backend, and home in the gentx command.
 - [ ] Recorded gentx filename.
 - [ ] Recorded gentx SHA256 with `shasum -a 256 "$NXR_HOME/config/gentx/gentx-"*.json`.
+
+The `add-genesis-account` command is only for local gentx preparation. The coordinator assembles final genesis separately from accepted gentxs.
 
 ## Network Readiness
 

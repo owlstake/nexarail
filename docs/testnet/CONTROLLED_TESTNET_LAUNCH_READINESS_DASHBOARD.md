@@ -6,11 +6,11 @@
 
 | Area | Status | Notes |
 |---|---|---|
-| Intake status | WAITING | Validator submissions: 0 |
+| Intake status | PARTIAL | NodeSync metadata received; accepted intake records: 0 |
 | Gentx status | WAITING | Accepted: 0; rejected: 0 |
 | Genesis status | DEFERRED | Final public genesis not frozen or assembled |
 | Peers status | WAITING | Persistent peers require complete external records |
-| Endpoint status | WAITING | Endpoint inventory is header-only |
+| Endpoint status | PARTIAL | NodeSync P2P-only metadata received; RPC/API/gRPC pending |
 | Launch window status | PENDING | No UTC launch time set |
 | Monitor script status | READY | `scripts/testnet/monitor-controlled-testnet-readiness.sh` exists and handles empty inventory |
 | Launch-hour evidence status | READY | `scripts/testnet/collect-launch-hour-evidence.sh` exists and handles empty inventory |
@@ -21,9 +21,9 @@
 
 ## Current Blockers
 
-- No external validator records received.
-- No external gentxs received.
-- No endpoint inventory records received.
+- NodeSync gentx JSON file content is not present locally.
+- No external gentxs verified.
+- NodeSync RPC/API/gRPC endpoints remain pending.
 - Persistent peers cannot be generated.
 - Final public genesis freeze decision remains `FREEZE_DEFER`.
 

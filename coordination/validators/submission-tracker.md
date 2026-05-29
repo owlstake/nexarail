@@ -1,14 +1,14 @@
 # Validator Submission Tracker
 
 **Network:** `nexarail-testnet-1`
-**Status:** awaiting validator submissions
+**Status:** NodeSync metadata received; gentx file content pending local receipt
 **Last updated:** 2026-05-29
 
-No external validator submissions have been received yet. Do not add placeholder validators or inferred records.
+NodeSync has provided public validator metadata and a claimed gentx filename/SHA256. The gentx JSON file content is not present in the local workspace yet, so SHA256 and gentx verification remain pending.
 
 | validator_id | moniker | contact status | node ID received | account/operator addresses received | endpoint received | gentx received | gentx hash verified | gentx accepted/rejected | peer entry generated | notes |
 |---|---|---|---|---|---|---|---|---|---|---|
-| - | - | awaiting validator submissions | no | no | no | no | no | waiting | no | Registry remains header-only. |
+| nodesync | NODESYNC | metadata received | yes | yes | P2P only | file content pending | no | waiting for gentx file | no | Claimed gentx SHA256 `fbf829ef28330323d6850f89b7219f2d43a47e98ecce91ba16e46aef94566601`; request resend/upload of JSON file. |
 
 ## Rules
 

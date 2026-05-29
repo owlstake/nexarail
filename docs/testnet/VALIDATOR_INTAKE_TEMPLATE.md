@@ -77,6 +77,9 @@ export NXR_CHAIN_ID="nexarail-testnet-1"
 ./build/nexaraild keys add <key-name> --home "$NXR_HOME" --keyring-backend test
 ./build/nexaraild keys show <key-name> -a --home "$NXR_HOME" --keyring-backend test
 ./build/nexaraild keys show <key-name> --bech val -a --home "$NXR_HOME" --keyring-backend test
+./build/nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl \
+  --home "$NXR_HOME" \
+  --keyring-backend test
 ./build/nexaraild gentx <key-name> 500000000unxrl \
   --moniker <moniker> \
   --chain-id "$NXR_CHAIN_ID" \
@@ -90,5 +93,7 @@ export NXR_CHAIN_ID="nexarail-testnet-1"
 shasum -a 256 "$NXR_HOME/config/gentx/gentx-"*.json
 git rev-parse HEAD
 ```
+
+The `add-genesis-account` command is local gentx preparation only. The coordinator assembles final genesis separately from accepted gentxs.
 
 Submit only the `gentx-*.json` file plus the non-secret intake fields. Do not send mnemonics, private keys, node keys, validator signing keys, keyring files, SSH keys, or node data.

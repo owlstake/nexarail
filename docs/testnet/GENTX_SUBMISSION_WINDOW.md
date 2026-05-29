@@ -57,13 +57,16 @@ Quick reference:
 ```bash
 nexaraild init <moniker> --chain-id nexarail-testnet-1
 nexaraild keys add <key-name>
-# Wait for coordinator to fund your account
+nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl \
+  --keyring-backend test
 nexaraild gentx <key-name> 500000000unxrl \
   --chain-id nexarail-testnet-1 \
   --commission-rate 0.05 \
   --commission-max-rate 0.20 \
   --commission-max-change-rate 0.01
 ```
+
+`add-genesis-account` is local gentx preparation only. The coordinator assembles final genesis separately from accepted gentxs.
 
 ## Verification Process
 

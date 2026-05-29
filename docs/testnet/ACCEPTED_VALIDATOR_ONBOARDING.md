@@ -84,10 +84,12 @@ Work through these items in order. Check each when complete.
 
 ### Step 7: Gentx
 
-- [ ] Account funded by coordinator (check balance)
+- [ ] Local gentx-preparation account added: `nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl --keyring-backend test`
 - [ ] Gentx created: `nexaraild gentx <key-name> 500000000unxrl --chain-id nexarail-testnet-1 --commission-rate X --commission-max-rate Y --commission-max-change-rate Z`
 - [ ] Gentx file located at `~/.nexarail/config/gentx/gentx-*.json`
 - [ ] Gentx submitted to coordinator
+
+`add-genesis-account` is local gentx preparation only. The coordinator assembles final genesis separately from accepted gentxs.
 
 ### Step 8: Join Community
 

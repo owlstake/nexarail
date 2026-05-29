@@ -63,10 +63,12 @@ Complete each item before submitting your gentx. Check the box when done.
 
 | # | Task | Done |
 |---|---|---|
-| 5.1 | Account funded (coordinator will provide faucet tokens) | ☐ |
+| 5.1 | Local gentx-preparation account added with `nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl --keyring-backend test` | ☐ |
 | 5.2 | `nexaraild gentx <key-name> 500000000unxrl --chain-id nexarail-testnet-1` succeeds | ☐ |
 | 5.3 | Gentx file located at `<home>/config/gentx/gentx-*.json` | ☐ |
 | 5.4 | Gentx submitted to coordinator (do NOT include private keys) | ☐ |
+
+`add-genesis-account` is local gentx preparation only. The coordinator assembles final genesis separately from accepted gentxs.
 
 ## Understanding
 

@@ -30,6 +30,10 @@ Send only the node ID, moniker, public host/DNS, P2P port, build tag/commit, and
 Please generate your gentx for nexarail-testnet-1.
 
 Command:
+./build/nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl \
+  --home "$NXR_HOME" \
+  --keyring-backend test
+
 ./build/nexaraild gentx <key-name> 500000000unxrl \
   --moniker <moniker> \
   --chain-id "$NXR_CHAIN_ID" \
@@ -39,6 +43,8 @@ Command:
   --min-self-delegation 1 \
   --keyring-backend test \
   --home "$NXR_HOME"
+
+The add-genesis-account command is a local gentx preparation step only. The coordinator assembles final genesis separately from accepted gentxs.
 
 Then send:
 - gentx-*.json

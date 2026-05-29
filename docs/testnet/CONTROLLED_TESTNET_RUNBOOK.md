@@ -62,6 +62,16 @@ The `tendermint` and `comet` node ID commands should print the same 40-character
 
 Create gentx only after the coordinator confirms the chain ID, build tag, and genesis-account funding amount.
 
+Add the validator account to the local gentx-preparation genesis:
+
+```bash
+./build/nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl \
+  --home "$NXR_HOME" \
+  --keyring-backend test
+```
+
+This does not publish final genesis. It only prepares the validator's local genesis state so `gentx` can be generated.
+
 ```bash
 ./build/nexaraild gentx <key-name> 500000000unxrl \
   --moniker <moniker> \

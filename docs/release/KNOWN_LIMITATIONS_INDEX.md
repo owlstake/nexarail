@@ -34,8 +34,9 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 - Phase 17A local dry-run passed with five local validators through height 20
 - Phase 17B intake workflow is ready, but no external validator records or gentxs are submitted yet
 - Phase 18A internal coordinator candidate is rehearsal-only and is not final public genesis
+- NodeSync public metadata and P2P endpoint have been received, but the original gentx JSON file content is not present locally and cannot be verified yet
 - Phase 18B final genesis freeze decision is `FREEZE_DEFER` because no external gentxs are verified
-- Endpoint inventory is a header-only template until real endpoints are provided
+- Endpoint inventory contains NodeSync P2P-only metadata; RPC/API/gRPC endpoints remain pending
 - Launch-window template is prepared, but launch date/time remains pending
 - Requires: accepted validator intake, external gentxs, final genesis, persistent peers, launch window, monitoring, and coordinator evidence
 
@@ -46,7 +47,7 @@ See [REST Readback Limitations](../api/REST_READBACK_LIMITATIONS.md) for full li
 ## External Validator Limitations
 - External validators: PENDING
 - ValConsensus-based validator set supported but untested with external nodes
-- No external validator has been configured or run against this chain
+- No accepted external validator has been configured or run against this chain
 - No external gentx has been verified for the final controlled-testnet genesis candidate
 - External decentralisation is not claimed until accepted external validators are running and evidenced
 

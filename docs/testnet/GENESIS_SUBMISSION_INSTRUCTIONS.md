@@ -118,7 +118,15 @@ Compare against the published checksum. If they don't match, contact the coordin
 
 ## Step 7: Create the Gentx
 
-Once your account has been funded (coordinator will confirm):
+Prepare your local gentx genesis account first:
+
+```bash
+./build/nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl \
+  --home "$NXR_HOME" \
+  --keyring-backend test
+```
+
+Then create the gentx:
 
 ```bash
 ./build/nexaraild gentx <key-name> 500000000unxrl \
@@ -136,6 +144,8 @@ Parameters:
 - `--commission-max-rate`: Maximum commission you will ever set (0.20 = 20%)
 - `--commission-max-change-rate`: Maximum daily commission change (0.01 = 1%)
 - `--min-self-delegation`: Minimum self-delegation (1 unxrl)
+
+The `add-genesis-account` command is local gentx preparation only. The coordinator assembles final genesis separately from accepted gentxs.
 
 **Note:** These values are for the testnet only. Mainnet parameters will be determined separately.
 

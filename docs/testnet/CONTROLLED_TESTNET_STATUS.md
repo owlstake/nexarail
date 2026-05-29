@@ -20,6 +20,7 @@
 | Phase 18A join readiness package | READY |
 | Phase 18B intake execution | OPEN - awaiting submissions |
 | Phase 18C launch operations pack | READY |
+| Phase 17C NodeSync submission | METADATA RECEIVED - gentx file content pending |
 | Final genesis freeze decision | FREEZE_DEFER |
 | Local Phase 17A dry-run | PASS |
 | Internal coordinator candidate dry-run | PASS |
@@ -51,13 +52,15 @@ Current coordination workspace:
 
 Current counts:
 
-- validator records submitted: 0;
+- validator metadata records received: 1 (`NODESYNC`);
+- accepted validator intake records: 0;
+- gentx files received locally: 0;
 - gentxs verified: 0;
 - gentxs rejected: 0;
 - final genesis candidate: not assembled.
-- endpoint inventory: header-only template.
+- endpoint inventory: NodeSync P2P-only metadata recorded; RPC/API/gRPC not provided.
 - internal coordinator candidate: assembled from local coordinator validators only.
-- submission tracker: awaiting validator submissions.
+- submission tracker: NodeSync metadata received; gentx file content pending local receipt.
 - final genesis freeze decision: `FREEZE_DEFER`.
 
 ## Phase 18A Coordinator Candidate
@@ -83,7 +86,17 @@ Phase 18B executes real validator intake and the final public genesis freeze gat
 - validator messages: `docs/testnet/VALIDATOR_INTAKE_MESSAGE_PACK.md`;
 - freeze decision: `docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md`.
 
-Current decision: `FREEZE_DEFER` because no external validator gentxs or endpoint records have been submitted.
+Current decision: `FREEZE_DEFER` because no external validator gentx file has been received locally and no gentx has been verified.
+
+## Phase 17C First External Submission
+
+NodeSync submitted public validator metadata and a P2P endpoint:
+
+```text
+2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656
+```
+
+The claimed gentx filename and SHA256 are recorded in `docs/testnet/PHASE_17C_FIRST_EXTERNAL_GENTX_VERIFICATION.md`, but the original gentx JSON file content is not present in the coordinator workspace. The submission is therefore `PENDING_GENTX_FILE`, not accepted or rejected.
 
 ## Phase 18C Launch Operations
 

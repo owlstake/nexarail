@@ -74,6 +74,20 @@
 - [ ] Run launch-hour evidence against real external endpoints after validators submit them.
 - [ ] Replace launch-window placeholders with final UTC time, genesis hash, and peer string.
 
+## Phase 17C First External Submission
+
+- [x] Record NodeSync public metadata in the submission tracker.
+- [x] Record NodeSync P2P-only endpoint in the endpoint inventory.
+- [x] Confirm the gentx JSON file content is not present in the coordinator workspace.
+- [x] Keep the accepted intake registry unchanged until the gentx file is received and verified.
+- [x] Fix validator docs to require `add-genesis-account` before `gentx`.
+- [ ] Receive the original NodeSync gentx JSON file.
+- [ ] Verify the NodeSync gentx SHA256.
+- [ ] Run the direct controlled gentx verifier for NodeSync.
+- [ ] Copy NodeSync gentx to `coordination/validators/verified/` only if verification passes.
+- [ ] Generate persistent peers from accepted records after verification.
+- [ ] Re-run final genesis freeze gate after at least one gentx is verified.
+
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.

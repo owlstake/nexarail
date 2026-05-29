@@ -8,22 +8,29 @@
 
 | Item | Count / Status |
 |---|---|
-| Validator records received | 0 |
-| Gentxs submitted | 0 |
+| Validator metadata records received | 1 |
+| Accepted validator intake records | 0 |
+| Gentx files received locally | 0 |
 | Gentxs accepted | 0 |
 | Gentxs rejected | 0 |
-| Endpoint records received | 0 |
+| Endpoint records received | 1 P2P-only metadata record |
 | Persistent peers | WAITING |
 | Final public genesis candidate | NOT ASSEMBLED |
 | Launch status | NOT LAUNCHED |
 
 ## Persistent Peers Status
 
-No persistent peer string is available because no complete external validator records have been submitted.
+NodeSync reported this P2P endpoint:
+
+```text
+2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656
+```
+
+The final persistent peer string is still waiting because the gentx JSON file is not present locally and the validator has not been accepted into the verified intake set.
 
 ## Endpoint Status
 
-`coordination/validators/endpoint-inventory.csv` is header-only. No real RPC, API, gRPC, or P2P endpoint records have been received.
+`coordination/validators/endpoint-inventory.csv` records NodeSync P2P-only metadata. RPC, API, and gRPC endpoints have not been provided.
 
 ## Genesis Candidate Status
 
@@ -45,11 +52,11 @@ FREEZE_DEFER
 
 ## Reason
 
-Final public genesis cannot be frozen because verified external gentx count is zero and there are no complete external validator endpoint records.
+Final public genesis cannot be frozen because verified external gentx count is zero. NodeSync metadata has been received, but the original gentx JSON file content is not present locally, so SHA256 and gentx verification cannot be completed.
 
 ## Next Required Action
 
-Send accepted validators the intake message pack, collect public non-secret validator records and gentxs, verify each gentx, update endpoint inventory, regenerate persistent peers, then re-run the freeze gate.
+Request the exact NodeSync gentx JSON file, verify the submitted SHA256, run the controlled gentx verifier, update the accepted intake registry only if verification passes, regenerate persistent peers, then re-run the freeze gate.
 
 ## Safety Boundary
 

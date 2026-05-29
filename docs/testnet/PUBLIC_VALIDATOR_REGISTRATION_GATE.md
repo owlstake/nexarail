@@ -58,7 +58,9 @@
    pex = true
    addr_book_strict = false
    
-3. Fund validator account via faucet
+3. Add validator account to the local gentx-preparation genesis:
+   nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl \
+     --keyring-backend test
    
 4. Create gentx:
    nexaraild gentx <key-name> 500000000unxrl \
@@ -69,6 +71,8 @@
 
 5. Submit gentx to genesis coordinator
 ```
+
+The `add-genesis-account` command is local gentx preparation only. The coordinator assembles final genesis separately from accepted gentxs.
 
 ### What "Controlled" Means
 

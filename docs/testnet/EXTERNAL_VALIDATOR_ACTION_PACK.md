@@ -110,6 +110,18 @@ Back up the mnemonic offline. Never share it with the coordinator.
 
 After the coordinator provides the genesis template and confirms your account funding:
 
+First add your validator account to the local gentx-preparation genesis:
+
+```bash
+./build/nexaraild add-genesis-account <key-name-or-address> 1000000000unxrl \
+  --home "$NXR_HOME" \
+  --keyring-backend test
+```
+
+This is a local gentx preparation step only. The coordinator assembles final genesis separately from accepted gentxs.
+
+Then create the gentx:
+
 ```bash
 ./build/nexaraild gentx <key-name> 500000000unxrl \
   --moniker <your-moniker> \
