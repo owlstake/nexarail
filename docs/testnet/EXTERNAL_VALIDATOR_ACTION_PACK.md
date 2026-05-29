@@ -84,7 +84,7 @@ Record your node ID:
 
 Aliases: `comet show-node-id` and `cometbft show-node-id` resolve to the same command.
 
-If the binary returns `unknown command "tendermint"`, you are running the pre-hotfix RC1 release (`v0.1.0-rc1`). Use the CLI hotfix binary set at `releases/github/v0.1.0-rc1-hotfix-cli/` or rebuild from the validator CLI hotfix commit/tag or later. See `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md` for full details, checksums, and the RC1 → hotfix mapping.
+If the binary returns `unknown command "tendermint"`, you are running the pre-hotfix RC1 release (`v0.1.0-rc1`). Use the CLI hotfix binary set from GitHub pre-release `v0.1.0-rc1-cli-hotfix`, or rebuild from that tag or later. See `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md` for full details, checksums, and the RC1 to hotfix mapping.
 
 Record your validator consensus pubkey:
 

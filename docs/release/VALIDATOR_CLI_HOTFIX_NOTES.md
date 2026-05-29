@@ -73,6 +73,8 @@ Location: `releases/github/v0.1.0-rc1-hotfix-cli/`
 | `nexaraild-linux-amd64` | `0ffe09b1523a0ee8a860bbd19a402fb08809fa9eac99e9db5b51d8c00e3965a0` |
 
 Source base: `74f63c6c69a8397f7f9c0a9abc0fb68fc76e1dcd` plus the validator CLI hotfix commit.
+Source fix commit: `3eb6d90e0069078ae5acf6a5a524832d7d4b3b7a`.
+GitHub pre-release tag: `v0.1.0-rc1-cli-hotfix`.
 Build flag: `-ldflags "-X main.Version=0.1.0-rc1-cli-hotfix"`.
 
 Verify locally:
@@ -106,7 +108,7 @@ Source-build alternative (Go 1.22+):
 ```bash
 git clone https://github.com/Bookings-cpu/nexarail.git
 cd nexarail
-git checkout <hotfix-tag-or-commit>
+git checkout v0.1.0-rc1-cli-hotfix
 make build
 ./build/nexaraild tendermint show-node-id
 ```
@@ -139,8 +141,6 @@ make build
 
 ## Release Route Decision
 
-Recommendation: **A - publish as `v0.1.0-rc1-cli-hotfix` GitHub pre-release** so blocked validator onboarding unblocks immediately. RC2 should still land separately once the canonical one-hour soak rerun and post-fix governance/product-flow replay are complete (see `docs/release/KNOWN_LIMITATIONS_INDEX.md`).
+Route: **A - publish as `v0.1.0-rc1-cli-hotfix` GitHub pre-release** so blocked validator onboarding unblocks immediately. RC2 should still land separately once the canonical one-hour soak rerun and post-fix governance/product-flow replay are complete (see `docs/release/KNOWN_LIMITATIONS_INDEX.md`).
 
 If RC2 is imminent (within the next 24h), roll the same `tendermintCommand()` wiring forward into RC2 and skip the pre-release tag, but only after verifying the RC2 candidate binary itself exposes `tendermint show-node-id`.
-
-Tagging is deferred until reviewer sign-off; binaries are reproducible from the hotfix source state so the tag can be applied when authorised.

@@ -5,7 +5,7 @@
 - RC2 is under evaluation and should not be tagged until the canonical one-hour soak rerun and targeted post-fix governance/product-flow replay are complete.
 
 ## Devnet Limitations
-- RC1 binaries (`v0.1.0-rc1`) shipped without the `tendermint`/`comet`/`cometbft` helper command group, so `tendermint show-node-id` and related helpers return `unknown command`. Patched binary set is `releases/github/v0.1.0-rc1-hotfix-cli/` (`v0.1.0-rc1-cli-hotfix`); see `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md`. Source builds need the validator CLI hotfix commit or later.
+- RC1 binaries (`v0.1.0-rc1`) shipped without the `tendermint`/`comet`/`cometbft` helper command group, so `tendermint show-node-id` and related helpers return `unknown command`. Patched binary set is GitHub pre-release `v0.1.0-rc1-cli-hotfix`; see `docs/release/VALIDATOR_CLI_HOTFIX_NOTES.md`. Source builds need that tag or later.
 - RC1 binaries are single-node oriented; post-RC1 `main` includes local five-agent validator-agent evidence
 - Five-agent evidence is local single-machine evidence only
 - Voting period shortened to 30 seconds (not realistic for mainnet)

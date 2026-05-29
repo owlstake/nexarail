@@ -2,7 +2,7 @@
   "release": "v0.1.0-rc1-cli-hotfix",
   "based_on": "v0.1.0-rc1",
   "source_base_commit": "74f63c6c69a8397f7f9c0a9abc0fb68fc76e1dcd",
-  "source_ref": "validator CLI hotfix commit/tag",
+  "source_ref": "v0.1.0-rc1-cli-hotfix",
   "build_date_utc": "2026-05-29",
   "ldflags_version": "0.1.0-rc1-cli-hotfix",
   "scope": "validator CLI usability - exposes CometBFT/Tendermint helper subcommand group on `nexaraild`",
