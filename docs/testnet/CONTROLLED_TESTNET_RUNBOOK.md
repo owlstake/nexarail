@@ -184,6 +184,23 @@ scripts/testnet/monitor-controlled-testnet-readiness.sh \
 
 The monitor can also take comma-separated RPC endpoints with `--rpc-endpoints`. Add REST/API endpoints with `--api-endpoints` or `--api-file` when available.
 
+For first-hour evidence capture, run:
+
+```bash
+scripts/testnet/collect-launch-hour-evidence.sh \
+  --endpoints coordination/validators/endpoint-inventory.csv \
+  --duration 3600 \
+  --sample-interval 60 \
+  --chain-id nexarail-testnet-1 \
+  --expected-validators <count>
+```
+
+Incident response and launch-day command references:
+
+- `docs/testnet/CONTROLLED_TESTNET_INCIDENT_RESPONSE.md`
+- `docs/testnet/CONTROLLED_TESTNET_LAUNCH_DAY_COMMANDS.md`
+- `docs/testnet/VALIDATOR_SUPPORT_TRIAGE_TEMPLATE.md`
+
 ## 13. Check Validator Signing
 
 ```bash

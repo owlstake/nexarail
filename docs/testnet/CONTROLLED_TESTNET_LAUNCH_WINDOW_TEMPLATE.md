@@ -15,6 +15,9 @@
 | Persistent peers | TBD |
 | Seed nodes | TBD |
 | Final genesis freeze decision | `FREEZE_DEFER` until verified external gentxs exist |
+| Incident response runbook | `docs/testnet/CONTROLLED_TESTNET_INCIDENT_RESPONSE.md` |
+| First-hour evidence script | `scripts/testnet/collect-launch-hour-evidence.sh` |
+| Support triage template | `docs/testnet/VALIDATOR_SUPPORT_TRIAGE_TEMPLATE.md` |
 
 ## Freeze Gate Before Scheduling
 
@@ -27,6 +30,8 @@
 - [ ] Product live flags remain false.
 - [ ] No secret material in launch artifacts.
 - [ ] Support channel and coordinator contact path confirmed.
+- [ ] Incident response roles assigned.
+- [ ] Launch-hour evidence directory confirmed.
 
 ## First-Block Checklist
 

@@ -61,6 +61,19 @@
 - [ ] Generate final public persistent peers from complete records.
 - [ ] Freeze final public genesis after accepted external gentxs exist.
 
+## Phase 18C Launch Operations
+
+- [x] Create incident response runbook.
+- [x] Create launch-day command sheet.
+- [x] Create first-hour evidence collection script.
+- [x] Create genesis publication checklist.
+- [x] Create validator support triage template.
+- [x] Create launch readiness dashboard.
+- [x] Confirm launch-hour evidence collection handles empty endpoint inventory.
+- [x] Confirm readiness monitor handles empty endpoint inventory.
+- [ ] Run launch-hour evidence against real external endpoints after validators submit them.
+- [ ] Replace launch-window placeholders with final UTC time, genesis hash, and peer string.
+
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.

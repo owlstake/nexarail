@@ -19,6 +19,7 @@
 | Phase 17B intake workflow | READY |
 | Phase 18A join readiness package | READY |
 | Phase 18B intake execution | OPEN - awaiting submissions |
+| Phase 18C launch operations pack | READY |
 | Final genesis freeze decision | FREEZE_DEFER |
 | Local Phase 17A dry-run | PASS |
 | Internal coordinator candidate dry-run | PASS |
@@ -83,6 +84,19 @@ Phase 18B executes real validator intake and the final public genesis freeze gat
 - freeze decision: `docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md`.
 
 Current decision: `FREEZE_DEFER` because no external validator gentxs or endpoint records have been submitted.
+
+## Phase 18C Launch Operations
+
+Phase 18C adds coordinator-side launch rehearsal and incident response readiness while validator intake remains open.
+
+- incident response: `docs/testnet/CONTROLLED_TESTNET_INCIDENT_RESPONSE.md`;
+- launch-day commands: `docs/testnet/CONTROLLED_TESTNET_LAUNCH_DAY_COMMANDS.md`;
+- launch-hour evidence script: `scripts/testnet/collect-launch-hour-evidence.sh`;
+- genesis publication checklist: `docs/testnet/GENESIS_PUBLICATION_CHECKLIST.md`;
+- support triage template: `docs/testnet/VALIDATOR_SUPPORT_TRIAGE_TEMPLATE.md`;
+- launch readiness dashboard: `docs/testnet/CONTROLLED_TESTNET_LAUNCH_READINESS_DASHBOARD.md`.
+
+The launch operations pack does not change launch status. The controlled external-validator testnet remains not launched.
 
 ## Local Dry-Run Evidence
 

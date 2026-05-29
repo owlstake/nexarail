@@ -142,7 +142,30 @@ apis = endpoint_list(api_endpoints) + endpoints_from_file(api_file, "api_url")
 rpcs = list(dict.fromkeys(rpcs))
 apis = list(dict.fromkeys(apis))
 if not rpcs:
-    raise SystemExit("No RPC endpoints provided")
+    report = {
+        "status": "WAITING",
+        "expected_chain_id": expected_chain_id,
+        "expected_validator_count": expected_validators,
+        "sample_duration_seconds": duration,
+        "sample_interval_seconds": interval,
+        "rpc_results": [],
+        "api_results": [],
+        "failures": [],
+        "warnings": ["No RPC endpoints provided; waiting for endpoint inventory."],
+        "health_notes": ["Endpoint inventory is empty or missing rpc_url values."],
+    }
+    print("Controlled testnet readiness monitor")
+    print("Status: WAITING")
+    print(f"Expected chain ID: {expected_chain_id}")
+    print(f"Expected validator count: {expected_validators if expected_validators is not None else 'not set'}")
+    print("")
+    print("Warnings:")
+    print("  - No RPC endpoints provided; waiting for endpoint inventory.")
+    if output_json:
+        Path(output_json).parent.mkdir(parents=True, exist_ok=True)
+        Path(output_json).write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+        print(f"\nJSON report: {output_json}")
+    sys.exit(0)
 
 samples: dict[str, list[dict[str, Any]]] = {rpc: [] for rpc in rpcs}
 api_samples: dict[str, dict[str, Any]] = {}

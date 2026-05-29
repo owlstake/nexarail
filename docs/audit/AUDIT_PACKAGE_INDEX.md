@@ -274,10 +274,19 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 
 ### Phase 18B — External Validator Intake Execution And Genesis Freeze Gate
 - `docs/testnet/PHASE_18B_EXTERNAL_VALIDATOR_INTAKE_EXECUTION.md` — Intake execution objective, fields, gentx handling, endpoint process, acceptance/rejection rules, and freeze criteria
+- `docs/testnet/PHASE_18B_VALIDATOR_INTAKE_AND_GENESIS_CANDIDATE.md` — Compatibility status document for Phase 18B intake and freeze-gate state
 - `docs/testnet/VALIDATOR_INTAKE_MESSAGE_PACK.md` — Copy-paste validator coordination messages with safety wording
 - `docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md` — Current freeze decision, counts, reasons, and next required action
 - `coordination/validators/submission-tracker.md` — Submission tracker; currently awaiting validator submissions
 - `coordination/validators/endpoint-inventory.csv` — Endpoint inventory template; currently header-only
+
+### Phase 18C — Coordinator Launch Operations And Incident Response
+- `docs/testnet/CONTROLLED_TESTNET_INCIDENT_RESPONSE.md` — Severity, roles, halt/rollback criteria, validator comms, evidence, log preservation, and common incident handling
+- `docs/testnet/CONTROLLED_TESTNET_LAUNCH_DAY_COMMANDS.md` — Coordinator command sheet for binary, genesis, peers, RPC/API, live flags, monitor, evidence, and safety checks
+- `docs/testnet/GENESIS_PUBLICATION_CHECKLIST.md` — Final genesis publication gate checklist
+- `docs/testnet/VALIDATOR_SUPPORT_TRIAGE_TEMPLATE.md` — Support issue capture template for validators
+- `docs/testnet/CONTROLLED_TESTNET_LAUNCH_READINESS_DASHBOARD.md` — Manual readiness dashboard for intake, genesis, peers, endpoints, monitor, rollback, support, and safety status
+- `scripts/testnet/collect-launch-hour-evidence.sh` — Launch-hour RPC/API, peer, validator, live-flag, and evidence summarizer
 
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
