@@ -14,7 +14,8 @@
 | Validator gentxs | 1 VERIFIED |
 | Launch time | PENDING |
 | Persistent peers | GENERATED FOR NODESYNC; DNS peer confirmed |
-| NodeSync P2P reachability | NOT_REACHABLE - TCP 26656 connection refused |
+| NodeSync P2P reachability | DEFERRED - real `nexaraild` service starts after final genesis distribution; Phase 17E.1 documents preconditions |
+| Phase 17E.1 denom audit | PASS - all unxrl; no fix required |
 | Seed or bootnode | PENDING |
 | External validator evidence | PENDING |
 | Phase 17B intake workflow | READY |

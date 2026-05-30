@@ -134,6 +134,19 @@
 - [ ] Re-run P2P reachability after NodeSync confirms TCP 26656 is open.
 - [ ] Re-run final genesis freeze gate after NodeSync reachability and launch sign-off.
 
+## Phase 17E.1 Genesis Denom Audit And P2P Preconditions
+
+- [x] Receive NodeSync clarification that Phase 17E refusal was because the real node was not started yet.
+- [x] Note that a temporary `nc` listener on 26656 is not evidence of CometBFT P2P readiness.
+- [x] Add `scripts/testnet/check-genesis-denoms.sh` to formalise denom audit.
+- [x] Run denom audit on the candidate: `PASS` (7 pass / 0 fail / 1 warn).
+- [x] Confirm `staking.params.bond_denom = unxrl` and all linked denoms.
+- [x] Confirm no `stake`/`uatom`/`atom`/`token`/`nstake` strings present.
+- [x] Confirm no genesis fix required; candidate SHA256 unchanged.
+- [x] Record real P2P freeze preconditions (`docs/testnet/PHASE_17E1_GENESIS_DENOM_AUDIT_AND_P2P_PRECONDITIONS.md`).
+- [ ] Verify real CometBFT peer handshake (real `nexaraild start`, real `/net_info` peer count > 0) before `FREEZE_GO`.
+- [ ] Seed `bank.denom_metadata` for `unxrl` ahead of public freeze (non-blocking; explorer/UX nicety).
+
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.

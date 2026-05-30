@@ -1,0 +1,19 @@
+{
+  "genesis": "releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json",
+  "expected_denom": "unxrl",
+  "status": "PASS",
+  "pass": 7,
+  "fail": 0,
+  "warn": 1,
+  "checks": [
+    {"status": "PASS", "field": "staking.params.bond_denom", "got": "unxrl"},
+    {"status": "PASS", "field": "mint.params.mint_denom", "got": "unxrl"},
+    {"status": "PASS", "field": "gov.*min_deposit.denom", "got": "unxrl"},
+    {"status": "PASS", "field": "crisis.constant_fee.denom", "got": "unxrl"},
+    {"status": "PASS", "field": "bank.balances[].coins[].denom", "got": "unxrl"},
+    {"status": "PASS", "field": "bank.supply[].denom", "got": "unxrl"},
+    {"status": "WARN", "field": "bank.denom_metadata", "got": "empty (consider adding unxrl metadata for explorers)"},
+    {"status": "PASS", "field": "genutil.gen_txs[*].MsgCreateValidator.value.denom", "got": "unxrl"},
+    {"status": "SKIP", "field": "distribution.fee_pool.community_pool[].denom", "got": ""}
+  ]
+}

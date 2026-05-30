@@ -316,6 +316,11 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `rehearsals/controlled-testnet/dry-run/evidence/20260530T012624Z-phase17f-live/` — Local coordinator rehearsal evidence path; not launch evidence
 - `rehearsals/controlled-testnet/launch-hour/evidence/20260530T013213Z/` — Local launch-hour evidence rehearsal path; records expected validator-count failure from non-simulated NodeSync signer; not launch evidence
 
+### Phase 17E.1 — Candidate Genesis Denom Audit And P2P Preconditions
+- `docs/testnet/PHASE_17E1_GENESIS_DENOM_AUDIT_AND_P2P_PRECONDITIONS.md` — NodeSync clarification, denom audit method/result, real CometBFT P2P readiness preconditions, freeze decision
+- `scripts/testnet/check-genesis-denoms.sh` — Genesis denom auditor (staking/bond/mint/gov/crisis/bank/gentx/distribution; suspicious denom scan; JSON report)
+- `coordination/audits/phase17e1-denom-audit.json` — Machine-readable denom audit report for the candidate (Result: PASS)
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly

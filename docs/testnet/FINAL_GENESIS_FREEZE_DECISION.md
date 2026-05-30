@@ -50,6 +50,10 @@ TCP IP check: connection refused on 178.104.162.88:26656
 Endpoint status: NOT_REACHABLE
 ```
 
+Phase 17E.1 NodeSync clarification:
+
+NodeSync confirmed the Phase 17E refusal was because the real `nexaraild` service was not started yet, which is the expected sequence before final genesis distribution. NodeSync also briefly started a `nc` listener on TCP 26656 to demonstrate the VPS is reachable on the wire. A `nc` listener is not evidence of CometBFT P2P readiness; the precondition list in `docs/testnet/PHASE_17E1_GENESIS_DENOM_AUDIT_AND_P2P_PRECONDITIONS.md` describes the real handshake requirements.
+
 ## Genesis Candidate Status
 
 Phase 17D assembled a controlled external-validator genesis candidate for review only:
@@ -90,6 +94,37 @@ It is marked `INTERNAL COORDINATOR CANDIDATE — NOT FINAL PUBLIC GENESIS` and m
 
 No final public genesis has been frozen or published for `releases/testnet-genesis/nexarail-testnet-1/`.
 
+## Phase 17E.1 Denom Audit
+
+Reason for audit: NodeSync flagged a possible incorrect `bond_denom` in the candidate genesis.
+
+Method:
+
+```bash
+scripts/testnet/check-genesis-denoms.sh \
+  --genesis releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json \
+  --expected-denom unxrl \
+  --output coordination/audits/phase17e1-denom-audit.json
+```
+
+Result:
+
+```text
+Result: PASS (PASS=7 FAIL=0 WARN=1)
+staking.params.bond_denom                          = unxrl
+mint.params.mint_denom                             = unxrl
+gov.*min_deposit.denom                             = unxrl
+crisis.constant_fee.denom                          = unxrl
+bank.balances[].coins[].denom                      = unxrl
+bank.supply[].denom                                = unxrl
+genutil.gen_txs[*].MsgCreateValidator.value.denom  = unxrl
+bank.denom_metadata                                = empty (WARN; non-blocking)
+distribution.fee_pool.community_pool[].denom       = not present
+Suspicious denoms (stake/uatom/atom/token/nstake)  = none
+```
+
+NodeSync's `bond_denom` concern was not confirmed. No genesis fix was required. Candidate SHA256 is unchanged: `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`.
+
 ## Freeze Decision
 
 ```text
@@ -98,11 +133,15 @@ FREEZE_DEFER
 
 ## Reason
 
-Final public genesis is not frozen because NodeSync P2P TCP reachability is still not confirmed: TCP 26656 returned connection refused for both the DNS host and direct IP at the Phase 17F recheck. The launch window is not confirmed and coordinator launch criteria have not been fully signed off.
+Denom audit passes, but real CometBFT P2P readiness is still pending. NodeSync's Phase 17E.1 clarification confirms that the real `nexaraild` service is started only after final genesis distribution, and that the prior `nc` listener on TCP 26656 was a VPS reachability demonstration, not a CometBFT handshake. The freeze gate will move to `FREEZE_GO` only after the preconditions in `docs/testnet/PHASE_17E1_GENESIS_DENOM_AUDIT_AND_P2P_PRECONDITIONS.md` are satisfied, including a real coordinator-verified CometBFT peer handshake.
 
 ## Next Required Action
 
-Ask NodeSync to open/listen on TCP 26656 for `nexarail-testnet-peer.nodesync.top`, confirm reachability from the coordinator side, keep additional validator intake open, and re-run the freeze gate after coordinator launch criteria are satisfied.
+1. Coordinator publishes the final genesis SHA and persistent peer list to NodeSync at launch window.
+2. NodeSync starts the real `nexaraild` service with `p2p.laddr=tcp://0.0.0.0:26656` and the published persistent peers.
+3. Coordinator verifies CometBFT P2P handshake (real `/net_info` peer count > 0), not just TCP open.
+4. Coordinator records the evidence under `rehearsals/controlled-testnet/p2p-launch/evidence/<TIMESTAMP>/`.
+5. Re-run the freeze gate and update this document to `FREEZE_GO` only if all criteria are met.
 
 ## Safety Boundary
 

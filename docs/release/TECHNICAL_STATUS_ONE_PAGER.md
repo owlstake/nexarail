@@ -15,6 +15,7 @@
 - Phase 17D external-validator genesis candidate is assembled for review with NodeSync plus five coordinator-operated validators; final freeze remains deferred
 - Phase 17E reachability check confirms NodeSync DNS resolves, but TCP 26656 is not reachable; freeze remains deferred
 - Phase 17F coordinator launch rehearsal with the external candidate genesis passed locally to height 50; the 600-second evidence run exposed the expected local limitation from NodeSync not signing; NodeSync remains unreachable on TCP 26656, so freeze remains deferred
+- Phase 17E.1 candidate genesis denom audit: PASS — `staking.params.bond_denom = unxrl`, all linked denom fields are `unxrl`, no suspicious denom strings; NodeSync's `bond_denom` flag did not reproduce; candidate SHA256 unchanged; freeze remains deferred pending real CometBFT P2P handshake after final genesis distribution
 
 ## Architecture
 - Cosmos SDK v0.47.x

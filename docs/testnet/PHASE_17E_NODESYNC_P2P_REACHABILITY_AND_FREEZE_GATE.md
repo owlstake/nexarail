@@ -57,6 +57,10 @@ Endpoint status:
 NOT_REACHABLE
 ```
 
+### Phase 17E.1 NodeSync Clarification
+
+NodeSync confirmed after this check that the real `nexaraild` service had not been started on the VPS yet. This is expected before final genesis distribution. NodeSync then started a temporary `nc` listener on TCP 26656 to demonstrate the VPS is reachable on the wire. A `nc` listener is not evidence of CometBFT P2P readiness. See `docs/testnet/PHASE_17E1_GENESIS_DENOM_AUDIT_AND_P2P_PRECONDITIONS.md` for the full preconditions that must be satisfied before the freeze gate can advance to `FREEZE_GO`.
+
 ## NodeSync Peer Entry
 
 Persistent peer:

@@ -213,3 +213,21 @@ Phase 17F rehearsed coordinator launch operations with the same external-validat
 - evidence: `rehearsals/controlled-testnet/dry-run/evidence/20260530T012624Z-phase17f-live/`.
 
 The 600-second local launch-hour evidence rehearsal continued block production but returned `FAIL` once the validator count drifted from 6 to 5 because NodeSync was not locally signing. NodeSync TCP `26656` remained unreachable at the Phase 17F recheck (`2026-05-30T01:19:37Z`), so the freeze decision remains `FREEZE_DEFER`.
+
+## Phase 17E.1 Denom Audit
+
+NodeSync flagged a possible incorrect `bond_denom` in the candidate genesis. The new auditor `scripts/testnet/check-genesis-denoms.sh` was run against the candidate:
+
+```text
+Result: PASS (PASS=7 FAIL=0 WARN=1)
+staking.params.bond_denom         = unxrl
+mint.params.mint_denom            = unxrl
+gov.*min_deposit.denom            = unxrl
+crisis.constant_fee.denom         = unxrl
+bank.balances/supply              = unxrl
+gentx self-delegation             = unxrl
+bank.denom_metadata               = empty (WARN; non-blocking)
+suspicious denoms scan            = none
+```
+
+No genesis fix was required. Candidate SHA256 unchanged: `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`. See `docs/testnet/PHASE_17E1_GENESIS_DENOM_AUDIT_AND_P2P_PRECONDITIONS.md`.

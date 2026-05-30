@@ -24,9 +24,11 @@
 - [ ] Accepted external validator count is greater than zero.
 - [ ] Verified gentx count matches accepted validator count.
 - [ ] Endpoint inventory is complete enough for launch monitoring.
-- [ ] NodeSync P2P endpoint accepts inbound TCP on `nexarail-testnet-peer.nodesync.top:26656`.
+- [ ] NodeSync P2P endpoint accepts inbound TCP on `nexarail-testnet-peer.nodesync.top:26656` from a real running `nexaraild` service (not a placeholder listener).
+- [ ] Coordinator confirms a real CometBFT P2P handshake against NodeSync (`/net_info` peer count > 0).
 - [ ] Persistent peers generated from accepted records.
 - [ ] Final public genesis candidate assembled and validated.
+- [ ] `scripts/testnet/check-genesis-denoms.sh` passes on the final candidate with `--expected-denom unxrl`.
 - [ ] Genesis checksum independently verified.
 - [ ] Product live flags remain false.
 - [ ] No secret material in launch artifacts.
