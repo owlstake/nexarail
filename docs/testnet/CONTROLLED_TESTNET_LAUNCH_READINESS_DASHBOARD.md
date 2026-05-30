@@ -21,9 +21,22 @@
 
 ## Current Blockers
 
-- NodeSync P2P TCP `26656` is not reachable from the coordinator side.
+- Real CometBFT P2P handshake with NodeSync is not yet performed; NodeSync's `nc` listener on TCP `26656` is informational only (Phase 17H freeze gate records it as `INFO`, not gating).
+- Coordinator launch sign-off (`docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md`) is `PENDING`.
 - NodeSync RPC/API/gRPC endpoints remain pending.
-- Final public genesis freeze decision remains `FREEZE_DEFER`.
+- Final public genesis freeze decision remains `FREEZE_DEFER` per the Phase 17H gate.
+
+## Phase 17H Freeze Gate
+
+Authoritative checker: `scripts/testnet/check-final-genesis-freeze-gate.sh`.
+
+Latest run (2026-05-30T09:04:22Z): `FREEZE_DEFER` — 12 pass / 0 fail / 2 defer.
+
+Pass: candidate exists, SHA256 matches, `validate-genesis`, denom audit, live flags false, NodeSync gentx accepted, NodeSync in genesis, NodeSync persistent peer, host resolves, no secret material, final public genesis folder empty, all required docs present.
+
+Defer: CometBFT handshake not probed yet, coordinator sign-off pending.
+
+Evidence: `rehearsals/controlled-testnet/freeze-gate/evidence/20260530T090422Z/`.
 
 ## Phase 17F Rehearsal Status
 
@@ -38,4 +51,18 @@
 
 ## Next Coordinator Action
 
-Ask NodeSync to open/listen on TCP `26656`, recheck reachability, then re-run the final genesis freeze gate. Do not publish final public genesis or claim a public launch until launch criteria and evidence exist.
+1. At launch window, publish the final genesis SHA and persistent peer list to NodeSync (use `docs/testnet/NODESYNC_LAUNCH_WINDOW_INSTRUCTIONS.md`).
+2. Have NodeSync start the real `nexaraild` service.
+3. Spin up a coordinator probe node, then re-run the freeze gate:
+   ```bash
+   scripts/testnet/check-final-genesis-freeze-gate.sh \
+     --genesis releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json \
+     --expected-sha256 4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095 \
+     --peer 2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656 \
+     --probe-rpc http://127.0.0.1:26657 \
+     --require-p2p --require-signoff
+   ```
+4. Update `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` to `APPROVED` only after the gate returns `FREEZE_GO`.
+5. Only then copy the candidate to `releases/testnet-genesis/nexarail-testnet-1/` as the published final genesis.
+
+Do not publish final public genesis or claim a public launch until the gate returns `FREEZE_GO`.

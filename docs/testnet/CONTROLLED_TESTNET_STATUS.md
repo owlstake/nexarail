@@ -14,8 +14,12 @@
 | Validator gentxs | 1 VERIFIED |
 | Launch time | PENDING |
 | Persistent peers | GENERATED FOR NODESYNC; DNS peer confirmed |
-| NodeSync P2P reachability | DEFERRED - real `nexaraild` service starts after final genesis distribution; Phase 17E.1 documents preconditions |
+| NodeSync P2P reachability | DEFERRED - real `nexaraild` service starts after final genesis distribution; Phase 17E.1 documents preconditions; Phase 17H freeze gate records TCP 26656 OPEN (NodeSync `nc` listener) as informational only |
 | Phase 17E.1 denom audit | PASS - all unxrl; no fix required |
+| Phase 17H freeze gate | FREEZE_DEFER - 12 pass / 0 fail / 2 defer (cometbft-handshake + coordinator-signoff pending) |
+| Launch sign-off | PENDING - `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` |
+| Final launch packet draft | DRAFT - `docs/testnet/CONTROLLED_TESTNET_FINAL_LAUNCH_PACKET_DRAFT.md` |
+| NodeSync launch-window instructions | DRAFT - `docs/testnet/NODESYNC_LAUNCH_WINDOW_INSTRUCTIONS.md` |
 | Seed or bootnode | PENDING |
 | External validator evidence | PENDING |
 | Phase 17B intake workflow | READY |

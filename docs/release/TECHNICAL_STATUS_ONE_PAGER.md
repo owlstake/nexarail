@@ -16,6 +16,7 @@
 - Phase 17E reachability check confirms NodeSync DNS resolves, but TCP 26656 is not reachable; freeze remains deferred
 - Phase 17F coordinator launch rehearsal with the external candidate genesis passed locally to height 50; the 600-second evidence run exposed the expected local limitation from NodeSync not signing; NodeSync remains unreachable on TCP 26656, so freeze remains deferred
 - Phase 17E.1 candidate genesis denom audit: PASS — `staking.params.bond_denom = unxrl`, all linked denom fields are `unxrl`, no suspicious denom strings; NodeSync's `bond_denom` flag did not reproduce; candidate SHA256 unchanged; freeze remains deferred pending real CometBFT P2P handshake after final genesis distribution
+- Phase 17H adds the single authoritative freeze gate `scripts/testnet/check-final-genesis-freeze-gate.sh` (genesis exists, SHA256 match, validate-genesis, denom audit, live flags false, NodeSync gentx accepted and in genesis, persistent peer present, host resolves, TCP 26656 recorded, optional CometBFT handshake probe, no secret material, final folder not pre-populated, docs present, sign-off). First run on the candidate: `FREEZE_DEFER` (12 pass / 0 fail / 2 defer). Launch-window signoff template, final launch packet draft, and NodeSync launch-window instructions are committed as drafts; nothing here authorises a launch by itself.
 
 ## Architecture
 - Cosmos SDK v0.47.x

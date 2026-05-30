@@ -135,13 +135,44 @@ FREEZE_DEFER
 
 Denom audit passes, but real CometBFT P2P readiness is still pending. NodeSync's Phase 17E.1 clarification confirms that the real `nexaraild` service is started only after final genesis distribution, and that the prior `nc` listener on TCP 26656 was a VPS reachability demonstration, not a CometBFT handshake. The freeze gate will move to `FREEZE_GO` only after the preconditions in `docs/testnet/PHASE_17E1_GENESIS_DENOM_AUDIT_AND_P2P_PRECONDITIONS.md` are satisfied, including a real coordinator-verified CometBFT peer handshake.
 
+## Phase 17H Automated Freeze Gate
+
+Single authoritative checker:
+
+```bash
+scripts/testnet/check-final-genesis-freeze-gate.sh \
+  --genesis releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json \
+  --expected-sha256 4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095 \
+  --peer 2bb62d82b4dbf820fdafd843816f1e72a84ffa8f@nexarail-testnet-peer.nodesync.top:26656
+```
+
+Result (2026-05-30T09:04:22Z):
+
+```text
+PASS=12  FAIL=0  DEFER=2
+Decision: FREEZE_DEFER
+TCP 26656: OPEN (recorded only; not gating — NodeSync nc listener)
+Handshake: NOT_PROBED (no --probe-rpc supplied)
+Signoff:   PENDING
+Evidence:  rehearsals/controlled-testnet/freeze-gate/evidence/20260530T090422Z/
+```
+
+The gate will return `FREEZE_GO` only when:
+
+1. all required checks PASS (already true for genesis/SHA/denom/live-flags/NodeSync/peer/secrets/docs),
+2. `--require-p2p` is supplied with a `--probe-rpc` against a coordinator node that has handshaked with NodeSync (`n_peers > 0` and NodeSync `node_id` in peer list), and
+3. `--require-signoff` is supplied with `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` `**Status:** APPROVED`.
+
+Hard failures the gate refuses to advance from `FREEZE_BLOCKED`: bad SHA, denom audit fail, live flags true, secret material in candidate, NodeSync missing from genesis, or final public genesis folder already populated.
+
 ## Next Required Action
 
 1. Coordinator publishes the final genesis SHA and persistent peer list to NodeSync at launch window.
 2. NodeSync starts the real `nexaraild` service with `p2p.laddr=tcp://0.0.0.0:26656` and the published persistent peers.
 3. Coordinator verifies CometBFT P2P handshake (real `/net_info` peer count > 0), not just TCP open.
 4. Coordinator records the evidence under `rehearsals/controlled-testnet/p2p-launch/evidence/<TIMESTAMP>/`.
-5. Re-run the freeze gate and update this document to `FREEZE_GO` only if all criteria are met.
+5. Coordinator marks `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` `**Status:** APPROVED` with the final SHA and launch time.
+6. Re-run the freeze gate with `--probe-rpc … --require-p2p --require-signoff`; this document advances to `FREEZE_GO` only if the gate returns `FREEZE_GO`.
 
 ## Safety Boundary
 

@@ -147,6 +147,17 @@
 - [ ] Verify real CometBFT peer handshake (real `nexaraild start`, real `/net_info` peer count > 0) before `FREEZE_GO`.
 - [ ] Seed `bank.denom_metadata` for `unxrl` ahead of public freeze (non-blocking; explorer/UX nicety).
 
+## Phase 17H Freeze Gate And Launch Packet
+
+- [x] Add `scripts/testnet/check-final-genesis-freeze-gate.sh` (single authoritative gate).
+- [x] Run freeze gate against candidate: `FREEZE_DEFER` (12 pass / 0 fail / 2 defer).
+- [x] Add `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` with PENDING status.
+- [x] Add `docs/testnet/CONTROLLED_TESTNET_FINAL_LAUNCH_PACKET_DRAFT.md` (DRAFT — NOT FINAL).
+- [x] Add `docs/testnet/NODESYNC_LAUNCH_WINDOW_INSTRUCTIONS.md` (DRAFT).
+- [ ] At launch window: re-run freeze gate with `--probe-rpc … --require-p2p --require-signoff` against the final genesis.
+- [ ] Mark launch sign-off `APPROVED` only after freeze gate returns `FREEZE_GO`.
+- [ ] Copy candidate to `releases/testnet-genesis/nexarail-testnet-1/` only after `FREEZE_GO`.
+
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.

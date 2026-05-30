@@ -178,6 +178,10 @@ FREEZE_DEFER
 
 Reason: denom audit passes, but real CometBFT P2P readiness depends on NodeSync starting the real `nexaraild` service after final genesis distribution, and the coordinator verifying a real peer handshake. This sequencing is correct and expected; it is not a regression.
 
+## Phase 17H Follow-up
+
+The Phase 17H freeze gate (`scripts/testnet/check-final-genesis-freeze-gate.sh`) automates these preconditions and reports `FREEZE_GO` / `FREEZE_DEFER` / `FREEZE_BLOCKED`. First run on this candidate returned `FREEZE_DEFER` (12 pass / 0 fail / 2 defer) with the two deferred items being the real CometBFT handshake (no probe RPC supplied) and coordinator sign-off (PENDING). Evidence: `rehearsals/controlled-testnet/freeze-gate/evidence/20260530T090422Z/`.
+
 ## Launch Status
 
 Controlled external-validator testnet remains **NOT LAUNCHED**. No public testnet is live. Mainnet remains **NO-GO**. External decentralisation is not claimed. NXRL is not presented as buyable and no monetary value is implied. No token sale is announced or implied. Product live-funds flags remain false by default.

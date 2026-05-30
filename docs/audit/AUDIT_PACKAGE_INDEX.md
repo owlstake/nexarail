@@ -321,6 +321,13 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `scripts/testnet/check-genesis-denoms.sh` — Genesis denom auditor (staking/bond/mint/gov/crisis/bank/gentx/distribution; suspicious denom scan; JSON report)
 - `coordination/audits/phase17e1-denom-audit.json` — Machine-readable denom audit report for the candidate (Result: PASS)
 
+### Phase 17H — Final Genesis Freeze Gate Automation And Launch Packet
+- `scripts/testnet/check-final-genesis-freeze-gate.sh` — Single authoritative freeze gate emitting `FREEZE_GO` / `FREEZE_DEFER` / `FREEZE_BLOCKED`; checks genesis file, SHA256, `validate-genesis`, denom audit, live flags, NodeSync gentx + in-genesis + persistent peer, host resolution, TCP 26656 state, optional CometBFT `/net_info` handshake, secret material, final folder, docs, sign-off
+- `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` — Sign-off template (PENDING) read by the freeze gate
+- `docs/testnet/CONTROLLED_TESTNET_FINAL_LAUNCH_PACKET_DRAFT.md` — Final launch packet draft (DRAFT — NOT FINAL — DO NOT START UNTIL SIGNOFF)
+- `docs/testnet/NODESYNC_LAUNCH_WINDOW_INSTRUCTIONS.md` — Operator-facing launch-window instructions (DRAFT)
+- `rehearsals/controlled-testnet/freeze-gate/evidence/20260530T090422Z/` — First freeze-gate evidence (`FREEZE_DEFER`, 12 pass / 0 fail / 2 defer)
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly
