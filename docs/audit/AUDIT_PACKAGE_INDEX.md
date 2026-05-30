@@ -305,6 +305,10 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `releases/testnet-genesis/nexarail-testnet-1-candidate/CANDIDATE_NOTICE.md` — Notice marking the candidate as not final public genesis
 - `scripts/testnet/run-controlled-testnet-dry-run.sh` — Added configurable source genesis, source homes, expected validator count, and min-height flags
 
+### Phase 17E — NodeSync P2P Reachability And Freeze Gate
+- `docs/testnet/PHASE_17E_NODESYNC_P2P_REACHABILITY_AND_FREEZE_GATE.md` — DNS, TTL, TCP reachability, candidate integrity checks, freeze decision, and required validator action
+- `coordination/validators/endpoint-inventory.csv` — Marks NodeSync P2P endpoint `NOT_REACHABLE` until TCP 26656 accepts inbound connections
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly

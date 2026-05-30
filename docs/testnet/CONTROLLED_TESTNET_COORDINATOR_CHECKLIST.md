@@ -104,6 +104,21 @@
 - [ ] Complete final public genesis review.
 - [ ] Confirm launch window and coordinator sign-off.
 
+## Phase 17E NodeSync Reachability And Freeze Gate
+
+- [x] Recheck NodeSync DNS.
+- [x] Record DNS TTL.
+- [x] Check TCP 26656 against DNS host.
+- [x] Check TCP 26656 against direct IP.
+- [x] Rerun candidate genesis SHA256 check.
+- [x] Rerun candidate `validate-genesis`.
+- [x] Verify NodeSync remains in candidate genesis.
+- [x] Verify candidate product live flags remain false.
+- [x] Verify no secret material pattern in candidate release artifacts.
+- [x] Keep freeze decision deferred because TCP 26656 is not reachable.
+- [ ] Confirm NodeSync has opened/listens on TCP 26656 before freeze.
+- [ ] Copy candidate artifacts to final public genesis folder only after `FREEZE_GO`.
+
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.

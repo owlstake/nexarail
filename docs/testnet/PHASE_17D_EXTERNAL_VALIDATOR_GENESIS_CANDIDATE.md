@@ -187,3 +187,15 @@ Controlled external-validator testnet remains **NOT LAUNCHED**. Mainnet remains 
 ## Next Action
 
 Confirm NodeSync P2P reachability for `nexarail-testnet-peer.nodesync.top:26656`, complete final genesis review, and keep additional validator intake open before any launch freeze decision changes from `FREEZE_DEFER`.
+
+## Phase 17E Follow-Up
+
+Phase 17E rechecked the endpoint at `2026-05-30T00:37:58Z`:
+
+```text
+nexarail-testnet-peer.nodesync.top. 300 IN A 178.104.162.88
+nexarail-testnet-peer.nodesync.top:26656 - connection refused
+178.104.162.88:26656 - connection refused
+```
+
+Candidate genesis integrity still passes, but the freeze decision remains `FREEZE_DEFER`. NodeSync must open or listen on TCP `26656` before the coordinator can move this candidate toward final public genesis freeze.

@@ -14,6 +14,7 @@
 | Validator gentxs | 1 VERIFIED |
 | Launch time | PENDING |
 | Persistent peers | GENERATED FOR NODESYNC; DNS peer confirmed |
+| NodeSync P2P reachability | NOT_REACHABLE - TCP 26656 connection refused |
 | Seed or bootnode | PENDING |
 | External validator evidence | PENDING |
 | Phase 17B intake workflow | READY |
@@ -60,7 +61,7 @@ Current counts:
 - gentxs rejected: 0;
 - external validator genesis candidate: assembled for freeze review under `releases/testnet-genesis/nexarail-testnet-1-candidate/`.
 - final public genesis: not frozen.
-- endpoint inventory: NodeSync P2P-only DNS endpoint confirmed; RPC/API/gRPC not provided.
+- endpoint inventory: NodeSync P2P-only DNS metadata recorded; TCP 26656 not reachable at latest coordinator check; RPC/API/gRPC not provided.
 - internal coordinator candidate: assembled from local coordinator validators only.
 - submission tracker: NodeSync gentx accepted; DNS peer confirmed.
 - final genesis freeze decision: `FREEZE_DEFER`.
@@ -115,6 +116,20 @@ Phase 17D assembled a controlled testnet genesis candidate for review only:
 - freeze decision: `FREEZE_DEFER`.
 
 The candidate is marked as not final public genesis and does not change launch status.
+
+## Phase 17E NodeSync Reachability
+
+Phase 17E rechecked NodeSync P2P reachability:
+
+- timestamp UTC: `2026-05-30T00:37:58Z`;
+- DNS: `nexarail-testnet-peer.nodesync.top. 300 IN A 178.104.162.88`;
+- TCP DNS check: connection refused on `nexarail-testnet-peer.nodesync.top:26656`;
+- TCP IP check: connection refused on `178.104.162.88:26656`;
+- endpoint status: `NOT_REACHABLE`;
+- freeze decision: `FREEZE_DEFER`;
+- final public genesis folder: not created.
+
+Candidate genesis integrity still passes: SHA256 matches, `validate-genesis` passes, NodeSync remains in genesis, product live flags remain false, and no secret material pattern was found in candidate artifacts.
 
 ## Phase 18C Launch Operations
 

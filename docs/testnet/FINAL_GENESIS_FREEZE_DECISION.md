@@ -13,7 +13,7 @@
 | Gentx files received locally | 1 |
 | Gentxs accepted | 1 |
 | Gentxs rejected | 0 |
-| Endpoint records received | 1 P2P-only DNS record |
+| Endpoint records received | 1 P2P-only DNS record, not reachable on TCP 26656 |
 | Persistent peers | GENERATED |
 | External validator genesis candidate | ASSEMBLED FOR REVIEW |
 | Final public genesis candidate | NOT FROZEN |
@@ -38,6 +38,16 @@ The confirmed persistent peer uses DNS. The gentx memo IP is retained as a noted
 ## Endpoint Status
 
 `coordination/validators/endpoint-inventory.csv` records NodeSync P2P-only DNS metadata. RPC, API, and gRPC endpoints have not been provided.
+
+Phase 17E reachability check:
+
+```text
+Timestamp UTC: 2026-05-30T00:37:58Z
+DNS: nexarail-testnet-peer.nodesync.top. 300 IN A 178.104.162.88
+TCP DNS check: connection refused on nexarail-testnet-peer.nodesync.top:26656
+TCP IP check: connection refused on 178.104.162.88:26656
+Endpoint status: NOT_REACHABLE
+```
 
 ## Genesis Candidate Status
 
@@ -75,11 +85,11 @@ FREEZE_DEFER
 
 ## Reason
 
-Final public genesis is not frozen because NodeSync P2P TCP reachability was not confirmed at check time, the final public genesis review is not complete, the launch window is not confirmed, and coordinator launch criteria have not been fully signed off.
+Final public genesis is not frozen because NodeSync P2P TCP reachability is still not confirmed: TCP 26656 returned connection refused for both the DNS host and direct IP. The launch window is not confirmed and coordinator launch criteria have not been fully signed off.
 
 ## Next Required Action
 
-Confirm NodeSync P2P reachability, complete final genesis review, keep additional validator intake open, and re-run the freeze gate after coordinator launch criteria are satisfied.
+Ask NodeSync to open/listen on TCP 26656 for `nexarail-testnet-peer.nodesync.top`, confirm reachability from the coordinator side, keep additional validator intake open, and re-run the freeze gate after coordinator launch criteria are satisfied.
 
 ## Safety Boundary
 

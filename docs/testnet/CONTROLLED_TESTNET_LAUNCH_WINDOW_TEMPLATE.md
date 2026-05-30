@@ -14,7 +14,7 @@
 | Genesis hash | TBD |
 | Persistent peers | TBD |
 | Seed nodes | TBD |
-| Final genesis freeze decision | `FREEZE_DEFER` until verified external gentxs exist |
+| Final genesis freeze decision | `FREEZE_DEFER` until NodeSync P2P reachability and coordinator sign-off pass |
 | Incident response runbook | `docs/testnet/CONTROLLED_TESTNET_INCIDENT_RESPONSE.md` |
 | First-hour evidence script | `scripts/testnet/collect-launch-hour-evidence.sh` |
 | Support triage template | `docs/testnet/VALIDATOR_SUPPORT_TRIAGE_TEMPLATE.md` |
@@ -24,6 +24,7 @@
 - [ ] Accepted external validator count is greater than zero.
 - [ ] Verified gentx count matches accepted validator count.
 - [ ] Endpoint inventory is complete enough for launch monitoring.
+- [ ] NodeSync P2P endpoint accepts inbound TCP on `nexarail-testnet-peer.nodesync.top:26656`.
 - [ ] Persistent peers generated from accepted records.
 - [ ] Final public genesis candidate assembled and validated.
 - [ ] Genesis checksum independently verified.

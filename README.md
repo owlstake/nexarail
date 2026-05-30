@@ -45,15 +45,16 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | Controlled external-validator launch | **Preparing** — source-build path, intake, gentx, genesis, and peer tooling are ready |
 | Public launch | **NOT LAUNCHED** — final genesis and external validator evidence are pending |
 | Mainnet | **NO** — This is NOT mainnet |
-| Validator onboarding | Intake open — external records and gentxs are awaiting submission |
+| Validator onboarding | Intake open - NodeSync accepted; additional validators pending |
 | Live flags | **Disabled by default** — all 6 live flags are `false` in genesis |
 | Product-flow suite | **487 pass / 0 fail** — full coverage validated |
 | REST parity | **36/36 (100%)** — REST readback parity confirmed |
 | Phase 17A dry-run | **PASS** — local five-validator launch path reached height 20 |
 | Phase 18A readiness | **Prepared** — internal coordinator candidate and public join package only |
-| Phase 18B intake | **Open** — awaiting real validator submissions; freeze decision `FREEZE_DEFER` |
+| Phase 18B intake | **Open** — NodeSync accepted; additional validator submissions pending; freeze decision `FREEZE_DEFER` |
 | Phase 18C operations | **Prepared** — launch rehearsal, incident response, support, and evidence pack |
 | First external gentx | **Accepted** — NodeSync gentx verified; DNS peer confirmed |
+| Freeze gate | `FREEZE_DEFER` — NodeSync DNS resolves but TCP 26656 is not reachable |
 | Launch status | `NOT_LAUNCHED` — controlled external testnet preparation only |
 
 ### Quick Links
@@ -81,6 +82,8 @@ One command: verify package → launch devnet → run smoke tests → open dashb
 | [Final Genesis Freeze Decision](docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md) | Current freeze decision and next required action |
 | [Phase 17C First External Gentx Verification](docs/testnet/PHASE_17C_FIRST_EXTERNAL_GENTX_VERIFICATION.md) | NodeSync SHA256 match, gentx verifier pass, confirmed DNS peer, and next action |
 | [Phase 17C.1 NodeSync Recheck](docs/testnet/PHASE_17C1_NODESYNC_SUBMISSION_RECHECK.md) | Local evidence recheck for attachment/download handling and SHA256 proof |
+| [Phase 17D Genesis Candidate](docs/testnet/PHASE_17D_EXTERNAL_VALIDATOR_GENESIS_CANDIDATE.md) | Six-validator review candidate with NodeSync plus coordinator-operated validators |
+| [Phase 17E Reachability Gate](docs/testnet/PHASE_17E_NODESYNC_P2P_REACHABILITY_AND_FREEZE_GATE.md) | NodeSync DNS/TCP reachability result and freeze decision |
 | [Launch Operations Dashboard](docs/testnet/CONTROLLED_TESTNET_LAUNCH_READINESS_DASHBOARD.md) | Coordinator readiness table for launch operations |
 | [Incident Response Runbook](docs/testnet/CONTROLLED_TESTNET_INCIDENT_RESPONSE.md) | Halt, rollback, support, and incident response process |
 
