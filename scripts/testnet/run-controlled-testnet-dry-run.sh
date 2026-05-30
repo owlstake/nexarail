@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Local five-validator dry-run for the controlled external-validator testnet path.
+# Local coordinator-validator dry-run for the controlled external-validator testnet path.
 set -Eeuo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && cd ../.. && pwd)"
@@ -17,6 +17,7 @@ PEERS_OUT="$EVIDENCE_DIR/peers"
 PIDS_DIR="$RUN_DIR/pids"
 LOGS_DIR="$EVIDENCE_DIR/logs"
 MIN_HEIGHT="${MIN_HEIGHT:-20}"
+EXPECTED_VALIDATOR_COUNT="${EXPECTED_VALIDATOR_COUNT:-5}"
 SOURCE_GENESIS="${DRY_RUN_GENESIS:-${COORDINATOR_CANDIDATE_GENESIS:-}}"
 SOURCE_HOMES_DIR="${DRY_RUN_SOURCE_HOMES:-${COORDINATOR_CANDIDATE_HOMES_DIR:-}}"
 KEEP_RUNNING="${DRY_RUN_KEEP_RUNNING:-0}"
@@ -28,6 +29,32 @@ AGENTS=(
     "delta:nxrl-controlled-delta:31687:31686:1520:9293"
     "echo:nxrl-controlled-echo:31697:31696:1521:9294"
 )
+
+usage() {
+    cat <<EOF
+Usage: scripts/testnet/run-controlled-testnet-dry-run.sh [options]
+
+Options:
+  --genesis <path>              source genesis to dry-run
+  --source-homes <dir>          coordinator validator homes to use with source genesis
+  --expected-validators <n>     expected validator set count (default: $EXPECTED_VALIDATOR_COUNT)
+  --min-height <n>              minimum block height to reach (default: $MIN_HEIGHT)
+  --keep-running                leave local validator processes running
+  -h, --help                    show this help
+EOF
+}
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --genesis) SOURCE_GENESIS="$2"; shift 2 ;;
+        --source-homes) SOURCE_HOMES_DIR="$2"; shift 2 ;;
+        --expected-validators) EXPECTED_VALIDATOR_COUNT="$2"; shift 2 ;;
+        --min-height) MIN_HEIGHT="$2"; shift 2 ;;
+        --keep-running) KEEP_RUNNING=1; shift ;;
+        -h|--help) usage; exit 0 ;;
+        *) echo "Unknown argument: $1" >&2; usage >&2; exit 2 ;;
+    esac
+done
 
 PASS=0
 FAIL=0
@@ -425,10 +452,10 @@ with open(sys.argv[1]) as f:
     print(len(json.load(f)["result"]["validators"]))
 PY
 )"
-if [ "$VAL_COUNT" = "5" ]; then
-    pass "validator set count is 5"
+if [ "$VAL_COUNT" = "$EXPECTED_VALIDATOR_COUNT" ]; then
+    pass "validator set count is $EXPECTED_VALIDATOR_COUNT"
 else
-    fail "validator set count is $VAL_COUNT"
+    fail "validator set count is $VAL_COUNT expected $EXPECTED_VALIDATOR_COUNT"
     exit 1
 fi
 
@@ -473,7 +500,7 @@ cat > "$EVIDENCE_DIR/summary.json" <<EOF
 {
   "timestamp_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "chain_id": "$CHAIN_ID",
-  "validator_count": 5,
+  "validator_count": $EXPECTED_VALIDATOR_COUNT,
   "height_verified": $HEIGHT,
   "genesis_sha256": "$GENESIS_SHA",
   "source_genesis": "${SOURCE_GENESIS:-}",
@@ -487,9 +514,10 @@ cat > "$EVIDENCE_DIR/summary.md" <<EOF
 # Controlled Testnet Dry-Run Summary
 
 - Chain ID: $CHAIN_ID
-- Validators: 5 local validators
+- Expected validator set count: $EXPECTED_VALIDATOR_COUNT
+- Local coordinator validators started: 5
 - Height verified: $HEIGHT
-- Validator set count: 5
+- Validator set count: $EXPECTED_VALIDATOR_COUNT
 - Genesis SHA256: $GENESIS_SHA
 - Source genesis: ${SOURCE_GENESIS:-generated during dry-run}
 - Product live flags: false

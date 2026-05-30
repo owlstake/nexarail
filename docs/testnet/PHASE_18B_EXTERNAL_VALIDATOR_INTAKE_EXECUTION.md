@@ -20,11 +20,14 @@ Phase 18B does not fabricate validators and does not wait idly. If no validator 
 - Verified gentxs: 1
 - Rejected gentxs: 0
 - Persistent peers: generated for NodeSync with confirmed DNS endpoint
-- Final public genesis: not assembled
+- External-validator genesis candidate: assembled for review under `releases/testnet-genesis/nexarail-testnet-1-candidate/`
+- Final public genesis: not frozen
 - Controlled external-validator testnet: not launched
 - Mainnet: NO-GO
 
 NodeSync has provided public metadata and the original gentx JSON. SHA256 matches and the controlled gentx verifier passes. The confirmed persistent peer uses DNS; the gentx memo IP is retained as a noted difference.
+
+Phase 17D assembled a review-only genesis candidate with NodeSync plus five coordinator-operated validators. The candidate validates and passed a local dry-run to height 20 with validator set count 6, but final public genesis remains deferred because NodeSync P2P TCP reachability was not confirmed at check time and final launch criteria are not fully signed off.
 
 ## Required Validator Fields
 

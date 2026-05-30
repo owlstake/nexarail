@@ -277,8 +277,8 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `docs/testnet/PHASE_18B_VALIDATOR_INTAKE_AND_GENESIS_CANDIDATE.md` — Compatibility status document for Phase 18B intake and freeze-gate state
 - `docs/testnet/VALIDATOR_INTAKE_MESSAGE_PACK.md` — Copy-paste validator coordination messages with safety wording
 - `docs/testnet/FINAL_GENESIS_FREEZE_DECISION.md` — Current freeze decision, counts, reasons, and next required action
-- `coordination/validators/submission-tracker.md` — Submission tracker; currently awaiting validator submissions
-- `coordination/validators/endpoint-inventory.csv` — Endpoint inventory template; currently header-only
+- `coordination/validators/submission-tracker.md` — Submission tracker with NodeSync accepted and DNS peer confirmed
+- `coordination/validators/endpoint-inventory.csv` — Endpoint inventory with NodeSync P2P-only DNS metadata
 
 ### Phase 18C — Coordinator Launch Operations And Incident Response
 - `docs/testnet/CONTROLLED_TESTNET_INCIDENT_RESPONSE.md` — Severity, roles, halt/rollback criteria, validator comms, evidence, log preservation, and common incident handling
@@ -297,6 +297,13 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `coordination/validators/verified/gentx-2bb62d82b4dbf820fdafd843816f1e72a84ffa8f.json` — Accepted NodeSync gentx copied after SHA256 and verifier pass
 - `docs/testnet/EXTERNAL_VALIDATOR_ACTION_PACK.md` — Includes required local `add-genesis-account` step before gentx generation
 - `docs/testnet/VALIDATOR_SUBMISSION_CHECKLIST.md` — Includes required local `add-genesis-account` check before gentx submission
+
+### Phase 17D — External Validator Genesis Candidate Freeze Review
+- `docs/testnet/PHASE_17D_EXTERNAL_VALIDATOR_GENESIS_CANDIDATE.md` — Candidate composition, NodeSync in-genesis verification, peers, DNS/TCP check, dry-run result, freeze decision, and launch status
+- `releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json` — Review-only controlled testnet genesis candidate; not final public genesis
+- `releases/testnet-genesis/nexarail-testnet-1-candidate/manifest.json` — Candidate manifest with validator counts, SHA256, safety marker, and freeze decision
+- `releases/testnet-genesis/nexarail-testnet-1-candidate/CANDIDATE_NOTICE.md` — Notice marking the candidate as not final public genesis
+- `scripts/testnet/run-controlled-testnet-dry-run.sh` — Added configurable source genesis, source homes, expected validator count, and min-height flags
 
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation

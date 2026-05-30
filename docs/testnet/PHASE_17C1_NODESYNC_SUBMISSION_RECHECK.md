@@ -132,6 +132,14 @@ NodeSync does **not** need to resend the gentx. The original content was found l
 
 ## Genesis And Launch Status
 
-Final public genesis remains not assembled. The freeze decision remains `FREEZE_DEFER` because coordinator launch criteria have not been met.
+Phase 17D subsequently assembled a review-only external-validator genesis candidate under:
+
+```text
+releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json
+```
+
+The candidate includes NodeSync plus five coordinator-operated validators, validates, and passed a local dry-run to height 20 with validator set count 6. It is not final public genesis.
+
+Final public genesis remains not frozen. The freeze decision remains `FREEZE_DEFER` because NodeSync P2P TCP reachability was not confirmed at check time, final public genesis review is not complete, and coordinator launch criteria have not been fully signed off.
 
 Controlled external-validator testnet remains **NOT LAUNCHED**. Mainnet remains **NO-GO**. External decentralisation is not claimed. NXRL is not presented as buyable and no monetary value is implied. No token sale is announced or implied. Product live-funds flags remain false by default.

@@ -8,7 +8,7 @@
 | Item | Status |
 |---|---|
 | Controlled external-validator testnet | NOT LAUNCHED |
-| Final public genesis | PENDING - one verified external gentx; freeze deferred |
+| Final public genesis | PENDING - review candidate assembled; freeze deferred |
 | Internal coordinator candidate | PREPARED - not final public genesis |
 | Validator intake registry | OPEN - NodeSync accepted; additional validators pending |
 | Validator gentxs | 1 VERIFIED |
@@ -21,6 +21,7 @@
 | Phase 18B intake execution | OPEN - NodeSync accepted; additional validators pending |
 | Phase 18C launch operations pack | READY |
 | Phase 17C NodeSync submission | ACCEPTED - DNS peer confirmed |
+| Phase 17D genesis candidate review | CANDIDATE ASSEMBLED - freeze deferred |
 | Final genesis freeze decision | FREEZE_DEFER |
 | Local Phase 17A dry-run | PASS |
 | Internal coordinator candidate dry-run | PASS |
@@ -57,7 +58,8 @@ Current counts:
 - gentx files received locally: 1;
 - gentxs verified: 1;
 - gentxs rejected: 0;
-- final genesis candidate: not assembled.
+- external validator genesis candidate: assembled for freeze review under `releases/testnet-genesis/nexarail-testnet-1-candidate/`.
+- final public genesis: not frozen.
 - endpoint inventory: NodeSync P2P-only DNS endpoint confirmed; RPC/API/gRPC not provided.
 - internal coordinator candidate: assembled from local coordinator validators only.
 - submission tracker: NodeSync gentx accepted; DNS peer confirmed.
@@ -97,6 +99,22 @@ NodeSync submitted public validator metadata and a P2P endpoint:
 ```
 
 The gentx SHA256 matches and the controlled gentx verifier passes. The generated peer entry uses the confirmed DNS endpoint. The gentx memo uses IP `178.104.162.88`, which is retained as a noted difference.
+
+## Phase 17D External Validator Genesis Candidate
+
+Phase 17D assembled a controlled testnet genesis candidate for review only:
+
+- composition: NodeSync plus five coordinator-operated validators;
+- validator count: 6;
+- genesis path: `releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json`;
+- genesis SHA256: `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`;
+- NodeSync in-genesis verification: pass;
+- local candidate dry-run: pass to height 20 with validator set count 6 and five coordinator signers online;
+- DNS check: `nexarail-testnet-peer.nodesync.top` resolves to `178.104.162.88`;
+- TCP 26656 check: connection refused at check time;
+- freeze decision: `FREEZE_DEFER`.
+
+The candidate is marked as not final public genesis and does not change launch status.
 
 ## Phase 18C Launch Operations
 

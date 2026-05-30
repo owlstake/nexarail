@@ -93,7 +93,20 @@ This is local preparation only. Final coordinator genesis is assembled separatel
 
 ## Genesis Candidate Status
 
-No preliminary or final public genesis candidate was assembled in this step. One external gentx is now verified, but final public genesis remains deferred pending coordinator launch criteria.
+No preliminary or final public genesis candidate was assembled during Phase 17C itself. One external gentx was verified, and Phase 17D subsequently assembled a review-only external-validator genesis candidate:
+
+```text
+releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json
+```
+
+Phase 17D candidate summary:
+
+- composition: NodeSync plus five coordinator-operated validators;
+- validator count: 6;
+- genesis SHA256: `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`;
+- NodeSync in-genesis verification: pass;
+- dry-run result: pass to height 20;
+- candidate status: not final public genesis.
 
 Freeze decision remains `FREEZE_DEFER`.
 

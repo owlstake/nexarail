@@ -89,6 +89,21 @@
 - [x] Confirm NodeSync final peer host uses DNS.
 - [ ] Re-run final genesis freeze gate after coordinator launch criteria are satisfied.
 
+## Phase 17D External Validator Genesis Candidate
+
+- [x] Decide candidate composition: NodeSync plus five coordinator-operated validators.
+- [x] Assemble controlled external-validator genesis candidate for review.
+- [x] Mark candidate as not final public genesis.
+- [x] Verify NodeSync is present in candidate genesis.
+- [x] Regenerate persistent peers from accepted intake records.
+- [x] Confirm NodeSync DNS resolves.
+- [x] Record TCP 26656 reachability result.
+- [x] Dry-run candidate to height 20 with validator set count 6.
+- [x] Keep final freeze decision deferred.
+- [ ] Confirm NodeSync P2P TCP reachability before launch freeze.
+- [ ] Complete final public genesis review.
+- [ ] Confirm launch window and coordinator sign-off.
+
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.
@@ -96,7 +111,7 @@
 - [x] Run `scripts/testnet/verify-controlled-testnet-gentx.sh` for every received gentx.
 - [x] Copy verified gentxs to `coordination/validators/verified/`.
 - [ ] Copy rejected gentxs to `coordination/validators/rejected/` with reason files.
-- [ ] Confirm gentxs are collected into a `nexarail-testnet-1` genesis and `collect-gentxs` signature validation passes.
+- [x] Confirm accepted gentxs are collected into a `nexarail-testnet-1` review candidate and `collect-gentxs` signature validation passes.
 - [x] Confirm self-delegation denom is `unxrl`.
 - [x] Confirm moniker and operator address are present.
 - [x] Confirm no private material or live-flag edits appear in gentx files.
@@ -105,7 +120,7 @@
 
 ## Genesis Assembly
 
-- [ ] Run `scripts/testnet/assemble-controlled-testnet-genesis.sh`.
+- [x] Run `scripts/testnet/assemble-controlled-testnet-genesis.sh` for the Phase 17D review candidate.
 - [ ] Do not assemble final genesis until verified gentx count is greater than zero.
 - [ ] Confirm `validate-genesis` passes.
 - [ ] Confirm all product live flags remain false.
