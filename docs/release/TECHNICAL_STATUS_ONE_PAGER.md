@@ -14,6 +14,7 @@
 - Phase 17C NodeSync gentx is verified and accepted; DNS peer is confirmed and the memo IP difference is noted
 - Phase 17D external-validator genesis candidate is assembled for review with NodeSync plus five coordinator-operated validators; final freeze remains deferred
 - Phase 17E reachability check confirms NodeSync DNS resolves, but TCP 26656 is not reachable; freeze remains deferred
+- Phase 17F coordinator launch rehearsal with the external candidate genesis passed locally to height 50; the 600-second evidence run exposed the expected local limitation from NodeSync not signing; NodeSync remains unreachable on TCP 26656, so freeze remains deferred
 
 ## Architecture
 - Cosmos SDK v0.47.x
@@ -56,6 +57,7 @@
 - Phase 17C records and accepts the first external validator gentx from NodeSync, fixes the required local `add-genesis-account` gentx-preparation step in validator docs, and confirms the DNS peer for persistent peers
 - Phase 17D assembles a six-validator review candidate, verifies NodeSync in genesis, and dry-runs the candidate to height 20 without simulating the external validator signing key
 - Phase 17E reruns the freeze gate; candidate integrity passes, but NodeSync P2P TCP 26656 returns connection refused
+- Phase 17F rehearses coordinator launch operations using the six-validator candidate genesis, reaches height 50 with five coordinator signers, runs launch-hour evidence capture and readiness monitoring locally, records the expected validator-count drift after NodeSync does not sign locally, and keeps launch freeze deferred until NodeSync P2P reachability is confirmed
 
 ## Product-Flow Evidence
 - Full product-flow suite: 487 pass / 0 fail
@@ -97,11 +99,12 @@
 - Phase 18B/17C intake validation: NodeSync accepted, one verified gentx, DNS peer confirmed
 - Phase 17D external-validator genesis candidate: pass, six-validator genesis, height 20 dry-run, live flags false, freeze deferred
 - Phase 17E reachability gate: DNS resolves, TCP 26656 connection refused, candidate integrity checks pass, freeze deferred
+- Phase 17F coordinator launch rehearsal: dry-run pass, six-validator candidate genesis, height 50, readiness monitor pass, 600-second launch-hour evidence completed with expected validator-count failure from non-simulated NodeSync signer, live flags false, freeze deferred
 - Phase 18C launch-hour evidence dry-run: waiting-state capture passes with empty endpoint inventory
 - RC2 readiness: under evaluation; expected recommendation is defer until canonical soak and targeted governance replay gates are complete
 
 ## Remaining NO-GO Items
-- Controlled external-validator testnet launch remains pending NodeSync P2P TCP reachability, launch criteria, and launch evidence
+- Controlled external-validator testnet launch remains pending NodeSync P2P TCP reachability, launch criteria, final genesis freeze, and launch evidence
 - Final public genesis and launch time remain pending
 - Final genesis freeze gate remains deferred even with one verified external gentx because final launch criteria are not fully signed off
 - Mainnet launch

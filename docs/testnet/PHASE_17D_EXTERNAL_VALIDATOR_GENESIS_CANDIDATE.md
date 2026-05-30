@@ -199,3 +199,17 @@ nexarail-testnet-peer.nodesync.top:26656 - connection refused
 ```
 
 Candidate genesis integrity still passes, but the freeze decision remains `FREEZE_DEFER`. NodeSync must open or listen on TCP `26656` before the coordinator can move this candidate toward final public genesis freeze.
+
+## Phase 17F Follow-Up
+
+Phase 17F rehearsed coordinator launch operations with the same external-validator candidate genesis:
+
+- dry-run result: PASS;
+- height verified: 50;
+- validator set count: 6;
+- local coordinator signers: 5;
+- NodeSync: present in validator set, not locally simulated;
+- product live flags: false;
+- evidence: `rehearsals/controlled-testnet/dry-run/evidence/20260530T012624Z-phase17f-live/`.
+
+The 600-second local launch-hour evidence rehearsal continued block production but returned `FAIL` once the validator count drifted from 6 to 5 because NodeSync was not locally signing. NodeSync TCP `26656` remained unreachable at the Phase 17F recheck (`2026-05-30T01:19:37Z`), so the freeze decision remains `FREEZE_DEFER`.

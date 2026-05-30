@@ -16,6 +16,7 @@
 | Endpoint records received | 1 P2P-only DNS record, not reachable on TCP 26656 |
 | Persistent peers | GENERATED |
 | External validator genesis candidate | ASSEMBLED FOR REVIEW |
+| Coordinator launch rehearsal with external candidate | PASS TO HEIGHT 50 |
 | Final public genesis candidate | NOT FROZEN |
 | Launch status | NOT LAUNCHED |
 
@@ -67,6 +68,18 @@ Candidate details:
 - candidate marker: `EXTERNAL VALIDATOR GENESIS CANDIDATE - NOT FINAL PUBLIC GENESIS`;
 - launch status: not launched.
 
+Phase 17F coordinator launch rehearsal:
+
+- command used the external-validator candidate genesis with five coordinator signer homes;
+- expected validator count: 6;
+- height verified: 50;
+- NodeSync included in the validator set but not locally simulated;
+- product live flags: false;
+- panic/fatal scan: pass;
+- evidence: `rehearsals/controlled-testnet/dry-run/evidence/20260530T012624Z-phase17f-live/`.
+
+The 600-second launch-hour evidence rehearsal wrote complete samples under `rehearsals/controlled-testnet/launch-hour/evidence/20260530T013213Z/` and returned `FAIL` because the local-only run cannot keep the non-simulated NodeSync validator in the active set for the full window. Block progression continued to height 159, live flags remained false, and panic/fatal markers were zero. This reinforces `FREEZE_DEFER`; it is not public launch evidence.
+
 The Phase 18A internal coordinator candidate remains available for coordinator rehearsal only:
 
 ```text
@@ -85,7 +98,7 @@ FREEZE_DEFER
 
 ## Reason
 
-Final public genesis is not frozen because NodeSync P2P TCP reachability is still not confirmed: TCP 26656 returned connection refused for both the DNS host and direct IP. The launch window is not confirmed and coordinator launch criteria have not been fully signed off.
+Final public genesis is not frozen because NodeSync P2P TCP reachability is still not confirmed: TCP 26656 returned connection refused for both the DNS host and direct IP at the Phase 17F recheck. The launch window is not confirmed and coordinator launch criteria have not been fully signed off.
 
 ## Next Required Action
 

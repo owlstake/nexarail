@@ -119,6 +119,21 @@
 - [ ] Confirm NodeSync has opened/listens on TCP 26656 before freeze.
 - [ ] Copy candidate artifacts to final public genesis folder only after `FREEZE_GO`.
 
+## Phase 17F Coordinator Launch Rehearsal
+
+- [x] Rehearse the external-validator genesis candidate with five coordinator signers.
+- [x] Confirm candidate dry-run reaches height 50.
+- [x] Confirm validator set count reports 6.
+- [x] Confirm NodeSync is present in the validator set but not locally simulated.
+- [x] Confirm product live flags remain false during rehearsal.
+- [x] Confirm REST params are queryable during rehearsal.
+- [x] Confirm no panic/fatal log markers in the dry-run evidence.
+- [x] Run launch-hour evidence collector against local coordinator endpoints.
+- [x] Run readiness monitor against local coordinator endpoints.
+- [x] Record NodeSync reachability as `NOT_REACHABLE`.
+- [ ] Re-run P2P reachability after NodeSync confirms TCP 26656 is open.
+- [ ] Re-run final genesis freeze gate after NodeSync reachability and launch sign-off.
+
 ## Gentx Validation
 
 - [ ] Store submitted gentxs in a coordinator-only working directory.

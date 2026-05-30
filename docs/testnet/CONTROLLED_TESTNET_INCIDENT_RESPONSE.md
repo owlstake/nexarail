@@ -77,6 +77,8 @@ Rollback means stop launch coordination, preserve evidence, publish corrected st
 
 Use `scripts/testnet/collect-launch-hour-evidence.sh` for first-hour evidence capture.
 
+For external-candidate coordinator rehearsals, record that external validator signers are not simulated locally. If NodeSync remains unreachable on TCP `26656`, classify the rehearsal evidence as coordinator-side readiness only and keep the freeze decision deferred.
+
 ## Preserve Logs
 
 - Ask validators to copy logs before restarting.
@@ -123,6 +125,7 @@ Do not share or commit:
 - Check `net_info` peer count.
 - Verify persistent peer string excludes the validator's own node ID.
 - Use sentry-specific instructions only if reviewed.
+- For NodeSync, current unresolved action is to open/listen on TCP `26656` for `nexarail-testnet-peer.nodesync.top` before final freeze can move to GO.
 
 ### App Hash Mismatch
 

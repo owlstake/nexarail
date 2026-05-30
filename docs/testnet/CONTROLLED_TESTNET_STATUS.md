@@ -23,6 +23,7 @@
 | Phase 18C launch operations pack | READY |
 | Phase 17C NodeSync submission | ACCEPTED - DNS peer confirmed |
 | Phase 17D genesis candidate review | CANDIDATE ASSEMBLED - freeze deferred |
+| Phase 17F coordinator launch rehearsal | PASS - external candidate genesis rehearsed locally |
 | Final genesis freeze decision | FREEZE_DEFER |
 | Local Phase 17A dry-run | PASS |
 | Internal coordinator candidate dry-run | PASS |
@@ -130,6 +131,24 @@ Phase 17E rechecked NodeSync P2P reachability:
 - final public genesis folder: not created.
 
 Candidate genesis integrity still passes: SHA256 matches, `validate-genesis` passes, NodeSync remains in genesis, product live flags remain false, and no secret material pattern was found in candidate artifacts.
+
+## Phase 17F Coordinator Launch Rehearsal
+
+Phase 17F rehearsed coordinator-side launch operations using the external-validator genesis candidate:
+
+- candidate genesis: `releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json`;
+- candidate SHA256: `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`;
+- validator set count: 6;
+- local coordinator signers started: 5;
+- NodeSync: included in validator set, not simulated locally;
+- dry-run result: pass to height 50;
+- 600-second launch-hour evidence rehearsal: completed with expected validator-count failure after NodeSync was not locally signing;
+- readiness monitor: pass during the local monitor window;
+- product live flags: false;
+- REST params: queryable;
+- evidence: `rehearsals/controlled-testnet/dry-run/evidence/20260530T012624Z-phase17f-live/`.
+
+NodeSync reachability was rechecked at `2026-05-30T01:19:37Z`; DNS resolved to `178.104.162.88`, but TCP `26656` still returned connection refused. Freeze remains `FREEZE_DEFER`, and the controlled external-validator testnet remains not launched.
 
 ## Phase 18C Launch Operations
 

@@ -11,6 +11,7 @@ export NXR_HOME="$HOME/.nexarail-testnet"
 export NXR_BINARY="./build/nexaraild"
 export NXR_GENESIS="releases/testnet-genesis/nexarail-testnet-1/genesis.json"
 export NXR_SHA256SUMS="releases/testnet-genesis/nexarail-testnet-1/SHA256SUMS"
+export NXR_CANDIDATE_GENESIS="releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json"
 export NXR_RPC="http://127.0.0.1:26657"
 export NXR_API="http://127.0.0.1:1317"
 ```
@@ -35,12 +36,30 @@ cat "$NXR_SHA256SUMS"
 
 Do not use the internal coordinator candidate as final public genesis.
 
+For rehearsal only, the external-validator candidate genesis is:
+
+```bash
+shasum -a 256 "$NXR_CANDIDATE_GENESIS"
+```
+
+Do not publish the candidate as final public genesis unless the freeze decision is `FREEZE_GO`.
+
 ## Verify Persistent Peers
 
 ```bash
 cat coordination/validators/peer-info/persistent-peers.txt
 grep '^persistent_peers' "$NXR_HOME/config/config.toml"
 ```
+
+NodeSync P2P reachability recheck:
+
+```bash
+dig +short nexarail-testnet-peer.nodesync.top
+nc -vz nexarail-testnet-peer.nodesync.top 26656
+nc -vz 178.104.162.88 26656
+```
+
+Freeze remains deferred while TCP `26656` is not reachable.
 
 ## Show Node ID
 
@@ -112,6 +131,8 @@ scripts/testnet/monitor-controlled-testnet-readiness.sh \
   --sample-duration 300 \
   --sample-interval 10
 ```
+
+For local coordinator rehearsal evidence, use a local-only endpoint CSV under `rehearsals/controlled-testnet/dry-run/evidence/`. Do not write local rehearsal RPC/API rows into the public validator endpoint inventory.
 
 ## Collect First-Hour Evidence
 

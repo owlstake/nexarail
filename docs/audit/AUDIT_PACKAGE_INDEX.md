@@ -309,6 +309,13 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 - `docs/testnet/PHASE_17E_NODESYNC_P2P_REACHABILITY_AND_FREEZE_GATE.md` — DNS, TTL, TCP reachability, candidate integrity checks, freeze decision, and required validator action
 - `coordination/validators/endpoint-inventory.csv` — Marks NodeSync P2P endpoint `NOT_REACHABLE` until TCP 26656 accepts inbound connections
 
+### Phase 17F — Coordinator Launch Rehearsal With External Candidate Genesis
+- `docs/testnet/PHASE_17F_COORDINATOR_LAUNCH_REHEARSAL.md` — Coordinator launch rehearsal using the six-validator external candidate genesis, five local coordinator signers, evidence capture, readiness monitoring, limitations, freeze decision, and launch status
+- `coordination/validators/nodesync-reachability.md` — NodeSync DNS/TCP reachability tracker with latest `NOT_REACHABLE` result and next recheck command
+- `scripts/testnet/run-controlled-testnet-dry-run.sh` — Height wait budget now derives from the parsed minimum height for higher-height coordinator rehearsals
+- `rehearsals/controlled-testnet/dry-run/evidence/20260530T012624Z-phase17f-live/` — Local coordinator rehearsal evidence path; not launch evidence
+- `rehearsals/controlled-testnet/launch-hour/evidence/20260530T013213Z/` — Local launch-hour evidence rehearsal path; records expected validator-count failure from non-simulated NodeSync signer; not launch evidence
+
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation
 - `scripts/testnet/assemble-testnet-genesis.sh` — Genesis assembly
