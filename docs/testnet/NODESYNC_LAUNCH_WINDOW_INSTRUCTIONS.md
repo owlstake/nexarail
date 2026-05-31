@@ -42,12 +42,25 @@ build/nexaraild init NODESYNC --chain-id "$NXR_CHAIN_ID" --home "$NXR_HOME"
 
 > WARNING: `priv_validator_key.json`, `node_key.json`, mnemonics, and seed phrases are private. Do not send them to the coordinator or any third party. Do not commit them to git. Do not paste them into chat.
 
+## Final Genesis Download Links (Published)
+
+The coordinator has published the final controlled-testnet genesis to `origin/main` on `github.com/Bookings-cpu/nexarail`. Download directly:
+
+- Genesis: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/genesis.json`
+- SHA256SUMS: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/SHA256SUMS`
+- Manifest: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/manifest.json`
+- Persistent peers: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/persistent-peers.txt`
+
+Expected SHA256: `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`
+
 ## Launch-Window Steps (Only After Coordinator Message)
 
-1. Verify the final genesis SHA256 matches the launch-window message:
+1. Download and verify the final genesis SHA256:
 
    ```bash
-   sha256sum /path/to/downloaded/genesis.json
+   curl -fLO https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/genesis.json
+   shasum -a 256 genesis.json
+   # expect: 4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095
    ```
 
    If it does not match, **stop** and reply to the coordinator. Do not start.
@@ -55,7 +68,7 @@ build/nexaraild init NODESYNC --chain-id "$NXR_CHAIN_ID" --home "$NXR_HOME"
 2. Place the final genesis in the node config:
 
    ```bash
-   cp /path/to/downloaded/genesis.json "$NXR_HOME/config/genesis.json"
+   cp genesis.json "$NXR_HOME/config/genesis.json"
    build/nexaraild --home "$NXR_HOME" validate-genesis "$NXR_HOME/config/genesis.json"
    ```
 

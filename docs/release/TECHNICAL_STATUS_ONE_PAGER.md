@@ -5,18 +5,22 @@
 - Validator CLI hotfix source tag is public at `v0.1.0-rc1-cli-hotfix`
 - Post-RC1 hardening is complete enough for RC2 preparation
 - RC2 is under evaluation; tag/release is deferred pending canonical soak and targeted governance replay evidence
-- Controlled external-validator testnet is preparing and not launched
-- Mainnet remains NO-GO
-- External validators remain pending
+- Controlled external-validator testnet launch is **PENDING / NOT LIVE**: final controlled-testnet genesis has been published; coordinator-operated nodes have rehearsed locally only; external-validator block-signing is pending NodeSync remote service start
+- Mainnet remains NO-GO; external decentralisation is not claimed until external-validator block-signing is evidenced
+- External validators remain pending beyond NodeSync
 - Phase 18A internal coordinator candidate and public join-readiness package are prepared
-- Phase 18B intake execution is open; final public genesis freeze decision is `FREEZE_DEFER`
+- Phase 18B intake execution is open; final controlled-testnet genesis is published and approved for validator distribution (Phase 17I.0); network-launch decision is deferred until external-validator handshake evidence exists
 - Phase 18C coordinator launch operations and incident response pack are prepared
 - Phase 17C NodeSync gentx is verified and accepted; DNS peer is confirmed and the memo IP difference is noted
-- Phase 17D external-validator genesis candidate is assembled for review with NodeSync plus five coordinator-operated validators; final freeze remains deferred
-- Phase 17E reachability check confirms NodeSync DNS resolves, but TCP 26656 is not reachable; freeze remains deferred
-- Phase 17F coordinator launch rehearsal with the external candidate genesis passed locally to height 50; the 600-second evidence run exposed the expected local limitation from NodeSync not signing; NodeSync remains unreachable on TCP 26656, so freeze remains deferred
-- Phase 17E.1 candidate genesis denom audit: PASS — `staking.params.bond_denom = unxrl`, all linked denom fields are `unxrl`, no suspicious denom strings; NodeSync's `bond_denom` flag did not reproduce; candidate SHA256 unchanged; freeze remains deferred pending real CometBFT P2P handshake after final genesis distribution
-- Phase 17H adds the single authoritative freeze gate `scripts/testnet/check-final-genesis-freeze-gate.sh` (genesis exists, SHA256 match, validate-genesis, denom audit, live flags false, NodeSync gentx accepted and in genesis, persistent peer present, host resolves, TCP 26656 recorded, optional CometBFT handshake probe, no secret material, final folder not pre-populated, docs present, sign-off). First run on the candidate: `FREEZE_DEFER` (12 pass / 0 fail / 2 defer). Launch-window signoff template, final launch packet draft, and NodeSync launch-window instructions are committed as drafts; nothing here authorises a launch by itself.
+- Phase 17D external-validator genesis candidate is now frozen as the final controlled-testnet genesis at `releases/testnet-genesis/nexarail-testnet-1/` (sha256 `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`)
+- Phase 17E reachability check confirmed NodeSync DNS resolves but TCP 26656 was refused; Phase 17E.1 clarified the real `nexaraild` service starts after final genesis distribution
+- Phase 17F coordinator launch rehearsal with the external candidate genesis passed locally to height 50; the pre-launch local 600-second evidence run exposed the expected local limitation from NodeSync not signing
+- Phase 17E.1 candidate genesis denom audit: PASS — `staking.params.bond_denom = unxrl`, all linked denom fields are `unxrl`, no suspicious denom strings; NodeSync's `bond_denom` flag did not reproduce; candidate SHA256 unchanged
+- Phase 17H freeze gate `scripts/testnet/check-final-genesis-freeze-gate.sh` reported `PASS=12 FAIL=0 DEFER=1` (only DEFER is live CometBFT handshake) and coordinator authorised genesis publication at `2026-05-30T12:03:32Z`
+- Phase 17I.0 (Final Controlled-Testnet Genesis Publication) — final artifacts committed to `releases/testnet-genesis/nexarail-testnet-1/`; raw GitHub links recorded in `docs/testnet/PHASE_17I0_FINAL_GENESIS_PUBLICATION.md`; launch-sign-off `Status: APPROVED_FOR_GENESIS_PUBLICATION`
+- Coordinator-operated nodes (local rehearsal): 5 nodes running against final genesis; chain id `nexarail-testnet-1`, height advancing on coordinator machines only; validator set 6, peers 4 (NodeSync slot empty pending remote service start); product live flags false
+- NodeSync launch-window packet sent at `coordination/outreach/2026-05-30-nodesync-launch-window.md`
+- Launch-hour evidence collector running (local-only rehearsal) at `rehearsals/controlled-testnet/launch-hour/evidence/20260530T121242Z/` (60-min duration, 60-second sampling)
 
 ## Architecture
 - Cosmos SDK v0.47.x

@@ -21,17 +21,31 @@
 | Resulting binary | `build/nexaraild` |
 | Min Go version | 1.22 |
 
-## Final Genesis Candidate
+## Final Genesis (Published)
 
 | Field | Value |
 |---|---|
-| Candidate path | `releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json` |
-| Candidate SHA256 | `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095` |
-| Manifest | `releases/testnet-genesis/nexarail-testnet-1-candidate/manifest.json` |
-| Final publish target | `releases/testnet-genesis/nexarail-testnet-1/` (DO NOT publish until `FREEZE_GO`) |
+| Final path | `releases/testnet-genesis/nexarail-testnet-1/genesis.json` |
+| Final SHA256 | `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095` |
+| Manifest | `releases/testnet-genesis/nexarail-testnet-1/manifest.json` |
+| SHA256SUMS | `releases/testnet-genesis/nexarail-testnet-1/SHA256SUMS` |
+| Candidate origin | `releases/testnet-genesis/nexarail-testnet-1-candidate/genesis.json` (sha256 unchanged) |
 | Denom | `unxrl` |
 | Validator count | 6 (NodeSync + 5 coordinator-operated) |
 | Chain ID | `nexarail-testnet-1` |
+
+### Raw GitHub Download Links (after `origin/main` push)
+
+- Genesis: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/genesis.json`
+- SHA256SUMS: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/SHA256SUMS`
+- Manifest: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/manifest.json`
+- Persistent peers: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/persistent-peers.txt`
+
+```bash
+curl -fLO https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/genesis.json
+shasum -a 256 genesis.json
+# expect: 4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095
+```
 
 ## Persistent Peer String
 

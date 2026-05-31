@@ -1,8 +1,8 @@
 # Final Genesis Freeze Decision
 
-**Date:** 2026-05-30
+**Date:** 2026-05-31
 **Network:** `nexarail-testnet-1`
-**Status:** FREEZE_DEFER
+**Status:** GENESIS_PUBLISHED — final controlled-testnet genesis artifacts published; network launch decision deferred until external-validator handshake evidence (Phase 17I.0)
 
 ## Intake Counts
 
@@ -17,8 +17,8 @@
 | Persistent peers | GENERATED |
 | External validator genesis candidate | ASSEMBLED FOR REVIEW |
 | Coordinator launch rehearsal with external candidate | PASS TO HEIGHT 50 |
-| Final public genesis candidate | NOT FROZEN |
-| Launch status | NOT LAUNCHED |
+| Final public genesis | PUBLISHED in `releases/testnet-genesis/nexarail-testnet-1/` |
+| Launch status | NOT LIVE — coordinator-operated quorum running locally only; external-validator block-signing pending |
 
 ## Persistent Peers Status
 
@@ -128,12 +128,17 @@ NodeSync's `bond_denom` concern was not confirmed. No genesis fix was required. 
 ## Freeze Decision
 
 ```text
-FREEZE_DEFER
+GENESIS_PUBLISHED — final controlled-testnet genesis artifacts published
+LAUNCH_DECISION  — DEFERRED until external-validator block-signing evidence
 ```
 
 ## Reason
 
-Denom audit passes, but real CometBFT P2P readiness is still pending. NodeSync's Phase 17E.1 clarification confirms that the real `nexaraild` service is started only after final genesis distribution, and that the prior `nc` listener on TCP 26656 was a VPS reachability demonstration, not a CometBFT handshake. The freeze gate will move to `FREEZE_GO` only after the preconditions in `docs/testnet/PHASE_17E1_GENESIS_DENOM_AUDIT_AND_P2P_PRECONDITIONS.md` are satisfied, including a real coordinator-verified CometBFT peer handshake.
+Static freeze-gate checks pass with `PASS=12 FAIL=0 DEFER=1`, the only DEFER being the live CometBFT handshake (it cannot be probed until NodeSync starts the real service). Per coordinator authorisation `2026-05-30T12:03:32Z`, final controlled-testnet genesis artifacts have been published to `releases/testnet-genesis/nexarail-testnet-1/` so validators can download a canonical, hashed file. The controlled external-validator testnet itself is **not declared live**: that decision is held until external-validator block-signing evidence is collected.
+
+Coordinator-operated nodes have rehearsed against this final genesis locally (chain id `nexarail-testnet-1`, height advancing, validator set count 6, peer count 4 with the NodeSync slot empty pending remote service start, product live flags false, no panic/fatal markers). Local rehearsal does not constitute public-testnet liveness.
+
+The static gate continues to refuse `FREEZE_GO` if any hard check fails (bad SHA, denom fail, live flags true, secret material, NodeSync missing). The "final genesis already published" check now reports `FREEZE_BLOCKED` for re-runs against the candidate path because the final folder `releases/testnet-genesis/nexarail-testnet-1/` is now populated; this is expected post-publication and is not a regression.
 
 ## Phase 17H Automated Freeze Gate
 
@@ -167,12 +172,11 @@ Hard failures the gate refuses to advance from `FREEZE_BLOCKED`: bad SHA, denom 
 
 ## Next Required Action
 
-1. Coordinator publishes the final genesis SHA and persistent peer list to NodeSync at launch window.
-2. NodeSync starts the real `nexaraild` service with `p2p.laddr=tcp://0.0.0.0:26656` and the published persistent peers.
-3. Coordinator verifies CometBFT P2P handshake (real `/net_info` peer count > 0), not just TCP open.
-4. Coordinator records the evidence under `rehearsals/controlled-testnet/p2p-launch/evidence/<TIMESTAMP>/`.
-5. Coordinator marks `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` `**Status:** APPROVED` with the final SHA and launch time.
-6. Re-run the freeze gate with `--probe-rpc … --require-p2p --require-signoff`; this document advances to `FREEZE_GO` only if the gate returns `FREEZE_GO`.
+1. NodeSync starts the real `nexaraild` service with `p2p.laddr=tcp://0.0.0.0:26656` and the published persistent peers (packet at `coordination/outreach/2026-05-30-nodesync-launch-window.md`).
+2. Coordinator verifies CometBFT P2P handshake (real `/net_info` peer count includes NodeSync `node_id`), not just TCP open.
+3. Coordinator records the evidence under `rehearsals/controlled-testnet/launch-hour/evidence/20260530T121242Z/` (60-min sampler) and a dedicated `rehearsals/controlled-testnet/p2p-launch/evidence/<TIMESTAMP>/` once the handshake is observed.
+4. Once external-validator block-signing is evidenced, update `docs/testnet/CONTROLLED_TESTNET_STATUS.md` to advance the controlled external-validator testnet launch line from `PENDING / NOT LIVE` to `LIVE` and mark the external-decentralisation claim eligible for review.
+5. Mainnet remains `NO-GO`. NXRL has no monetary value. No token sale is announced or implied.
 
 ## Safety Boundary
 

@@ -7,33 +7,45 @@
 
 | Item | Status |
 |---|---|
-| Controlled external-validator testnet | NOT LAUNCHED |
-| Final public genesis | PENDING - review candidate assembled; freeze deferred |
-| Internal coordinator candidate | PREPARED - not final public genesis |
+| Controlled external-validator testnet launch | PENDING / NOT LIVE — coordinator-operated quorum runs locally only; external-validator block-signing not yet evidenced |
+| Final controlled-testnet genesis | PUBLISHED — `releases/testnet-genesis/nexarail-testnet-1/` (sha256 `4ced9f71...`) |
+| Internal coordinator candidate | SUPERSEDED by published final genesis |
 | Validator intake registry | OPEN - NodeSync accepted; additional validators pending |
 | Validator gentxs | 1 VERIFIED |
-| Launch time | PENDING |
-| Persistent peers | GENERATED FOR NODESYNC; DNS peer confirmed |
-| NodeSync P2P reachability | DEFERRED - real `nexaraild` service starts after final genesis distribution; Phase 17E.1 documents preconditions; Phase 17H freeze gate records TCP 26656 OPEN (NodeSync `nc` listener) as informational only |
+| Persistent peers | NodeSync DNS peer in published `persistent-peers.txt`; coordinator-operated peers appended locally at startup |
+| NodeSync P2P reachability | PENDING - launch packet at `coordination/outreach/2026-05-30-nodesync-launch-window.md`; NodeSync to start real `nexaraild` and confirm `/net_info` handshake + block-signing |
 | Phase 17E.1 denom audit | PASS - all unxrl; no fix required |
-| Phase 17H freeze gate | FREEZE_DEFER - 12 pass / 0 fail / 2 defer (cometbft-handshake + coordinator-signoff pending) |
-| Launch sign-off | PENDING - `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` |
-| Final launch packet draft | DRAFT - `docs/testnet/CONTROLLED_TESTNET_FINAL_LAUNCH_PACKET_DRAFT.md` |
-| NodeSync launch-window instructions | DRAFT - `docs/testnet/NODESYNC_LAUNCH_WINDOW_INSTRUCTIONS.md` |
-| Seed or bootnode | PENDING |
-| External validator evidence | PENDING |
+| Phase 17H freeze gate (static) | PASS=12, FAIL=1 (`final-genesis-not-published` is now expected post-publication), DEFER=1 (`cometbft-handshake` pending real start) |
+| Launch sign-off | APPROVED_FOR_GENESIS_PUBLICATION - `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` |
+| Final launch packet | DRAFT — distribution-ready; network start coordinated separately |
+| NodeSync launch-window packet | SENT - `coordination/outreach/2026-05-30-nodesync-launch-window.md` |
+| Coordinator-operated quorum (local) | RUNNING locally for rehearsal — chain id `nexarail-testnet-1`, height advancing on coordinator machines only |
+| Coordinator launch-hour evidence | RUNNING - `rehearsals/controlled-testnet/launch-hour/evidence/20260530T121242Z/` |
+| External validator block-signing evidence | PENDING NodeSync start |
 | Phase 17B intake workflow | READY |
 | Phase 18A join readiness package | READY |
 | Phase 18B intake execution | OPEN - NodeSync accepted; additional validators pending |
 | Phase 18C launch operations pack | READY |
 | Phase 17C NodeSync submission | ACCEPTED - DNS peer confirmed |
-| Phase 17D genesis candidate review | CANDIDATE ASSEMBLED - freeze deferred |
-| Phase 17F coordinator launch rehearsal | PASS - external candidate genesis rehearsed locally |
-| Final genesis freeze decision | FREEZE_DEFER |
+| Phase 17D genesis candidate review | FROZEN and PUBLISHED as final |
+| Phase 17F coordinator launch rehearsal | PASS - candidate genesis rehearsed locally |
+| Final genesis freeze decision | APPROVED for publication; launch decision deferred until external-validator handshake evidence |
 | Local Phase 17A dry-run | PASS |
 | Internal coordinator candidate dry-run | PASS |
 | Product live flags | FALSE BY DESIGN |
+| External decentralisation | NOT CLAIMED until external-validator block-signing evidence collected |
 | Mainnet | NO-GO |
+
+## Final Genesis Download Links
+
+Published to `origin/main` on `github.com/Bookings-cpu/nexarail`:
+
+- Genesis: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/genesis.json`
+- SHA256SUMS: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/SHA256SUMS`
+- Manifest: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/manifest.json`
+- Persistent peers: `https://raw.githubusercontent.com/Bookings-cpu/nexarail/main/releases/testnet-genesis/nexarail-testnet-1/persistent-peers.txt`
+
+Expected SHA256: `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`
 
 ## Current Validator Path
 

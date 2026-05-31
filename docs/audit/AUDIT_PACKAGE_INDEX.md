@@ -323,10 +323,18 @@ See `docs/PHASE_5_LIVE_FUNDS_STATUS.md`.
 
 ### Phase 17H — Final Genesis Freeze Gate Automation And Launch Packet
 - `scripts/testnet/check-final-genesis-freeze-gate.sh` — Single authoritative freeze gate emitting `FREEZE_GO` / `FREEZE_DEFER` / `FREEZE_BLOCKED`; checks genesis file, SHA256, `validate-genesis`, denom audit, live flags, NodeSync gentx + in-genesis + persistent peer, host resolution, TCP 26656 state, optional CometBFT `/net_info` handshake, secret material, final folder, docs, sign-off
-- `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` — Sign-off template (PENDING) read by the freeze gate
+- `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` — Sign-off doc read by the freeze gate (`APPROVED_FOR_GENESIS_PUBLICATION` after Phase 17I.0)
 - `docs/testnet/CONTROLLED_TESTNET_FINAL_LAUNCH_PACKET_DRAFT.md` — Final launch packet draft (DRAFT — NOT FINAL — DO NOT START UNTIL SIGNOFF)
 - `docs/testnet/NODESYNC_LAUNCH_WINDOW_INSTRUCTIONS.md` — Operator-facing launch-window instructions (DRAFT)
 - `rehearsals/controlled-testnet/freeze-gate/evidence/20260530T090422Z/` — First freeze-gate evidence (`FREEZE_DEFER`, 12 pass / 0 fail / 2 defer)
+
+### Phase 17I.0 — Final Controlled-Testnet Genesis Publication And Validator Link Pack
+- `releases/testnet-genesis/nexarail-testnet-1/genesis.json` — Final controlled-testnet genesis (sha256 `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`)
+- `releases/testnet-genesis/nexarail-testnet-1/SHA256SUMS` — Checksum manifest
+- `releases/testnet-genesis/nexarail-testnet-1/manifest.json` — Provenance + safety metadata
+- `releases/testnet-genesis/nexarail-testnet-1/persistent-peers.txt` — NodeSync persistent peer
+- `releases/testnet-genesis/nexarail-testnet-1/README.md` / `FINAL_NOTICE.md` — Safety notice (not mainnet, no token sale, no monetary value, live-funds flags false)
+- `docs/testnet/PHASE_17I0_FINAL_GENESIS_PUBLICATION.md` — Publication record with raw GitHub download links and next required step
 
 ### Scripts (existing)
 - `scripts/testnet/verify-submitted-gentx.sh` — Gentx validation

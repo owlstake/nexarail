@@ -155,8 +155,20 @@
 - [x] Add `docs/testnet/CONTROLLED_TESTNET_FINAL_LAUNCH_PACKET_DRAFT.md` (DRAFT — NOT FINAL).
 - [x] Add `docs/testnet/NODESYNC_LAUNCH_WINDOW_INSTRUCTIONS.md` (DRAFT).
 - [ ] At launch window: re-run freeze gate with `--probe-rpc … --require-p2p --require-signoff` against the final genesis.
-- [ ] Mark launch sign-off `APPROVED` only after freeze gate returns `FREEZE_GO`.
-- [ ] Copy candidate to `releases/testnet-genesis/nexarail-testnet-1/` only after `FREEZE_GO`.
+- [ ] Mark launch sign-off `APPROVED` (full launch) only after freeze gate returns `FREEZE_GO`.
+- [x] Copy candidate to `releases/testnet-genesis/nexarail-testnet-1/` after static freeze gate `PASS=12 FAIL=0 DEFER=1` and coordinator publication signoff (Phase 17I.0).
+
+## Phase 17I.0 Final Genesis Publication
+
+- [x] Stage final controlled-testnet genesis artifacts under `releases/testnet-genesis/nexarail-testnet-1/`.
+- [x] Confirm published SHA256 equals candidate SHA256 `4ced9f713d8d6f4e85cd4611c8e28a465db6d3d74e62269e3b0df2fc8a4f0095`.
+- [x] Run denom audit against published genesis: `PASS` (7 pass / 0 fail / 1 warn).
+- [x] Run `validate-genesis` against published genesis: PASS.
+- [x] Confirm no secret material (private keys, mnemonics, `priv_validator_key.json`, `node_key.json`) in final folder.
+- [x] Set `docs/testnet/CONTROLLED_TESTNET_LAUNCH_SIGNOFF.md` status to `APPROVED_FOR_GENESIS_PUBLICATION`.
+- [x] Record raw GitHub download links in `docs/testnet/PHASE_17I0_FINAL_GENESIS_PUBLICATION.md`.
+- [ ] Verify raw GitHub links resolve after `origin/main` push.
+- [ ] Distribute validator launch message containing SHA256 + raw links + persistent peer string.
 
 ## Gentx Validation
 
