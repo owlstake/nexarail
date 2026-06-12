@@ -9,7 +9,7 @@
 | Discord Handle         | owlstake                                     |
 | Telegram Handle        | @bettermanzZ                                 |
 | GitHub Handle          | owlstake                                     |
-| Website (optional)     | https://owlstake.com                         |
+| Website (optional)     | [Hompage](https://owlstake.com), [Analytics](https://analytics.owlstake.com), [IBC Explorer](https://compass.owlstake.com)                         |
 
 ## Validator Information
 
